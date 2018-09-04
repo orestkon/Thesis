@@ -1,0 +1,37 @@
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+\usepackage{bookmark}
+\usepackage{xpatch}
+\usepackage{xcolor}
+
+% If you use the hyperref package, please uncomment the following line
+% to display URLs in blue roman font according to Springer's eBook style:
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    citecolor=red,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\renewcommand\UrlFont{\color{blue}\rmfamily}
+%
+%
+
+\setcounter{tocdepth}{2}
+
+\makeatletter
+\renewcommand*\l@author[2]{}
+\renewcommand*\l@title[2]{}
+\makeatletter
+
+\let\classtableofcontents\tableofcontents%
+
+\renewcommand{\tableofcontents}{%
+  \begingroup%
+  \xpatchcmd{\chapter}{\thispagestyle{empty}}{}{}{}%
+  \classtableofcontents%
+  \endgroup%
+}
