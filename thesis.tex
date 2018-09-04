@@ -1,0 +1,32 @@
+% This is samplepaper.tex, a sample chapter demonstrating the
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.20 of 2017/10/04
+%
+\documentclass[runningheads]{llncs}
+%
+\input{preamble.tex}
+%
+\begin{document}
+%
+\input{firstPage.tex}
+\maketitle              % typeset the header of the contribution
+\input{abstract.tex}
+%
+\input{tableOfContents.tex}
+%
+%
+\pagenumbering{arabic}
+\setcounter{page}{1}
+%
+%
+\input{samplechapter.tex}
+%
+% ---- Bibliography ----
+%
+% BibTeX users should specify bibliography style 'splncs04'.
+% References will then be sorted and formatted in the correct style.
+%
+\bibliographystyle{splncs04}
+\bibliography{myBibliography.bib}
+%
+\end{document}
