@@ -4,11 +4,51 @@
 \setcounter{section}{0}
 \section{Overview}
 %
-%% Hash funtions
+\section{Hash function}
+%
+In this section, we will define the syntax and the security model of the cryptographic hash function, as introduced in \cite{Katz:2007:IMC:1206501}. We will slightly change their definition, because we assume no key as input to the hash function. In our case, the only input is a message.
+%
+\begin{definition}{(Hash function - syntax)} \cite{Katz:2007:IMC:1206501}
+A \textbf{hash function} is a probabilistic polynomial-time algorithm $H$
+fulfilling the following:
+\begin{itemize}
+  \item[$\bullet$] There exists a polynomial $l$ such that $H$ is (deterministic) polynomial-time
+  algorithm that takes as input any string $x \in { \{ 0,1 \}}^*$, and outputs
+  a string $H(x) \in { \{ 0,1 \}}^{l(n)}$.
+\end{itemize}
+If for every $n$, $H$ is defined only over inputs of length $l'(n)$ and $l'(n) > l(n)$, then
+we say that $H$ is a \textbf{fixed-length hash function} with length parameter $l'$.
+\end{definition}
+
+Notice that in the fixed-length case we require that $l'$ be greater than $l$. This ensures that the
+function is a hash function in the classic sense in that it \textit{compresses} the input. We remark
+that in the general case we have no requirement on $l$ because the function takes for input all (finite) binary strings. Thus, by definition, it also compresses.
+
+We will now define security for this model. We begin by defining a game for a hash function $H$, an adversary $\mathcal{A}$ and a security parameter $n$:
+\\
+
+\textbf{The collision-finding game ${Hash-coll}_{\mathcal{A},H}(n)$:} \cite{Katz:2007:IMC:1206501}
+\begin{enumerate}
+  \item The adversary $\mathcal{A}$ outputs a pair $x$ and $x'$. \\
+  Formally, $(x,x') \leftarrow \mathcal{A}(s)$.
+  \item The output of the experiment is $1$ if and only if $x \neq x'$ and $H(x) = H(x')$. In such a case we say that $\mathcal{A}$ has found a collision.
+\end{enumerate}
+%
+The definition of collision resistance for hash functions states that no efficient adversary can find a collision except with negligible probability.
+%
+\begin{definition} \cite{Katz:2007:IMC:1206501}
+  A hash function $H$ is \textbf{collision resistant} if for all probabilistic polynomial-time adversaries $\mathcal{A}$ there exists a negligible function $\textbf{negl}$ such that
+
+\begin{equation}\label{eqn:collision}
+  Pr[{Hash-coll}_{\mathcal{A},H}(n) = 1] \leq \textbf{negl} \: (n)
+\end{equation}
+\end{definition}
 %
 %% Memory-hardness
 %
 %% Password scramblers
+%
+%% PRF
 %
 %% Pebbling game
 %
