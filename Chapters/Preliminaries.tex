@@ -8,7 +8,7 @@
 %
 In this section, we will define the syntax and the security model of the cryptographic hash function, as introduced in \cite{Katz:2007:IMC:1206501}. We will slightly change their definition, because we assume no key as input to the hash function. In our case, the only input is a message.
 %
-\begin{definition}{(Hash function - syntax)} \cite{Katz:2007:IMC:1206501}
+\begin{definition}{(Hash function - syntax)} \textnormal{\cite{Katz:2007:IMC:1206501}}
 A \textbf{hash function} is a probabilistic polynomial-time algorithm $H$
 fulfilling the following:
 \begin{itemize}
@@ -17,7 +17,7 @@ fulfilling the following:
   a string $H(x) \in { \{ 0,1 \}}^{l(n)}$.
 \end{itemize}
 If for every $n$, $H$ is defined only over inputs of length $l'(n)$ and $l'(n) > l(n)$, then
-we say that $H$ is a \textbf{fixed-length hash function} with length parameter $l'$.
+we say that $H$ is a \textbf{fixed-length hash function} with length parameter $l'$. The output of a hash function is called digest.
 \end{definition}
 
 Notice that in the fixed-length case we require that $l'$ be greater than $l$. This ensures that the
@@ -36,7 +36,7 @@ We will now define security for this model. We begin by defining a game for a ha
 %
 The definition of collision resistance for hash functions states that no efficient adversary can find a collision except with negligible probability.
 %
-\begin{definition} \cite{Katz:2007:IMC:1206501}
+\begin{definition} \textnormal{\cite{Katz:2007:IMC:1206501}}
   A hash function $H$ is \textbf{collision resistant} if for all probabilistic polynomial-time adversaries $\mathcal{A}$ there exists a negligible function $\textbf{negl}$ such that
 
 \begin{equation}\label{eqn:collision}
@@ -44,7 +44,46 @@ The definition of collision resistance for hash functions states that no efficie
 \end{equation}
 \end{definition}
 %
-%% Memory-hardness
+\section{Memory-Hard Functions}
+In this section we will define the notion of the memory-hard function in the Parallel Random Oracle Model (pROM) of \cite{Alwen:2015:HPC:2746539.2746622}, as introduced in \cite{cryptoeprint:2016:875}. First, we will define the model along with the associated complexity notions.
+
+\paragraph{The parallel Random Oracle Model.} We consider an algorithm $\mathcal{A}$ executing in the pROM of computation \cite{Alwen:2015:HPC:2746539.2746622}. Let this algorithm be repeated an arbitrary amount of times. After each invocation we make states. At invocation $i \in \{ 1,2, \dots \}$ algorithm $\mathcal{A}$ keeps the state $\sigma_{i-1}$ it produced. Next $\mathcal{A}$ can make calls $\textbf{q}_i = (q_{1,i}, q_{2,i}, \dots)$
+to the \textit{fixed input length random oracle $H$} (ideal compression function). After it receives the digest of $H$, is allowed to perform arbitrary computation before producing its output (the next state $\sigma_i$). The state $\sigma_0$ contains the input to the computation and no other state is kept by $\mathcal{A}$. Now, we need some complexity notions to be defined.
+
+The cumulative memory complexity (CMC) is defined to be
+\begin{equation}
+    cmc(\mathcal{A}) = \underset{H}{\mathbb{E}} \Bigg{[} \underset{x,r}{\max} \sum_{i} \lvert \sigma_i \rvert \Bigg{]}
+\end{equation}
+where $\lvert \sigma \rvert$ is the bit-length of state $\sigma$, the expectation is taken over the choice of $H$ and $max_{x,r}$ denotes the maximum over all inputs and coins of $\mathcal{A}$.
+
+Moreover, the \textit{time complexity} (TC), $time(\mathcal{A})$ is the maximum running time of $\mathcal{A}$ in any execution. Similarly, the \textit{space complexity} (SC) is the largest state it ever outputs in any execution.
+
+\paragraph{Oracle function.} Let $f$ be a function over strings depending on the choice of $H$. We consider the scenario in which we want to compute $f$ on $m \in \mathbb{N}^{+}$ arbitrary distinct inputs.
+Let $\mathbb{A}_{f,m,q}$ be the set of pROM algorithms that accomplish this making at most $q$ queries to
+$H$. Then,
+
+\begin{enumerate}[label=(\alph*)]
+  \item $f$ is an oracle function \\
+
+  \item The \textit{amortized cumulative memory complexity} (aCMC) of $f$ is defined to be
+  \begin{equation}
+      cmc_{m,q}(f) = \min \Bigg{\{} \frac{cmc(\mathcal{A})}{n} : \: n \in [m], \mathcal{A} \in \mathbb{A}_{f,n,q} \Bigg{\}}.
+  \end{equation}
+\end{enumerate}
+This definition provides a good lower-bound on the \textit{amortized time complexity} of a function \cite{Alwen:2015:HPC:2746539.2746622}.
+
+For more detailed information about the above, we refer the reader to the appendix of \cite{cryptoeprint:2016:875}. There are some technical details there that are beyond the scope of this thesis. Now we are ready to define properly the notion of the memory-hard function.
+
+\begin{definition}{\textbf{(Memory-Hard Function).}} \textnormal{\cite{cryptoeprint:2016:875}}
+  Let $\{ f_{\sigma, \tau} \}_{\sigma, \tau \in \mathbb{N}^{+}}$ be a family of (oracle) functions and $\mathcal{N}$ be a sequential pROM algorithm which, on input $(\sigma, \tau, x)$, outputs $f_{\sigma, \tau}(x)$ in time at most $\tau \sigma$ using space at most $\sigma$. Then $F=\big{(} \{ f_{\sigma,\tau} \}, \mathcal{N} \big{)}$
+  is an $(h,g,t)$-memory-hard function (for up to $m$ instances and $q$ queries) if it has memory-hardness at least $h$, memory-gap at most $g$ and throughput at least $t$ (all functions of $\sigma$ and $\tau$).
+
+\begin{align*}
+cmc_{m,q}(f_{\sigma, \tau})&\geq h(\sigma, \tau)           &  \frac{\mbox{space}(\mathcal{N})*\mbox{time}(\mathcal{N})}{cmc_{m,q}(f_{\sigma, \tau})} &\leq g(\sigma, \tau)             &  \frac{\mbox{space}(\mathcal{N})}{\mbox{time}(\mathcal{N})} &\geq t(\sigma, \tau)\\
+\end{align*}
+%
+\end{definition}
+%
 %
 %% Password scramblers
 %
