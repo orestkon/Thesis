@@ -59,7 +59,7 @@ where $\lvert \sigma \rvert$ is the bit-length of state $\sigma$, the expectatio
 Moreover, the \textit{time complexity} (TC), $time(\mathcal{A})$ is the maximum running time of $\mathcal{A}$ in any execution. Similarly, the \textit{space complexity} (SC) is the largest state it ever outputs in any execution.
 
 \paragraph{Oracle function.} Let $f$ be a function over strings depending on the choice of $H$. We consider the scenario in which we want to compute $f$ on $m \in \mathbb{N}^{+}$ arbitrary distinct inputs.
-Let $\mathbb{A}_{f,m,q}$ be the set of pROM algorithms that accomplish this making at most $q$ queries to
+Let $\mathbb{A}_{f,m,q}$ be the set of pROM algorithms that accomplish this, making at most $q$ queries to
 $H$. Then,
 
 \begin{enumerate}[label=(\alph*)]
@@ -84,10 +84,30 @@ cmc_{m,q}(f_{\sigma, \tau})&\geq h(\sigma, \tau)           &  \frac{\mbox{space}
 %
 \end{definition}
 %
+\section{Pseudorandom Functions}
+In cryptography, a pseudorandom function family, abbreviated $PRF$, is a collection of efficiently-computable functions which emulate a random oracle in the following way: no efficient algorithm can distinguish (with significant advantage) between a function chosen randomly from the PRF family and a random oracle (a function whose outputs are fixed completely at random). With that in mind,
+we must first recall the definition of oracle indistinguishability and then proceed to define a pseudorandom function.
+
+\begin{definition}{(Oracle Indistinguishability).} \textnormal{\cite{ACI}}
+  Let $\{ O_n \}_{n \in \mathbb{N}}$ and $\{ O'_{n} \}_{n}$ be ensembles where $O_n, O'_n$ are probability
+  distributions over functions $f: \{ 0,1 \}^{l_1(n)} \rightarrow \{ 0,1 \}^{l_2(n)}$ for some polynomials $l_1(\cdot)$, $l_2(\cdot)$. We say that $\{ O_{n} \}_{n}$ and $\{ O'_{n} \}_{n}$ are \textbf{computationally indistinguishable} (denoted by $\{ O'_{n} \}_{n} \approx \{ O'_n \}_{n \in \mathbb{N}}$
+  ) if for all non-uniform p.p.t. oracles machines $D$, there exists a negligible function $\epsilon(\cdot)$ such that $\forall n \in \mathbb{N}$
+  \begin{equation}{\label{oracle}}
+    \Bigg{\lvert} \: Pr \big{[} F \leftarrow O_n : D^{F(\cdot)}(1^n)=1 \big{]} - Pr \big{[} F \leftarrow O'_n : D^{F(\cdot)}(1^n)=1 \big{]} \: \Bigg{\rvert} < \epsilon(n).
+  \end{equation}
+\end{definition}
+
+\begin{definition}{(Pseudo-random Function).} \textnormal{\cite{ACI}}
+  A family of functions $\big{\{} f_s: \{ 0,1 \}^{\lvert s \rvert} \rightarrow \{ 0,1 \}^{\lvert s \rvert} \big{\}}_{s \in \{ 0,1 \}^{*}}$ is \textbf{pseudo-random} if
+  \begin{itemize}
+    \item[$\bullet$] (Easy to compute): $f_s(x)$ can be computed by a p.p.t. algorithm that is given input $s$ and $x$
+    \item[$\bullet$] (Pseudorandom): $\big{\{} s \leftarrow \{ 0,1 \}^n: f_s \big{\}}_n \approx \big{\{} F \leftarrow RF_n: F \big{\}}_n$.
+  \end{itemize}
+\end{definition}
+Notice that if someone knows $s$ then it is easy to distinguish $f_s$ from a random function. In order to consider this function indistinguishable from a random function, one should keep seed $s$ secret.
+%
 %
 %% Password scramblers
-%
-%% PRF
 %
 %% Pebbling game
 %
