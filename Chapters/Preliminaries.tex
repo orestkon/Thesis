@@ -74,7 +74,7 @@ This definition provides a good lower-bound on the \textit{amortized time comple
 
 For more detailed information about the above, we refer the reader to the appendix of \cite{cryptoeprint:2016:875}. There are some technical details there that are beyond the scope of this thesis. Now we are ready to define properly the notion of the memory-hard function.
 
-\begin{definition}{\textbf{(Memory-Hard Function).}} \textnormal{\cite{cryptoeprint:2016:875}}
+\begin{definition}{\textbf{(Memory-Hard Function).}}{\label{Memhard1}} \textnormal{\cite{cryptoeprint:2016:875}}
   Let $\{ f_{\sigma, \tau} \}_{\sigma, \tau \in \mathbb{N}^{+}}$ be a family of (oracle) functions and $\mathcal{N}$ be a sequential pROM algorithm which, on input $(\sigma, \tau, x)$, outputs $f_{\sigma, \tau}(x)$ in time at most $\tau \sigma$ using space at most $\sigma$. Then $F=\big{(} \{ f_{\sigma,\tau} \}, \mathcal{N} \big{)}$
   is an $(h,g,t)$-memory-hard function (for up to $m$ instances and $q$ queries) if it has memory-hardness at least $h$, memory-gap at most $g$ and throughput at least $t$ (all functions of $\sigma$ and $\tau$).
 
@@ -83,6 +83,18 @@ cmc_{m,q}(f_{\sigma, \tau})&\geq h(\sigma, \tau)           &  \frac{\mbox{space}
 \end{align*}
 %
 \end{definition}
+
+The above definition, although extremely rigid, is not that intuitive. In order to describe memory requirements, we can describe the same notion we will mention another definition given in \cite{ForlerLW13}, without causing any conflict with definition \ref{Memhard1}. Before we give the second definition, one should notice that for any parallelized attack, using $b$ cores, the required memory per core is decreased by a factor of $\frac{1}{b}$, and vice versa.
+
+\begin{definition}{\textbf{(Memory-Hard Function - intuitive).}}\textnormal{\cite{ForlerLW13}}
+  Let $g$ denote the memory cost factor. For all $\alpha > 0$, a memory-hard function $f$ can be computed on a Random Access Machine using \textbf{space}$(g)$ space and \textbf{time}$(g)$ operations, where \textbf{space}$(g) \in \Omega(\mbox{\textbf{time}}(g)^{1-\alpha})$.\\
+
+  \noindent Thus, for \textbf{space}$(\cdot)$\:$\cdot$\:\textbf{time}$(\cdot)$\:$=G^2$ with $G=2^g$, using $b$ cores, we have
+  \begin{equation}\label{eqn:memhard}
+    \Bigg{(} \frac{1}{b} \cdot \mbox{\textbf{space}}(\cdot) \Bigg{)} \cdot \bigg{(} b \cdot \mbox{\textbf{time}}(\cdot) \bigg{)} = G^2.
+  \end{equation}
+\end{definition}
+In their paper, a formal generalization of this notion is given, but it is beyond of the scope of this thesis. For more information about memory-hardness the reader is refered to their work~\cite{ForlerLW13}.
 %
 \section{Pseudorandom Functions}
 In cryptography, a pseudorandom function family, abbreviated $PRF$, is a collection of efficiently-computable functions which emulate a random oracle in the following way: no efficient algorithm can distinguish (with significant advantage) between a function chosen randomly from the PRF family and a random oracle (a function whose outputs are fixed completely at random). With that in mind,
