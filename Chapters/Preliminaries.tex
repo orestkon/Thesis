@@ -44,6 +44,16 @@ The definition of collision resistance for hash functions states that no efficie
 \end{equation}
 \end{definition}
 %
+\section{Password Scramblers}
+Passwords~\footnote{Passphrases and personal identification numbers (PINs) are considered "passwords", in this context.} are user-memorizable secrets. Typical (user-chosen) passwords often suffer from low entropy and can be attacked by trying out all possible password candidates. If we let asside the case of a dedicated cryptographic protocol on an interactive session, the next best protection are password scramblers performing "key-stretching". Christian Forler, Stefan Lucks and Jakob Wenzel~\cite{ForlerLW13}, give three basic conditions a good password scrambler should satisfy at least:
+
+\begin{enumerate}
+  \item \label{Condition 1.} Given a password $pwd$, computing $PS(pwd)$ should be "fast enough" for the user.
+  \item \label{Condition 2.} Computing $PS(pwd)$ should be "as slow as possible", without contradicting Condition~\ref{Condition 1.}.
+  \item Given $y=PS(pwd)$, there must be no significantly faster way to test $q$ password candidates $x_1, x_2, \dots, x_q$ for $PS(x_i)=y$ than by actually computing $PS(x_i)$ for each $x_i$.
+\end{enumerate}
+Tratidionally, most password scramblers satisfy Condition~\ref{Condition 2.} by iterating a cryptographic primitive (a block cipher or hash function) many times. However, an adversary with $b$ computing units ("cores") can try $b$ different passwords in parallel. With today's availability of graphical processing units (GPUs), slowing down these kind of attacks becomes a pressing question.
+%
 \section{Memory-Hard Functions}
 In this section we will define the notion of the memory-hard function in the Parallel Random Oracle Model (pROM) of \cite{Alwen:2015:HPC:2746539.2746622}, as introduced in \cite{cryptoeprint:2016:875}. First, we will define the model along with the associated complexity notions.
 
@@ -117,9 +127,6 @@ we must first recall the definition of oracle indistinguishability and then proc
   \end{itemize}
 \end{definition}
 Notice that if someone knows $s$ then it is easy to distinguish $f_s$ from a random function. In order to consider this function indistinguishable from a random function, one should keep seed $s$ secret.
-%
-%
-%% Password scramblers
 %
 %% Pebbling game
 %
