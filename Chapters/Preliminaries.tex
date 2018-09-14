@@ -128,6 +128,65 @@ we must first recall the definition of oracle indistinguishability and then proc
 \end{definition}
 Notice that if someone knows $s$ then it is easy to distinguish $f_s$ from a random function. In order to consider this function indistinguishable from a random function, one should keep seed $s$ secret.
 %
-%% Pebbling game
+
+\section{Pebbling game}
+Hellman presented in \cite{Hellman:2006:CTT:2263346.2269686} a possibility to trade memory/space $S$ against time $T$ in attacking cryptographic algorithms, i.e. he has introduced the idea of a time-memory trade-off ($TMT$) in terms of generic attacks. Hence, we can assume that an adversary with access to this algorithm and restricted resources is always looking for a sweet spot to optimize $S \cdot T$. For, studying the $TMT$, one needs to choose a certain model. But first we must introduce the reader to the notion of the \textit{directed acyclic graph}.
+
+\begin{definition}{(Directed Acyclic Graph).}\textnormal{\cite{ForlerLW13}}
+  Let $\Pi(\mathcal{V},\mathcal{E})$ be a graph consisting of a set of vertices $\mathcal{V}=(v_0,v_1,\dots,v_{n-1})$ and a set of edges $\mathcal{E}=(e_0,e_1,\dots,e_{l-1})$, where $\mathcal{E}=\varnothing$ is a valid variant. $\Pi(\mathcal{V},\mathcal{E})$ is a \textbf{directed acyclic graph}, if every edge in $\mathcal{E}$
+  consists of a starting vertex $v_i$ and an ending vertex $v_j$, with $i \neq j$. A path through $\Pi(\mathcal{V},\mathcal{E})$ beginning at vertex $v_i$ must never reach $v_i$ again (else, there would be a cycle). If there exists a path from a vertex $v_i$ to a vertex $v_j$ in the graph with $i \neq j$, we will write $v_i \leq v_j$.
+\end{definition}
+
+In 1970, Hewitt and Paterson introduced a method for analyzing $TMTs$ on directed acyclic graphs ($DAG$), called \textit{pebble game}. It has been occasionally used in cryptographic context, see, e.g. \cite{Dziembowski:2011:KSR:2033036.2033061} for a recent example. The pebble game model is restricted to $DAGs$ with bounded in-degree and can be seen as a single-player game.
+
+\begin{definition}{(Parallel/Sequential Graph Pebbling).}\textnormal{\cite{cryptoeprint:2016:875}}
+  Let $G=(\mathcal{V},\mathcal{E})$ be a $DAG$ and let $T \subseteq \mathcal{V}$ be a target set of nodes to be pebbled. A pebbling configuration (of $G$) is a subset $P_i \subseteq \mathcal{V}$. A legal parallel pebbling of $T$ is a sequence $P=(P_0,\dots,P_t)$ of pebbling configurations of $G$ where $P_0 = \varnothing$ and which satisfies \hyperref[pebble:condition_1]{conditions}~\ref{pebble:condition_1}
+  \hyperref[pebble:condition_2]{\&}~\ref{pebble:condition_2} below. A sequential pebbling additionally must satisfy \hyperref[pebble:condition_3]{condition}~\ref{pebble:condition_3}.
+
+  \begin{enumerate}
+    \item \label{pebble:condition_1} At some step every target node is pebbled (though not necessarily simultaneously).
+%
+    \begin{equation}\label{eqn:pebcondition_1}
+      \forall x \in T \ \ \exists z \leq t \quad : \quad x \in P_z.
+    \end{equation}
+%
+    \item \label{pebble:condition_2} Pebbles are added only when their predecessors already have a pebble at the end of the previous step.
+%
+    \begin{equation}\label{eqn:pebcondition_2}
+      \forall i \in [t] \quad : \quad x \in (P_i \setminus P_{i-1}) \ \Rightarrow \ \mbox{\textbf{parents}}(x) \subseteq P_{i-1}.
+    \end{equation}
+%
+    \item \label{pebble:condition_3} At most one pebble placed per step.
+%
+    \begin{equation}\label{eqn:pebcondition_3}
+      \forall i \in [t] \quad : \quad \lvert P_i \setminus P_{i-1} \rvert \leq 1.
+    \end{equation}
+%
+  \end{enumerate}
+%
+  We denote with $\mathcal{P}_{G,T}$ and $\mathcal{P}_{G,T}^{||}$ the set of all legal sequential and parallel pebblings of $G$ with target set $T$, respectively.
+  Note that $\mathcal{P}_{G,T} \subseteq \mathcal{P}_{G,T}^{||}$. In the case where $T=\mbox{\textbf{sinks}}(G)$, we will simply write $\mathcal{P}_{G}$ and
+  $\mathcal{P}_{G}^{||}$.
+%
+\end{definition}
+%
+\begin{definition}{(Time/Space/Cumulative Pebbling Complexity).}\textnormal{\cite{cryptoeprint:2016:875}}
+  The time, space, space-time and cumulative complexity of a pebbling $P=\{ P_0,\dots,P_t \} \in \mathcal{P}_{G}^{||}$ are defined to be:
+
+  \begin{align*}
+    \Pi_t(P)&= t  &  \Pi_s(P)&= \underset{i \in [t]}{\max} \lvert P_i \rvert &  \Pi_{st}(P)&= \Pi_t(P) \cdot \Pi_s(P) & \Pi_{cc}(P)&= \underset{i \in [t]}{\sum} \lvert P_i \rvert .\\
+  \end{align*}
+  For $\alpha \in \{ s,t,st,cc \}$ and a target set $T \subseteq \mathcal{V}$, the sequential and parallel pebbling complexities of $G$ are defined as
+
+  \begin{align*}
+    \Pi_\alpha(G,T)&= \underset{P \in \mathcal{P}_{G,T}}{\min} \Pi_{\alpha}(P) &  &\mbox{and} & \Pi_{\alpha}^{||}(G,T)&= \underset{P \in \mathcal{P}_{G,T}^{||}}{\min} \Pi_{\alpha}(P) .\\
+  \end{align*}
+  When $T=\mbox{\textbf{sinks}}(G)$ we simplify notation and write $\Pi_{\alpha}(G)$ and $\Pi_{\alpha}^{||}(G)$.
+%
+\end{definition}
+We notice that the definition comes along with the intuition about these complexities. For $\alpha \in \{ s,t,st,cc \}$ and any $G$, the parallel pebbling complexity is at most as high as the sequential,
+i.e., $\Pi_\alpha(G) \geq \Pi_{\alpha}^{||}(G)$, and cumulative complexity is at most as high as space-time complexity, i.e., $\Pi_{st}(G) \geq \Pi_{cc}(G)$ and $\Pi_{st}^{||}(G) \geq \Pi_{cc}^{||}(G)$.\\
+
+\noindent With this last definition, this chapter is concluded and all the tools needed for our analysis have been formally defined.
 %
 %% Information about pebbling algorithms and complexity
