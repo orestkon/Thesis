@@ -14,7 +14,28 @@ Bitcoin is the first successful implementation of a distributed crypto-currency,
 Bitcoins have all the desirable properties of a money-like good. They are portable, durable, divisible, recognizable, fungible, scarce and difficult to counterfeit.
 
 %
-%% Mining
+\section{Mining}
+Bitcoin mining\footnote{It is misleading to think that there is an analogy between gold mining and bitcoin mining. The fact is that gold miners are rewarded for producing gold, while bitcoin miners are not rewarded for producing bitcoins; they are rewarded for their record-keeping services.} is the processing of transactions in the digital currency system, in which the records of current Bitcoin transactions, \textit{blocks}, are added to the record of past transactions, the \textit{blockchain}. Miners keep the blockchain consistent, complete, and unalterable by repeatedly grouping newly broadcast transactions into a block, which is then broadcast to the network and verified by recipient nodes.~\cite{economist} Each block contains a SHA-256 cryptographic hash of the previous block~\cite{economist}, thus linking it to the previous block and giving the blockchain its name.
+
+To be accepted by the rest of the network, a new block must contain a proof-of-work ($PoW$). The system used is based on Adam Back's 1997 anti-spam scheme, Hashcash~\cite{Nakamoto_bitcoin:a}.
+The $PoW$ requires miners to find a number called a nonce, such that when the block content is hashed along with the nonce, the result is numerically smaller than the network's difficulty target~\cite{Nakamoto_bitcoin:a}. This proof is easy for any node in the network to verify, but extremely time-consuming to generate, as for a secure cryptographic hash, miners must try many different nonce values before meeting the difficulty target.
+
+The primary purpose of mining is to set the history of transactions in a way that is computationally impractical to modify by any one entity. By downloading and verifying the blockchain, bitcoin nodes are able to reach consensus about the ordering of events in bitcoin.~\cite{wiki}
+
+Every 2,016 blocks (approximately 14 days at roughly 10 min per block), the difficulty target is adjusted based on the network's recent performance, with the aim of keeping the average time between new blocks at ten minutes. In this way the system automatically adapts to the total amount of mining power on the network. Between 1 March 2014 and 1 March 2015, the average number of nonces miners had to try before creating a new block increased from 16.4 quintillion to 200.5 quintillion.\cite{difficulty_history}
+
+The proof-of-work system, alongside the chaining of blocks, makes modifications of the blockchain extremely hard, as an attacker must modify all subsequent blocks in order for the modifications of one block to be accepted. As new blocks are mined all the time, the difficulty of modifying a block increases as time passes and the number of subsequent blocks (also called confirmations of the given block) increases.~\cite{economist}
+
+Mining is also the mechanism used to introduce Bitcoins into the system: Miners are paid any transaction fees as well as a "subsidy" of newly created coins. This both serves the purpose of disseminating new coins in a decentralized manner as well as motivating people to provide security for the system.~\cite{wiki}
+
+Originally, Bitcoin mining was conducted on the \textit{CPUs} of individual computers, with more cores and greater speed resulting in more profitability. After that, the system became dominated by multi-graphics card systems, then field-programmable gate arrays (\textit{FPGAs}) and finally application-specific integrated circuits (\textit{ASICs}), in the attempt to find more hashes per hour with less electrical power usage.
+
+Due to this constant escalation, it has become hard for prospective new miners to start. This adjustable difficulty is an intentional mechanism created to prevent inflation. To get around that problem, individuals often work in mining pools.
+
+Bitcoin generally started with individuals and small organizations mining. At that time, start-up could be enabled by a single high-end gaming system. Now, however, larger mining organizations might spend tens of thousands on one high-performance, specialized application-specific integrated circuit.
+
+That creates a problem. In a system, which from its creation, it is supposed to distribute power among users, there has been a great power concentration in the hands of big companies, like Bitfury or 21, that develop ASICs to mine bitcoin. Because of the extreme cost of ASICs and extreme hashrate, someone who uses a multi-graphics card system or a $CPU$ is out of competition. As a result of this, independent miners have largely dried up.
+
 %
 %% Egalitarian Mining
 %
