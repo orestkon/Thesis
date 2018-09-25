@@ -54,6 +54,23 @@ To sum up, for reasons of security and decentralization, it is healthy for some 
 
 Memory-hardness defends a system against this prospect and thus strengthens the notion of coin's security. Furthermore, no matter how much someone trusts the corporations involved, security is a binary state. A system cannot be secure against attackers and insecure against other parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.
 %
-%% Monero
+\section{Monero}
+Monero (XMR) is a decentralised open-source cryptocurrency forked from Bytecoin in April 2014. The coin's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The exact person behind a Monero transaction is not known; this results in considerable increase of privacy compared to Bitcoin and its forks.~\cite{monerodef}
+
+Monero is actively encouraged to those seeking financial privacy, since payments and account balances remain entirely hidden, which is not the standard for most cryptocurrencies.\\
+
+\noindent Monero is:~\cite{monero}
+\begin{description}
+  \item [Untraceable] Monero uses a digital signature scheme called "ring signatures", which shuffles users' public keys in order to eliminate the possibility to identify a particular user.
+  \item [Unlinkable] Monero employs a specific protocol which generates multiple unique one-time addresses that can only be linked by the payment receiver and are unfeasable to be revealed through blockhain analysis.
+  \item [Secure] Monero is cryptographically secured. Moreover, the design of the algorithm used, consists in tremendous computational and electric capibilities that an adversary would need to even try to steal funds.
+  \item [Private] Privacy is basically provided with the idea of anonymous transactions without any obligations to cooperate with third parties.
+  \item [Analysis Resistant] Monero's blockhain analysis resistantce results from unlinkability, which was achieved by using a modified version of the Diffie-Hellman exchange protocol that generates multiple one-time public addresses that can only be simply gathered by the message receiver, but hardly analyzed by confused foreigners inside the block explorer.
+\end{description}
+%
+Monero uses a Proof of Work mechanism to issue new coins and
+incentivize miners to secure the network and validate transactions.
+One key part, for Monero to offer the above, is a proof-of-work algorithm called CryptoNight, developed by the CryptoNote
+project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the memory-hardness property of this algorithm.
 %
 %% Cryptonight
