@@ -68,9 +68,15 @@ Monero is actively encouraged to those seeking financial privacy, since payments
   \item [Analysis Resistant] Monero's blockhain analysis resistantce results from unlinkability, which was achieved by using a modified version of the Diffie-Hellman exchange protocol that generates multiple one-time public addresses that can only be simply gathered by the message receiver, but hardly analyzed by confused foreigners inside the block explorer.
 \end{description}
 %
+In Monero a wallet is called an account, and it is a private account owned and operated by a Monero user. An account contains all of the Monero transactions a user has sent and received. Your account balance is a sum of all the Monero received, less the Monero sent.
+
+A Monero account has two balances, a locked and an unlocked balance. The unlocked balance contains funds that can be spent immediately, and the locked balance contains funds that can't be spent right now. A Monero user may receive a transaction that has an unlock time set, or he may have sent some Monero and are waiting for the change to come back to his wallet, both situations that could lead to those funds being locked for a time.
+
+An account resides only under user's control, normally on his computer, and cannot be accessed by anyone else if he practices good security.~\cite{getmonero}
+
 Monero uses a Proof of Work mechanism to issue new coins and
 incentivize miners to secure the network and validate transactions.
-One key part, for Monero to offer the above, is a proof-of-work algorithm called CryptoNight, developed by the CryptoNote
+One key part, for Monero project to offer the above, is a proof-of-work algorithm called CryptoNight, developed by the CryptoNote
 project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the memory-hardness property of this algorithm.
 %
 %% Cryptonight
