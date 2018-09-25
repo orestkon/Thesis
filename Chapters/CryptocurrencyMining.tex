@@ -79,4 +79,58 @@ incentivize miners to secure the network and validate transactions.
 One key part, for Monero project to offer the above, is a proof-of-work algorithm called CryptoNight, developed by the CryptoNote
 project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the memory-hardness property of this algorithm.
 %
-%% Cryptonight
+\section{CryptoNote}
+CryptoNote, as described in the bitcoin forum~\cite{btcforum}, is the technology that allows creation of privacy-centric cryptocurrencies. The level of anonymity provided by CryptoNote isn't possible with Bitcoin code base by design. Bytecoin (\emph{BCN}) was the CryptoNote reference implementation, and \emph{XMR} is based on \emph{BCN}'s code.
+
+Two of the main features of CryptoNote are ring signatures that mask sender identities by mixing and one-time keys that make transactions unlinkable. Their combined effect gives a high degree of anonymity without any extra effort on the part of the user.
+
+Unlike Bitcoin, your funds are not held in the address you give out to others. Instead, every time you receive a payment it goes to an unlinkable address generated with random numbers. When you decide to spend the funds in that one-time address, the amount will be broken down and the components will be indistinguishable from identical outputs in the blockchain.
+
+For example if $556.44$ \emph{XMR} are sent, the protocol will break it down into $500 + 50 + 6 + 0.4 + 0.04$ and a ring signature will be performed with other $500$'s, $50$'s, $6$'s, $0.4$'s, and $0.04$'s in the blockchain. Unlike the "CoinJoin" mixing method, CryptoNote mixes outputs not transactions. This means no other senders need to be participating with you at the same time or with the same amounts. Any arbitrary amount sent at any time can always be rendered fundamentally indistinguishable (a mathematical proof is given in the white paper)~\cite{citeulike:14139412}.
+
+The degree of anonymity is also a choice rather than decided by the protocol: do you want to be hidden as one among five or one among fifty? The size of the signature grows linearly as $O(n+1)$ with the ambiguity so greater anonymity is paid for with higher fees to miners.\\
+
+\noindent Ring signatures are explained below. We will start will a normal signature scheme shown in \hyperref[fig:normal_sig]{Fig.}~\ref{fig:normal_sig}. Reproduced from CryptoNote:\\
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9 \columnwidth,keepaspectratio]{Images/CryptoNote/normal_sig.png}
+  \caption{Normal signature: One participant, which allows one-to-one mapping.}
+  \label{fig:normal_sig}
+\end{figure}\\
+In \hyperref[fig:ring_sig]{Fig.}~\ref{fig:ring_sig} we show the ring signature concept:\\
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9 \columnwidth,keepaspectratio]{Images/CryptoNote/ring_sig.png}
+  \caption{Ring signature: Only proves that a signer belongs to a group.}
+  \label{fig:ring_sig}
+\end{figure}\\
+The result is shown in \hyperref[fig:result]{Fig.}~\ref{fig:result}. The reader can think of it as decentralized and trustless mixing.
+%% In the final document the following line needs to be uncommented in order to show the figures properly.
+%\newpage
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9 \columnwidth,keepaspectratio]{Images/CryptoNote/result.png}
+  \caption{High level of anonymity in cryptocurrency transactions.}
+  \label{fig:result}
+\end{figure}
+
+%% Uncomment the following line in the final document, if it is placed after a figure. Looks bad otherwise.
+%\noindent
+Now that we have seen the whole concept, it is time to see what a transaction looks like in this context. Again reproduced from CryptoNote, we will subjoin an example and a figure showing the details of a transaction from Bob to Carol.
+
+Bob decides to spend an output, which was sent to the one-time public key. He needs Extra \textbf{(1)}, TxOutNumber \textbf{(2)}, and his Account private key \textbf{(3)} to recover his one-time private key \textbf{(4)}.
+
+When sending a transaction to Carol, Bob generates its Extra value by random \textbf{(5)}. He uses Extra \textbf{(6)}, TxOutNumber \textbf{(7)} and Carol's Account public key \textbf{(8)} to get her Output public key \textbf{(9)}.
+
+In the input Bob hides the link to his output among the foreign keys \textbf{(10)}. To prevent double-spending he also packs the Key image, derived from his One-time private key \textbf{(11)}.
+
+Finally, Bob signs the transaction, using his One-time private key \textbf{(12)}, all the public keys \textbf{(13)} and Key Image \textbf{(14)}. He appends the resulting Ring Signature to the end of the transaction \textbf{(15)}.
+
+The example above is illustrated in \hyperref[fig:transaction]{Fig.}~\ref{fig:transaction}.\\
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.9 \columnwidth,keepaspectratio]{Images/CryptoNote/transaction.png}
+  \caption{A sample transaction from Bob to Carol.}
+  \label{fig:transaction}
+\end{figure}
+%
