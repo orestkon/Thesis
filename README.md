@@ -18,7 +18,7 @@
    3. Mining
    4. Egalitarian Mining
    5. Monero
-   6. Cryptonight
+   6. CryptoNote
 
 4. Cryptonight Analysis
    1. Description (Stage 1,2,3)
