@@ -21,7 +21,8 @@
    6. CryptoNote
 
 4. Cryptonight Analysis
-   1. Description (Stage 1,2,3)
+   1. Description 
+   2. The three Stages
    2. Stage 2 and Memory-hardness
    3. Details and Graphics representation
 
