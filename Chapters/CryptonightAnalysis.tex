@@ -4,6 +4,32 @@
 %
 \setcounter{section}{0}
 \section{Description}
+In this section we will describe in detail the proposed implementation of the CryptoNight hash function. This function is used in the Monero project in order to achieve \emph{egalitarian mining}. It is easy to understand why we characterize this implementation as \emph{proposed}, since each miner is free to use any implementation he/she can think of, as long as it produces the right result.
+
+In order to prove that a function is \emph{memory-hard} we need to show that no implementation exists, that can produce the same result using less memory without a significant time cost. In other words, using an implementation which needs less memory is not something that can give advantage to some miner because the time factor will make the procedure equally or more "expensive", even if the miner uses parallel computation techniques.
+
+\noindent Reproduced from CryptoNote~\cite{cryptonight}:
+\begin{verbatim}
+  CryptoNight is a memory-hard hash function. It is designed to be
+  inefficiently computable on GPU, FPGA and ASIC architectures.
+\end{verbatim}
+In the proposed implementation, a scratchpad\footnote{a large area of memory used to store intermediate values during the evaluation of a memory-hard function.} is used (2MB) to ensure that the memory needed fits the size of L3 cache (per core) in modern processors. In practice, the miner should measure mining power and calculate efficiency. In Monero mining, $CPUs$ cores are only efficient if they can use the super fast 2MB cache over and over. Each core needs about 2MB for CryptoNight to stay cached. So a miner should check how much L2 cache or in rare cases also L3 cache the CPU has. Then divide by 2MB this, will be how many cores he/she can run at the same time.
+
+There are several reasons to suspect that CryptoNight could be a memory-hard function. One of the most popular argument was that a megabyte of internal memory is an almost unacceptable size for a modern ASIC pipeline. But, hardware is evolving and eventually there was recently an effort for Monero \emph{ASIC} production.
+
+There were some thoughts like "\emph{How did they did this? Isn't CryptoNight memory-bound?}". Well, one thing is that CryptoNight is \emph{ASIC-resistant}, not \emph{proof}. But, that was not the case. Another issue is that L3 cache supports a lot of extra functionality like being shared across cores, writing back to $RAM$, being behind two other levels of cache, etc. which all makes a lot less efficient (among other issues with the approach). But, again, that was not the case in that particular effort.
+
+L3 latency wasn't the issue. The $ASICs$ just traded latency for bandwidth the same way $GPUs$ do. They're built on stacks of $DRAM$ not lightning fast caches. The costs of cache complexity aren't only latency but also power usage and die space. Raw speed isn't even necessarily the goal for either $CPUs$ or $GPUs$ or $ASICs$ here, it is efficiency.
+
+But, Monero project reacted and announced upgrades bi-annually in order to keep ASIC's at bay. Upgrades are a problem, because upgrades produce bugs and vulnerabilities. Especially, when they are that frequent. On the other hand, upgrades in Monero are minor with no changes to the memory-hard part. From this experience we understand that a formal proof or even a better understanding of the memory-hardness property in practice, is vital in order to protect a cryptocurrency from centralization.
+
+In this chapter we will just show the proposed implementation of CryptoNight without any analysis. We will demonstrate the three stages of the computation and the role for each element. A really quick overview of these stages would be something like this:
+
+\begin{enumerate}
+  \item Initialize the scratchpad in a pseudo-random manner.
+  \item Read/write operations at pseudo-random addresses. (memory-hard part)
+  \item Use all the computations' results to produce the output.
+\end{enumerate}
 %% Description (Stage 1,2,3)
 %
 %% Stage 2 and Memory-hardness
