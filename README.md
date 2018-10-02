@@ -4,7 +4,7 @@
    1. Overview
    2. Thesis Structure
 
-1. Preliminaries
+2. Preliminaries
    1. Overview
    2. Hash functions
    3. Memory-hardness
@@ -21,7 +21,7 @@
    6. CryptoNote
 
 4. Cryptonight Analysis
-   1. Description 
+   1. Description
    2. The three Stages
    2. Stage 2 and Memory-hardness
    3. Details and Graphics representation
