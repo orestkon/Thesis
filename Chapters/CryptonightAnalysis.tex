@@ -30,6 +30,91 @@ In this chapter we will just show the proposed implementation of CryptoNight wit
   \item Read/write operations at pseudo-random addresses. (memory-hard part)
   \item Use all the computations' results to produce the output.
 \end{enumerate}
+
+\section{The three Stages}
+Enough with the overview of the function and its history. Let's dive into it and see in detail its components.
+
+The input of this algorithm is a block and if the value of the Cryptonight function satisfies the target (\hyperref[eq:target]{equation}~\ref{eq:target}), it is possible that this block is the next block in the blockchain.
+
+\begin{equation}
+  \label{eq:target}
+  \color{Bittersweet} \mbox{Cryptonight}
+  \color{black} (
+  \color{RedViolet} \mbox{block}
+  \color{black} )\leq
+  \color{ForestGreen} \mbox{Target}
+  \color{black}
+\end{equation}
+So, the input of the funtion is a block of transactions along with the necessary fields, which are specified by the Monero protocol.
+
+\subsection{The first Stage}
+The first stage of the algorithm sets the initial value of the scratchpad. In order to prevent several attack schemes, the scratchpad must be initialized with data chosen in a way, which is indistiguishable from the uniform distribution. This is the goal.
+
+We will describe the first Stage in several parts and discuss the role of each part and its contribution regarding the properties of function's output. Let us begin:
+
+\noindent Prepare the tools:
+% Prepare the tools
+\begin{enumerate}
+  \item Hash the input using Keccak~\cite{keccak} ($b=1600$, $c=512$).
+  \item Choose the first $32$ bytes of the final state.
+  \item Interpret them as an AES-256 key.
+  \item Expand them to $10$ round keys.
+\end{enumerate}
+% Comment on the above
+Keccak is the versatile cryptographic function that is most known as SHA-3. The parameter analysis and the description of their part is beyond the scope of this thesis. The reader is refered to their work.
+
+We will consider Keccak a collision-free hash function. The next three steps produce random keys for encryption. We consider these keys random enough in the way that they are interpreted as keys and expanded according to \cite{nla.cat-vn4183631}.
+
+\noindent Create the scratchpad:
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item Allocate $2097152$ bytes ($2$MiB).
+\end{enumerate}
+\noindent The encryption part:
+\begin{enumerate}
+  \setcounter{enumi}{5}
+  \item Split the bytes $64$ to $191$ into $8$ blocks of $16$ bytes each.
+  \item \label{step 7} Encrypt the blocks as follows:
+    \begin{verbatim}
+      for i = 0..9 do:
+          block = aes_round(block, round_keys[i])
+    \end{verbatim}
+\end{enumerate}
+\noindent Fill $128$ bytes of the scratchpad:
+\begin{enumerate}
+  \setcounter{enumi}{7}
+  \item Fill $128$ bytes of the scratchpad with the resulting blocks.
+\end{enumerate}
+\noindent Repeat:
+\begin{enumerate}
+  \setcounter{enumi}{8}
+  \item With the resulting blocks run \hyperref[step 7]{step}~\ref{step 7} again.
+\end{enumerate}
+%
+Each time 128 bytes are written, they represent the
+result of the encryption of the previously written 128 bytes. The
+process is repeated until the scratchpad Allocate $2097152$ bytes ($2$MiB)Allocate $2097152$ bytes ($2$MiB)Allocate $2097152$ bytes ($2$MiB)is fully initialized.
+
+\subsection{The second Stage (memory-hardness)}
+The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (all of them, with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final stage of the scratchpad, using memory less than the size of the scratchpad. That is the intuition. In detail:
+
+\noindent \emph{(The preparation part).} The core structure of this stage is a loop. However, before illustrating the computations that take place inside the loop, there are some computations needed for preparation and two technical clarifications.
+
+\begin{enumerate}
+  \item Compute the values of $a$ and $b$.
+\end{enumerate}
+Elements $a$ and $b$ are the two values which, along with the scratchpad, are given as input to the loop. More specifically, the first $64$ bytes of the hashed input (the Keccak state) are split in two parts ($32$ bytes each part) and $XOR$ed, and the resulting $32$ bytes are used to initialize variables $a$ and $b$, $16$ bytes each.
+
+\noindent \emph{(Clarification 1).} The reader may notice in figure ... that the function uses a 16-byte value as an address in the scratchpad. Actually, the value is interpreted as a little-endian integer. The $21$ low-order bits are used as a byte index. To ensure the 16-byte alignment, the four low-order bits of the index are cleared. This alignment is essential, as the data is read from and written to the scratchpad in 16-byte blocks.
+
+\noindent \emph{(Clarification 2).} The main loop is iterated $524,288 = 2^{19}$ times. Every time, two blocks of the scratchpad are written, so with high probability, the whole scratchpad will be overwritten. In every iteration, along with the two blocks of the scratchpad, values $a'$ and $b'$ are computed, which are used as input to the next iteration.
+
+Now we are ready to describe the inner computations of the loop.
+%
+%% The above is not done. Check again tomorrow from line 50. I leave now to drink a fucking beer.. Cheers tomorrow's self...
+%
+%% Here my thought is: Describe as an algorithm (steps) the procedure and maybe along a figure. Just a thought...
+%
 %% Description (Stage 1,2,3)
 %
 %% Stage 2 and Memory-hardness
