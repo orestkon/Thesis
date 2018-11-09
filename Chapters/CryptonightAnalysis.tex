@@ -32,7 +32,7 @@ In this chapter we will just show the proposed implementation of CryptoNight wit
 \end{enumerate}
 
 \section{The three Stages}
-Enough with the overview of the function and its history. Let's dive into it and see in detail its components.
+Enough with the overview of the function and its history. Let's dive into it and see in detail its components as it is described in \cite{cryptonight}.
 
 The input of this algorithm is a block and if the value of the Cryptonight function satisfies the target (\hyperref[eq:target]{equation}~\ref{eq:target}), it is possible that this block is the next block in the blockchain.
 
@@ -45,7 +45,7 @@ The input of this algorithm is a block and if the value of the Cryptonight funct
   \color{ForestGreen} \mbox{Target}
   \color{black}
 \end{equation}
-So, the input of the funtion is a block of transactions along with the necessary fields, which are specified by the Monero protocol.
+So, the input of the function is a block of transactions along with the necessary fields, which are specified by the Monero protocol.
 
 \subsection{The first Stage}
 The first stage of the algorithm sets the initial value of the scratchpad. In order to prevent several attack schemes, the scratchpad must be initialized with data chosen in a way, which is indistiguishable from the uniform distribution. This is the goal.
@@ -80,7 +80,6 @@ We will consider Keccak a collision-free hash function. The next three steps pro
           block = aes_round(block, round_keys[i])
     \end{verbatim}
 \end{enumerate}
-\noindent Fill $128$ bytes of the scratchpad:
 \begin{enumerate}
   \setcounter{enumi}{7}
   \item Fill $128$ bytes of the scratchpad with the resulting blocks.
@@ -93,7 +92,7 @@ We will consider Keccak a collision-free hash function. The next three steps pro
 %
 Each time 128 bytes are written, they represent the
 result of the encryption of the previously written 128 bytes. The
-process is repeated until the scratchpad Allocate $2097152$ bytes ($2$MiB)Allocate $2097152$ bytes ($2$MiB)Allocate $2097152$ bytes ($2$MiB)is fully initialized.
+process is repeated until the scratchpad is fully initialized.
 
 \subsection{The second Stage (memory-hardness)}
 The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (all of them, with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final stage of the scratchpad, using memory less than the size of the scratchpad. That is the intuition. In detail:
@@ -101,7 +100,7 @@ The second stage of the algorithm uses the initialized scratchpad and two values
 \noindent \emph{(The preparation part).} The core structure of this stage is a loop. However, before illustrating the computations that take place inside the loop, there are some computations needed for preparation and two technical clarifications.
 
 \begin{enumerate}
-  \item Compute the values of $a$ and $b$.
+  \item \label{memh: step 1} Compute the values of $a$ and $b$.
 \end{enumerate}
 Elements $a$ and $b$ are the two values which, along with the scratchpad, are given as input to the loop. More specifically, the first $64$ bytes of the hashed input (the Keccak state) are split in two parts ($32$ bytes each part) and $XOR$ed, and the resulting $32$ bytes are used to initialize variables $a$ and $b$, $16$ bytes each.
 
@@ -109,7 +108,37 @@ Elements $a$ and $b$ are the two values which, along with the scratchpad, are gi
 
 \noindent \emph{(Clarification 2).} The main loop is iterated $524,288 = 2^{19}$ times. Every time, two blocks of the scratchpad are written, so with high probability, the whole scratchpad will be overwritten. In every iteration, along with the two blocks of the scratchpad, values $a'$ and $b'$ are computed, which are used as input to the next iteration.
 
-Now we are ready to describe the inner computations of the loop.
+Now we are ready to describe the inner computations of the loop. We will divide this stage into parts, as it will help us later in the analysis. The number of parts are determined, based on some intermediate values. Here, we note that the intermediate values are not memory requirements, as we can implement the computations with only $32$ bytes of memory (for $a$ and $b$) plus the memory needed for the scratchpad. But during theoretical analysis and understanding of the function's computations, these intermediate values seem natural stops of the train of thought. So, after the \hyperref[memh: step 1]{step}~\ref{memh: step 1}:
+
+\begin{enumerate}
+  \setcounter{enumi}{1}
+  \item \label{memh: step 2} Interpret the value of $a$ as a scratchpad address.
+  \item \label{memh: step 3} Read from this address.
+  \item Evaluate the AES function with data from \hyperref[memh: step 3]{step}~\ref{memh: step 3} and key the value of $a$.
+\end{enumerate}
+Let's call this intermediate value $c$. And let's add a final step to this part:
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item $XOR$ $c$ with $b$ and write the result to the address of \hyperref[memh: step 2]{step}~\ref{memh: step 2}.
+\end{enumerate}
+The value $c$ is passed as $b'$, part of the input of the next iteration. The second part involves another read from the scratchpad:
+
+\begin{enumerate}
+  \setcounter{enumi}{5}
+  \item \label{memh: step 6} Interpret the value of $c$ as a scratchpad address.
+  \item Read from this address. (We will refer to this intermediate value as $d$.)
+  \item \label{memh: step 8} Multiply\footnote{The multiplication uses only the first 8 bytes of each argument, which are interpreted as unsigned 64-bit little-endian integers and multiplied together. The result is converted into 16 bytes, and finally the two 8-byte halves of the result are swapped~\cite{cryptonight}.} $c$, $d$ and add the value of $a$ to the result.
+  \item Write the result of \hyperref[memh: step 8]{step}~\ref{memh: step 8} to the address of \hyperref[memh: step 6]{step}~\ref{memh: step 6}.
+\end{enumerate}
+This concludes the second part. The scratchpad is written twice per iteration. The only thing that is left to conclude the second stage is the computation of $a'$, part of the input of the next iteration. This is computed as follows:
+
+\begin{enumerate}
+  \setcounter{enumi}{9}
+  \item $XOR$ $d$ with the result of \hyperref[memh: step 8]{step}~\ref{memh: step 8} to compute $a'$.
+\end{enumerate}
+
+
+
 %
 %% The above is not done. Check again tomorrow from line 50. I leave now to drink a fucking beer.. Cheers tomorrow's self...
 %
