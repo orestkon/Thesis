@@ -1,3 +1,10 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For this chapter I need to build the figures.
+% NOT done yet.
+% Also need to be checked, but this will happen after
+% the figure insertion.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter*{Cryptonight Analysis}
 \addcontentsline{toc}{chapter}{Cryptonight Analysis}
 %
@@ -55,7 +62,7 @@ We will describe the first Stage in several parts and discuss the role of each p
 \noindent Prepare the tools:
 % Prepare the tools
 \begin{enumerate}
-  \item Hash the input using Keccak~\cite{keccak} ($b=1600$, $c=512$).
+  \item \label{hashing} Hash the input using Keccak~\cite{keccak} ($b=1600$, $c=512$).
   \item Choose the first $32$ bytes of the final state.
   \item Interpret them as an AES-256 key.
   \item Expand them to $10$ round keys.
@@ -130,22 +137,70 @@ The value $c$ is passed as $b'$, part of the input of the next iteration. The se
   \item \label{memh: step 8} Multiply\footnote{The multiplication uses only the first 8 bytes of each argument, which are interpreted as unsigned 64-bit little-endian integers and multiplied together. The result is converted into 16 bytes, and finally the two 8-byte halves of the result are swapped~\cite{cryptonight}.} $c$, $d$ and add the value of $a$ to the result.
   \item Write the result of \hyperref[memh: step 8]{step}~\ref{memh: step 8} to the address of \hyperref[memh: step 6]{step}~\ref{memh: step 6}.
 \end{enumerate}
-This concludes the second part. The scratchpad is written twice per iteration. The only thing that is left to conclude the second stage is the computation of $a'$, part of the input of the next iteration. This is computed as follows:
+This concludes the second part. The scratchpad is written twice per iteration. The only thing that is left to conclude the description of the second stage, is the computation of $a'$, part of the input of the next iteration. This is computed as follows:
 
 \begin{enumerate}
   \setcounter{enumi}{9}
   \item $XOR$ $d$ with the result of \hyperref[memh: step 8]{step}~\ref{memh: step 8} to compute $a'$.
 \end{enumerate}
 
+\subsection{The third Stage}
+The third stage of the algorithm uses the final state of the scratchpad to produce the output. During this stage $AES$ operation is used. At first, the function extracts $10$ key values from $32$ bytes of the hashed input of the function, similar to the \hyperref[hashing]{step}~\ref{hashing} of the first stage.
 
+\noindent Extracting keys:
+% Extract keys
+\begin{enumerate}
+  \item Choose the bytes $[32...63]$ of the final Keccak state.
+  \item Interpret them as an AES-256 key.
+  \item \label{keys} Expand them to $10$ round keys.
+\end{enumerate}
+After this, the function needs a starting value. It applies $XOR$ operation on bytes $[64...191]$ of the hashed input and the first $128$ bytes of the scratchpad. Let's call these values \emph{input} and \emph{scratchpad[0]}.
 
-%
-%% The above is not done. Check again tomorrow from line 50. I leave now to drink a fucking beer.. Cheers tomorrow's self...
-%
-%% Here my thought is: Describe as an algorithm (steps) the procedure and maybe along a figure. Just a thought...
-%
-%% Description (Stage 1,2,3)
-%
-%% Stage 2 and Memory-hardness
-%
-%% Details and Graphics representation
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item \label{xor} \emph{input} $\oplus$ \emph{scratchpad[0]}.
+\end{enumerate}
+Now, using the first key of \hyperref[keys]{step}~\ref{keys} as key to the $AES$ operation:
+
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item \label{encrypt} Encrypt the result of \hyperref[xor]{step}~\ref{xor}.
+\end{enumerate}
+Repeat the last two steps as follows:
+
+\begin{itemize}
+  \item Take as input the encrypted result of the last step.
+  \item Take the next $128$ bytes of the scratchpad(\emph{scratchpad[1]}).
+  \item Use, as $AES$ key, the next extracted key.
+  \item Execute \hyperref[xor]{step}~\ref{xor} and \hyperref[encrypt]{step}~\ref{encrypt}.
+\end{itemize}
+until the last bytes of the scratchpad are used to the aforementioned operations. After the last bytes of the scratchpad are $XOR$ed and encrypted,
+
+\begin{enumerate}
+  \setcounter{enumi}{5}
+  \item \label{modified} Use the result to replace the bytes $[64...191]$ of the hashed input.
+\end{enumerate}
+We we call the state of the hashed input after the above step as the \emph{modified Keccak state}. To produce the final result the function performs the next steps.
+
+\begin{enumerate}
+  \setcounter{enumi}{5}
+  \item Pass the \emph{modified Keccak state} through Keccak-$f$ (the Keccak permutation~\cite{keccak}).
+  \item Choose the 2 low-order bits of the first byte of the \emph{modified Keccak state}.
+  \item Based on these bits choose a hash function:
+  \begin{itemize}
+    \item case $00$: BLAKE-256
+    \item case $01$: Groestl-256
+    \item case $10$: JH-256
+    \item case $11$: Skein-256
+  \end{itemize}
+  \item \label{output} Apply the chosen function to the \emph{modified Keccak state}.
+\end{enumerate}
+The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
+
+\section{CryptoNight Analysis}
+%% Introduce our model: AES as PRF, parametrize everything, set up the focus on the second stage.
+% You will explain probabilities in the next chapter, but still, you can analyze the game perhaps?
+% Definition of security ...? 
+% A glimpse on what set of variables are NOT independent, or NOT DEFINITELY independent.
+% Just set up your model, so you can write next chapter easily...
+%% Still needs figures...
