@@ -1,7 +1,7 @@
 ## Extra files, I need to be ignored:
 readme.txt
 history.txt
-
+Cryptographic_Hash_function.jpg
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
