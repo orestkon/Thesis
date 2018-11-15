@@ -198,9 +198,30 @@ We we call the state of the hashed input after the above step as the \emph{modif
 The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
 
 \section{CryptoNight Analysis}
-%% Introduce our model: AES as PRF, parametrize everything, set up the focus on the second stage.
+Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the memory-hardness property. The reader now should have an understanding about the general purpose of each stage. So, we can see the overview of CryptoNight's structure. The first stage sets the scene for the memory-hardness part. We will assume that it initializes the scratchpad in a way, that is indistiguishable from the uniform distribution. It is also safe to assume that, for an honest miner, the input is chosen in a way that is indistiguishable from the uniform distribution also. Our goal is to focus on the second stage, analyze it and then try to imagine what happens when the miner is not honest. From the aforementioned assumptions we can conclude that the input of the second stage is chosen uniformly random from its domain. Just to remember, the second stage's input is:
+
+\begin{itemize}
+  \item $a$
+  \item $b$
+  \item Scratchpad, from now on denoted as $SP$
+\end{itemize}
+
+\subsection{Parameters}
+One of the first things that we need to do is to parametrize the input. We can't talk about complexity or security without the relative size between our objects or calculations. Moreover, this kind of analysis can help to generalize results and conclusions.
+
+We will arbitrarily choose $n$ as symbol for the size of $a$ and fix everything else respectively. For that analysis we are fixing our language. Symbols:
+
+\begin{itemize}
+  \item Size of $a$: $n$
+  \item Size of $b$: $n$
+  \item Size of $SP$: $\beta_{n} = 2 \cdot 2^{20} = 2 \cdot n^{5} $ (polynomial regarding $n$)
+  \item The value of $SP$ in address $x$: $SP_{x}$ (of size $n$)
+\end{itemize}
+
+
+%% Introduce our model: AES as PRF, parametrize everything, set up the focus on the second stage, multiplication.
 % You will explain probabilities in the next chapter, but still, you can analyze the game perhaps?
-% Definition of security ...? 
+% Definition of security ...?
 % A glimpse on what set of variables are NOT independent, or NOT DEFINITELY independent.
 % Just set up your model, so you can write next chapter easily...
 %% Still needs figures...
