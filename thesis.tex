@@ -1,27 +1,24 @@
-% This is samplepaper.tex, a sample chapter demonstrating the
-% LLNCS macro package for Springer Computer Science proceedings;
-% Version 2.20 of 2017/10/04
+%Typeset using XeLaTeX
+
+\documentclass[10pt,a4paper]{book}
 %
-\RequirePackage{amsmath} %% when preloaded the llncs can redefine
-%                        %% things without problems.
-%
-\documentclass[runningheads]{llncs}
 %
 \input{preamble.tex}
+%
 %
 \begin{document}
 %
 \input{firstPage.tex}
-\maketitle              % typeset the header of the contribution
+\input{secondPage.tex}
 \input{abstract.tex}
+\input{abstract_gr.tex}
 %
 \input{tableOfContents.tex}
 %
+%% Start
 %
 \pagenumbering{arabic}
-\setcounter{page}{1}
-%
-%
+
 \input{Chapters/Introduction.tex}
 \input{Chapters/Preliminaries.tex}
 \input{Chapters/CryptocurrencyMining.tex}
@@ -29,14 +26,17 @@
 \input{Chapters/ProblemStatement.tex}
 \input{Chapters/FutureWork.tex}
 \input{Chapters/Summary.tex}
-% \input{Chapters/samplechapter.tex}
 %
-% ---- Bibliography ----
+%% End of the document, clear page and prepare for bibliography
 %
-% BibTeX users should specify bibliography style 'splncs04'.
-% References will then be sorted and formatted in the correct style.
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
 %
-\bibliographystyle{splncs04}
-\bibliography{myBibliography.bib}
+%
+%% Bibliography
+%
+\bibliographystyle{abbrv}
+\bibliography{myBibliography}
 %
 \end{document}

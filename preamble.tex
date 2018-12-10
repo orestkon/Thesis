@@ -1,15 +1,13 @@
-\usepackage{graphicx}
-% Used for displaying a sample figure. If possible, figure files should
-% be included in EPS format.
-%
-\usepackage{bookmark}
-\usepackage{xpatch}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{amssymb}
-\usepackage{enumitem}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{phonetic}
+\usepackage{fancyhdr}
+\usepackage[pass]{geometry}
+\usepackage{fontspec}
 
-% If you use the hyperref package, please uncomment the following line
-% to display URLs in blue roman font according to Springer's eBook style:
+\usepackage{xunicode}
+\usepackage{xltxtra}
+%\usepackage{xgreek}
+\setmainfont[Mapping=TeX-text]{Times New Roman}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -18,22 +16,87 @@
     filecolor=magenta,      % color of file links
     urlcolor=cyan           % color of external links
 }
-\renewcommand\UrlFont{\color{blue}\rmfamily}
-%
-%
+\usepackage[dvipsnames]{xcolor}
+\usepackage[Glenn]{fncychap}
+\ChNameVar{\bfseries\Large}
+\usepackage{tabularx}
+\usepackage[normalem]{ulem}
 
-\setcounter{tocdepth}{2}
+%% myPackages (Extra)
+\usepackage{enumitem}
 
-\makeatletter
-\renewcommand*\l@author[2]{}
-\renewcommand*\l@title[2]{}
-\makeatletter
+\renewcommand{\maketitle}{
+  \begin{titlepage}
+    \newgeometry{left=4cm, top=2.3cm, bottom=2.3cm}
 
-\let\classtableofcontents\tableofcontents%
+    \hbox{
+      \mbox{ \hspace{-1.3cm} }
+      \vrule depth 0.98 \textheight
+      \mbox{ \hspace{1cm} }
 
-\renewcommand{\tableofcontents}{%
-  \begingroup%
-  \xpatchcmd{\chapter}{\thispagestyle{empty}}{}{}{}%
-  \classtableofcontents%
-  \endgroup%
-}
+        \vtop{
+          \vspace{2cm}
+
+          \begin{flushleft}
+            \huge{\bf Thesis Title\\}
+            \vskip3cm
+            \Large  Author's name\\
+            Author's Registration Number\\
+            \vskip3cm
+
+            \begin{minipage}{7.5cm}
+              \begin{flushleft}
+                \normalsize {\it {\bf Examination committee:}\\
+                Professor's name, Department or School, Institution.\\
+                Professor's name, Department or School, Institution.\\
+                Professor's name, Department or School, Institution.}
+              \end{flushleft}
+            \end{minipage}
+
+            \hskip0.5cm
+            \begin{minipage}{6cm}
+              \begin{flushleft}
+                \normalsize {\it {\bf Supervisor:}\\
+                Supervisor's name, Rank, \\ Department or School,\\
+                Institution.\\
+                }
+              \end{flushleft}
+            \end{minipage}
+
+          \end{flushleft}
+
+          \vskip6cm
+          \hskip4.5cm
+          \begin{minipage}{5cm}
+            \begin{center}
+              \includegraphics[width=0.8\textwidth]{alma.png}
+            \end{center}
+          \end{minipage}
+        }
+    }
+
+ \end{titlepage}
+ }
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\theoremstyle{definition}
+\newtheorem{ex}{}[section]
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{remark}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\fancyhead[LO]{\slshape \leftmark}
+\fancyhead[RE]{\slshape \rightmark}
+\fancyhead[LE]{}
+\fancyhead[RO]{}
+\fancyfoot[LO,RE]{
+\tiny{\it}}

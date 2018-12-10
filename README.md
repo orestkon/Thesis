@@ -23,8 +23,8 @@
 4. Cryptonight Analysis
    1. Description
    2. The three Stages
-   2. Stage 2 and Memory-hardness
-   3. Details and Graphics representation
+   3. Stage 2 and Memory-hardness
+   4. Details and Graphics representation
 
 5. Problem Statement and our Remarks
    1. Trying the proof approach

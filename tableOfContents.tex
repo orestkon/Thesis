@@ -1,9 +1,18 @@
-\newpage
-\pagenumbering{Roman}
-\setcounter{page}{1}
-\thispagestyle{headings}
-\pdfbookmark{\contentsname}{toc}
+%
+%% ToC
+%
+%
+\clearpage
+\thispagestyle{empty}
+
+\pagestyle{fancy}
+
+\pagenumbering{roman}
 \tableofcontents
-\newpage
-\phantomsection
-\cleardoublepage
+\clearpage
+%
+%% Empty page
+%
+\thispagestyle{empty}
+\null
+\clearpage
