@@ -9,9 +9,107 @@ The original Bitcoin software by Satoshi Nakamoto was released under the MIT lic
 
 Bitcoin is the first successful implementation of a distributed cryptocurrency, described in part in 1998 by Wei Dai on the cypherpunks mailing list. Building upon the notion that money is any object, or any sort of record, accepted as payment for goods and services and repayment of debts in a given country or socio-economic context, Bitcoin is designed around the idea of using cryptography to control the creation and transfer of money, rather than relying on central authorities.
 
+Bitcoin is pseudonymous: the identity of each user is only their \textit{address}, which corresponds to an ECDSA public key. This address can be used to receive money from other users. Each user can spend money only if they have their corresponding private key. A set of ECDSA keypairs comprises a \textit{wallet}. A user can have multiple addresses.
+
 Bitcoins have all the desirable properties of a money-like good. They are portable, durable, divisible, recognizable, fungible, scarce and difficult to counterfeit.
 
+As in fiat money, transfer of value in Bitcoin happens with transactions. A transaction has inputs and outputs. An output is where the value creation happens for the receiver. An output can be later redeemed by using its designated receiver's private key and turned into an input to be used for another transaction.
+
+\subsection{Scripts}
+Bitcoin offers much more than just moving currency around. It allows us to actually move currency conditionally, where the condition can be expressed as a \emph{Bitcoin script}. Bitcoin script is a stack-based language. An example of a Bitcoin script can be seen on Figure~\ref{fig:bitcoin-script}.
+
+\begin{figure}
+  \centering
+  {
+    \tt
+    OP\_HASH256 \\
+    6fe28c0ab6f1b372c1a6a246ae63f74f931e8365e15a089c68d6190000000000 \\
+    OP\_EQUAL
+  }
+  \caption{A Bitcoin script~\cite{gtklocker}}
+  \label{fig:bitcoin-script}
+\end{figure}
+
+This script introduces two kinds of operations. The first kind is commands prefixed with \code{OP\_}. These operations are called \emph{opcodes} and they perform calculations on values on the stack. The result is pushed again to the stack. The type of the calculations are intuitive, e.g. \code{OP\_HASH256} calculates the SHA256 hash of the value on the top of the stack, \code{OP\_EQUALS} compares the top 2 values on the stack and pushes 1 if they are indeed equal or 0 otherwise. The second kind of operation is hex values. These values are simply pushed to the stack.
+
+It is easy for the reader to see that the script of figure~\ref{fig:bitcoin-script} checks if the value on the stack is the preimage of the given hash value and returns 1 (true) or 0 (false). In practice, this output confirms the success of the evaluation. Such a script is called a \textsf{pubKeyScript}. However, in our example we assume the preimage was on the stack. The way this is implemented in Bitcoin is running another script called \textsf{scriptSig} that passes the parameters to \textsf{pubKeyScript}. Now, let's see the standard script for conventional fund transfer in Bitcoin, called \emph{pay to public key hash} (P2PKH).
+
+% check https://en.bitcoinwiki.org/wiki/Pay-to-Pubkey_Hash for scheme and language for the following subsubsection.
+%%%%% Begin from here tomorrow. After checking wiki, maybe you need to correct the paragraph above.
+
+%%%%% v2. Now everything is kind of corrected. Please, refine the language. The whole section seems
+% confusing to someone who hasn't heard about bitcoin scripts.
+
+\subsubsection{P2PKH}
+Two types of payment are referred as P2PK (pay to public key) and P2PKH (pay to public key hash).
+Satoshi later decided to use P2PKH instead of P2PK for two reasons:
+
+\begin{itemize}
+  \item Elliptic Curve Cryptography is vulnerable to a modified Shor's algorithm for solving the discrete logarithm problem on elliptic curves. That means, that in the future a quantum computer might be able to retrieve a private key from a public key. By publishing the public key only when coins are spent (and assuming that addresses are not reused), such an attack is rendered ineffective.
+  \item With the hash being smaller (20 bytes) it is easier to print and easier to embed into small storage mediums like QR codes.
+\end{itemize}
+
+A Bitcoin address is only a hash, so the sender can't provide a full public key in \textsf{pubKeyScript}. When redeeming coins that have been sent to a Bitcoin address, the recipient provides both the signature and the public key. The script verifies that the provided public key does hash to the hash in \textsf{pubKeyScript}, and then it also checks the signature against the public key. The reader can see the process in detail in table~\ref{tab:bitcoin}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Don't freak out. The next lines were made with this tool: https://www.tablesgenerator.com/
+%% If any debugging is needed, I strongly suggest the online tool.
+%% Enjoy!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{table}[]
+  \centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+\rowcolor[HTML]{C0C0C0}
+\multicolumn{1}{c}{\cellcolor[HTML]{C0C0C0}\textbf{Stack}}                                                                                                                                          & \multicolumn{1}{c}{\cellcolor[HTML]{C0C0C0}\textbf{Script}}                                                                                                                                                          & \multicolumn{1}{c}{\cellcolor[HTML]{C0C0C0}\textbf{Description}}                                                   \\ \midrule
+\multicolumn{1}{|l|}{Empty}                                                                                                                                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}\textless{}sig\textgreater{}\textless{}pubKey\textgreater \\ OP\_DUP OP\_HASH160\\ \textless{}pubKeyHash\textgreater \\ OP\_EQUALVERIFY \\ OP\_CHECKSIG\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}scriptSig and\\ scriptPubKey\end{tabular}}                          \\ \midrule
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKey\textgreater\\ \textless{}sig\textgreater{}\end{tabular}}                                                                          & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}OP\_DUP OP\_HASH160\\ \textless{}pubKeyHash\textgreater \\ OP\_EQUALVERIFY \\ OP\_CHECKSIG\end{tabular}}                                                              & \multicolumn{1}{l|}{\cellcolor[HTML]{FFFFFF}\begin{tabular}[c]{@{}l@{}}Constants\\ added\\ to stack.\end{tabular}} \\ \midrule
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKey\textgreater\\ \textless{}pubKey\textgreater\\ \textless{}sig\textgreater{}\end{tabular}}                                          & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}OP\_HASH160\\ \textless{}pubKeyHash\textgreater \\ OP\_EQUALVERIFY \\ OP\_CHECKSIG\end{tabular}}                                                                      & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Top stack\\ item\\ duplicated.\end{tabular}}                        \\ \midrule
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKeyHashA\textgreater\\ \textless{}pubKey\textgreater\\ \textless{}sig\textgreater{}\end{tabular}}                                     & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKeyHash\textgreater \\ OP\_EQUALVERIFY \\ OP\_CHECKSIG\end{tabular}}                                                                                    & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Top stack\\ item\\ hashed.\end{tabular}}                            \\ \midrule
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKeyHash\textgreater\\ \textless{}pubKeyHashA\textgreater\\ \textless{}pubKey\textgreater\\ \textless{}sig\textgreater{}\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}OP\_EQUALVERIFY \\ OP\_CHECKSIG\end{tabular}}                                                                                                                         & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Constant\\ added.\end{tabular}}                                     \\ \midrule
+\multicolumn{1}{|l|}{\begin{tabular}[c]{@{}l@{}}\textless{}pubKey\textgreater\\ \textless{}sig\textgreater{}\end{tabular}}                                                                          & \multicolumn{1}{l|}{OP\_CHECKSIG}                                                                                                                                                                                    & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Equality check\\ between the\\ top two stack\\ items.\end{tabular}} \\ \midrule
+True                                                                                                                                                                                                & Empty.                                                                                                                                                                                                               & \begin{tabular}[c]{@{}l@{}}Signature is\\ checked for top\\ two stack items.\end{tabular}                          \\ \bottomrule
+\end{tabular}
+\bigskip
+\caption{Bitcoin script process~\cite{p2pkh}}
+\label{tab:bitcoin}
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Table finished. Let's get back to normal mode... :P!!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This is the standard script for conventional fund transfer in Bitcoin. Let's say we want to make sure only Bob can satisfy this script. The \textsf{pubKeyScript} is the following: \code{OP\_DUP OP\_HASH160 <Bob's address> OP\_EQUALVERIFY OP\_CHECKSIG}. The \textsf{scriptSig} is then typically \code{<Bob's signature> <Bob's public key>}.
+
+Bob's signature will be on the hash of the transaction (which we'll explore shortly) containing the output. The script will then duplicate his public key, check that it matches the one on the \text{pubKeyScript} and if it does, it will check that he has provided a valid signature with that public key. If all these checks pass, the stack will end up with 1 on top and the execution will be valid.
+
+\subsection{Outputs}
+An \emph{output} is a tuple ({\sf value, pubKeyScript}). The \textsf{value} refers to an amount of Bitcoin in Satoshi (where $\sf 10^8 \, Satoshi = 1 \, Bitcoin$) and \textsf{pubKeyScript} is a script which needs to be run against some stack and return 1 in order for \textsf{value} to be transferable.
+
+\subsection{Inputs}
+An input is the way an output is redeemed. Specifically, it contains 3 things:
+\begin{itemize}
+  \item The hash of the transaction where the output of interest is contained.
+  \item An index clarifying which output in the transaction this input is referring to.
+  \item A signature (called \textsf{scriptSig}) used for the validation of the output script.
+\end{itemize}
+
+For the transaction to be valid, the script inside the specified output when run on a stack with the contents of \textsf{scriptSig} should return 1.
+
+As a convention, when we talk about the value of an input we mean the value of the output it redeems.
 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Maybe the next step is Bitcoin transactions. Revise the above and start building
+%% the road to mining. A! And update the READΜΕ.md! Maybe if you are bored sometime
+%% fix the first pages also... It should take less than 15'...
+%% Goodbye today's self, see you tomorrow.. This boring !@#$#@!$ will end sometime...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
 \section{Mining}
 Bitcoin mining\footnote{It is misleading to think that there is an analogy between gold mining and bitcoin mining. The fact is that gold miners are rewarded for producing gold, while bitcoin miners are not rewarded for producing bitcoins; they are rewarded for their record-keeping services.} is the processing of transactions in the digital currency system, in which the records of current Bitcoin transactions, \textit{blocks}, are added to the record of past transactions, the \textit{blockchain}. Miners keep the blockchain consistent, complete, and unalterable by repeatedly grouping newly broadcast transactions into a block, which is then broadcast to the network and verified by recipient nodes~\cite{economist}. Each block contains a SHA-256 cryptographic hash of the previous block~\cite{economist}, thus linking it to the previous block and giving the blockchain its name.
 
