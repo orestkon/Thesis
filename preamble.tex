@@ -5,7 +5,7 @@
 \usepackage{fontspec}
 \usepackage{url}
 \usepackage{booktabs}
-\usepackage[table,xcdraw]{xcolor}
+\usepackage[table,xcdraw,dvipsnames]{xcolor}
 \usepackage{algorithm}
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
@@ -22,7 +22,6 @@
     filecolor=magenta,      % color of file links
     urlcolor=cyan           % color of external links
 }
-\usepackage[dvipsnames]{xcolor}
 \usepackage[Glenn]{fncychap}
 \ChNameVar{\bfseries\Large}
 \usepackage{tabularx}
@@ -106,3 +105,17 @@
 \fancyhead[RO]{}
 \fancyfoot[LO,RE]{
 \tiny{\it}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This is for code environment, helpful.
+%% (not complete, I didn't need everything)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\code#1{\texttt{#1}}
+\newcommand{\easyfigure}[3]{
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\columnwidth,keepaspectratio]{figures/#2.#1}
+    \caption{#3}
+    \label{fig:#2}
+  \end{figure}
+}
