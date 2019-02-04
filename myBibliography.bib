@@ -1,3 +1,128 @@
+@misc{CT,
+  author = {Gregory Maxwell},
+  title = {Confidential Transactions}
+}
+%
+@misc{ringCT,
+    author = {Shen Noether},
+    title = {Ring Signature Confidential Transactions for Monero},
+    howpublished = {Cryptology ePrint Archive, Report 2015/1098},
+    year = {2015},
+    note = {\url{https://eprint.iacr.org/2015/1098}},
+}
+%
+@InProceedings{ad-hoc2,
+  author="Wu, Qianhong and Susilo, Willy and Mu, Yi and Zhang, Fangguo",
+  editor="Yoshiura, Hiroshi and Sakurai, Kouichi and Rannenberg, Kai and Murayama, Yuko and Kawamura, Shinichi",
+  title="Ad Hoc Group Signatures",
+  booktitle="Advances in Information and Computer Security",
+  year="2006",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="120--135",
+  abstract="The main advantage of ring signatures is to ensure anonymity in ad hoc groups. However, since a group manager is not present in ad hoc groups, there is no existing way to identify the signer who is responsible for or benefit from a disputed ring signature. In this paper, we address this issue by formalizing the notion of ad hoc group signature. This new notion bridges the gap between the ring signature and group signature schemes. It enjoys the same advantage of ring signatures to provide anonymity whilst not requiring any group manager. Furthermore, it allows a member in an ad hoc group to provably claim that it has (not) issued the anonymous signature on behalf of the group. We propose the first construction of ad hoc group signatures that is provably secure in the random oracle model under the Strong RSA assumption. Our proposal is very simple and additionally, it produces a constant size signature length and requires constant modular exponentiations. This is to ensure that our scheme is very practical for ad hoc applications where a centralized group manager is not present.",
+  isbn="978-3-540-47700-6"
+}
+%
+@article{ad-hoc1,
+  author = {AdidaSusan Hohenberger, Ben and L. Rivest, Ronald},
+  year = {2019},
+  month = {02},
+  pages = {},
+  title = {Ad-Hoc-Group Signatures from Hijacked Keypairs}
+}
+%
+@InProceedings{traceable2,
+  author="Fujisaki, Eiichiro and Suzuki, Koutarou",
+  editor="Okamoto, Tatsuaki and Wang, Xiaoyun",
+  title="Traceable Ring Signature",
+  booktitle="Public Key Cryptography -- PKC 2007",
+  year="2007",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="181--200",
+  abstract="The ring signature allows a signer to leak secrets anonymously, without the risk of identity escrow. At the same time, the ring signature provides great flexibility: No group manager, no special setup, and the dynamics of group choice. The ring signature is, however, vulnerable to malicious or irresponsible signers in some applications, because of its anonymity. In this paper, we propose a traceable ring signature scheme. A traceable ring scheme is a ring signature except that it can restrict ``excessive'' anonymity. The traceable ring signature has a tag that consists of a list of ring members and an issue that refers to, for instance, a social affair or an election. A ring member can make any signed but anonymous opinion regarding the issue, but only once (per tag). If the member submits another signed opinion, possibly pretending to be another person who supports the first opinion, the identity of the member is immediately revealed. If the member submits the same opinion, for instance, voting ``yes'' regarding the same issue twice, everyone can see that these two are linked. The traceable ring signature can suit to many applications, such as an anonymous voting on a BBS. We formalize the security definitions for this primitive and show an efficient and simple construction in the random oracle model.",
+  isbn="978-3-540-71677-8"
+}
+%
+@InProceedings{traceable1,
+  author="Fujisaki, Eiichiro",
+  editor="Kiayias, Aggelos",
+  title="Sub-linear Size Traceable Ring Signatures without Random Oracles",
+  booktitle="Topics in Cryptology -- CT-RSA 2011",
+  year="2011",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="393--415",
+  abstract="Traceable ring signatures, proposed at PKC'07, are a variant of ring signatures, which allow a signer to anonymously sign a message with a tag behind a ring, i.e., a group of users chosen by the signer, unless he signs two messages with the same tag. However, if a signer signs twice on the same tag, the two signatures will be linked and the identity of the signer will be revealed when the two signed messages are different. Traceable ring signatures can be applied to anonymous write-in voting without any special voting authority and electronic coupon services. The previous traceable ring signature scheme relies on random oracles at its security and the signature size is linear in the number of ring members. This paper proposes the first secure traceable ring signature schemes without random oracles in the common reference string model. In addition, the proposed schemes have a signature size of {\$}O({\backslash}sqrt{\{}N{\}}){\$}, where N is the number of users in the ring.",
+  isbn="978-3-642-19074-2"
+}
+%
+@InProceedings{short,
+  author="Au, Man Ho and Chow, Sherman S. M. and Susilo, Willy and Tsang, Patrick P.",
+  editor="Atzeni, Andrea S. and Lioy, Antonio",
+  title="Short Linkable Ring Signatures Revisited",
+  booktitle="Public Key Infrastructure",
+  year="2006",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="101--115",
+  abstract="Ring signature is a group-oriented signature in which the signer can spontaneously form a group and generate a signature such that the verifier is convinced the signature was generated by one member of the group and yet does not know who actually signed. Linkable ring signature is a variant such that two signatures can be linked if and only if they were signed by the same person.",
+  isbn="978-3-540-35152-8"
+}
+%
+@InProceedings{link2,
+  author="Liu, Joseph K. and Wei, Victor K. and Wong, Duncan S.",
+  editor="Wang, Huaxiong and Pieprzyk, Josef and Varadharajan, Vijay",
+  title="Linkable Spontaneous Anonymous Group Signature for Ad Hoc Groups",
+  booktitle="Information Security and Privacy",
+  year="2004",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="325--335",
+  abstract="We present a linkable spontaneously anonymous group (LSAG) signature scheme (alternatively known as linkable ring signature scheme) satisfying the following three properties. (1) Anonymity, or signer indistinguishability. (2) Linkability: That two signatures by the same signer can be linked. (3) Spontaneity: No group secret, therefore no group manager or group secret sharing setup. We reduce the security of our scheme to well-known problems under the random oracle model. Using the scheme, we construct a new efficient one-round e-voting system which does not have a registration phase. We also present a new efficient reduction of famous rewind simulation lemma which only relies on elementary probability theory. Threshold extensions of our scheme are also presented.",
+  isbn="978-3-540-27800-9"
+}
+%
+@InProceedings{link1,
+  author="Liu, Joseph K. and Wong, Duncan S.",
+  editor="Gervasi, Osvaldo and Gavrilova, Marina L. and Kumar, Vipin and Lagan{\`a}, Antonio and Lee, Heow Pueh and Mun, Youngsong and Taniar, David and Tan, Chih Jeng Kenneth",
+  title="Linkable Ring Signatures: Security Models and New Schemes",
+  booktitle="Computational Science and Its Applications -- ICCSA 2005",
+  year="2005",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="614--623",
+  abstract="A ring signature scheme is a group signature scheme but with no group manager to setup a group or revoke a signer's identity. The formation of a group is spontaneous in the way that diversion group members can be totally unaware of being conscripted to the group. It allows members of a group to sign messages on the group's behalf such that the resulting signature does not reveal their identity (anonymity). The notion of linkable ring signature, introduced by Liu, et al. [10], also provides signer anonymity, but at the same time, allows anyone to determine whether two signatures have been issued by the same group member (linkability). In this paper, we enhance the security model of [10] for capturing new and practical attacking scenarios. We also propose two polynomial-structured linkable ring signature schemes. Both schemes are given strong security evidence by providing proofs under the random oracle model.",
+  isbn="978-3-540-32044-9"
+}
+%
+@InProceedings{ring,
+  author="Rivest, Ronald L. and Shamir, Adi and Tauman, Yael",
+  editor="Boyd, Colin",
+  title="How to Leak a Secret",
+  booktitle="Advances in Cryptology --- ASIACRYPT 2001",
+  year="2001",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="552--565",
+  abstract="In this paper we formalize the notion of a ring signature, which makes it possible to specify a set of possible signers without revealing which member actually produced the signature.Unlike group signatures, ring signatures have no group managers, no setup procedures, no revocation procedures, and no coordination:any user can choose any set of possible signers that includes himself,and sign any message by using his secret key and the others' public keys,without getting their approval or assistance. Ring signatures provide an elegant way to leak authoritativ secrets in an anonymous way, to sign casual email in a way which can only be verified by its intended recipient, and to solve other problems in multiparty computations. The main contribution of this paper is a new construction of such signatures which is unconditionally signer-ambiguous, provably secure in the random oracle model,and exceptionally efficient:adding each ring member increases the cost of signing or verifying by a single modular multiplication and a single symmetric encryption.",
+  isbn="978-3-540-45682-7"
+}
+%
+@InProceedings{group,
+  author="Chaum, David and van Heyst, Eug{\`e}ne",
+  editor="Davies, Donald W.",
+  title="Group Signatures",
+  booktitle="Advances in Cryptology --- EUROCRYPT '91",
+  year="1991",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="257--265",
+  abstract="In this paper we present a new type of signature for a group of persons, called a group signature, which has the following properties:only members of the group can sign messages;the receiver can verify that it is a valid group signature, but cannot discover which group member made it;if necessary, the signature can be ``opened'', so that the person who signed the message is revealed.These group signatures are a ``generalization'' of the credential/membership authentication schemes, in which one person proves that he belongs to a certain group.",
+  isbn="978-3-540-46416-7"
+}
+%
 @inproceedings{merkle,
   title={A digital signature based on a conventional encryption function},
   author={Merkle, Ralph C},
