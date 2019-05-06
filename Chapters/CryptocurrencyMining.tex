@@ -10,20 +10,36 @@
 \end{wrapfigure}
 Bitcoin~\cite{Nakamoto_bitcoin:a} is a decentralized digital currency that enables instant payments to anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate with no central authority: transaction management and money issuance are carried out collectively by the network.
 
-\noindent The original Bitcoin software by Satoshi Nakamoto was released under the MIT license. Most client software, derived or "from scratch", also use open source licensing.
+The original Bitcoin software by Satoshi Nakamoto was released under the MIT license. Most client software, derived or "from scratch", also use open source licensing.
 
-Bitcoin is the first successful implementation of a distributed cryptocurrency, described in part in 1998 by Wei Dai on the cypherpunks mailing list. Building upon the notion that money is any object, or any sort of record, accepted as payment for goods and services and repayment of debts in a given country or socio-economic context, Bitcoin is designed around the idea of using cryptography to control the creation and transfer of money rather than relying on central authorities.
+Bitcoin is the first successful implementation of a distributed cryptocurrency, described in part in 1998 by Wei Dai on the cypherpunks mailing list. For the reader to understand what this list was, we reproduce from \emph{cryptoanarchy.wiki}~\cite{cryptoanarchy}:
 
-Bitcoin is pseudonymous~\cite{gtklocker}: the identity of each user is only their \emph{address}, which corresponds to an ECDSA public key. This address can be used to receive money from other users. Each user can spend money only if they have their corresponding private key. A set of ECDSA keypairs comprises a \emph{wallet}. A user can have multiple addresses.
+\begin{verbatim}
+  The Cypherpunks mailing list was started in 1992, and by 1994
+  had 700 subscribers. At its peak, it was a very active forum
+  with technical discussion ranging over mathematics, cryptography,
+  computer science, political and philosophical discussion,
+  personal arguments and attacks, etc., with some spam thrown in.
+  An email from John Gilmore reports an average of 30 messages
+  a day from December 1, 1996 to March 1, 1999, and suggests that
+  the number was probably higher earlier. The number of subscribers
+  is estimated to have reached 2000 in the year 1997.
+\end{verbatim}
 
-As in fiat money, transfer of value in Bitcoin happens with transactions. A transaction has inputs and outputs. An output is where the value creation happens for the receiver. An output can be later redeemed by using its designated receiver's private key and turned into an input to be used for another transaction.
+It is during this period that the community was energised by a battle with the US intelligence establishment relating to the export of cryptography (which the US Government had at the time classified as a munition). This is a battle that the cypherpunk movement and broader civilian cryptography community largely won, though some variations of government proposals still pop up to this day. More about the cypherpunks mailing list and the archived conversations can be found in cryptoanarchy wiki~\cite{cryptoanarchy}.
+
+Building upon the notion that money is any object, or any sort of record, accepted as payment for goods and services and repayment of debts in a given country or socio-economic context, Bitcoin is designed around the idea of using cryptography to control the creation and transfer of money rather than relying on central authorities.
+
+Bitcoin is pseudonymous~\cite{gtklocker}: the identity of each user is only their \emph{address}, which corresponds to an ECDSA public key~\cite{ecdsa}. This address can be used to receive money from other users. Each user can spend money only if they have their corresponding private key. A set of ECDSA keypairs comprises a \emph{wallet}. A user can have multiple addresses.
+
+As in fiat money, transfer of value in Bitcoin happens with transactions. A \hyperref[sec:transactions]{transaction} has \hyperref[sec:inputs]{inputs} and \hyperref[sec:outputs]{outputs}. An output is where the value creation happens for the receiver. An output can be later redeemed by using its designated receiver's private key and turned into an input to be used for another transaction.
 
 Bitcoins have all the desirable properties of a money-like good. They are portable, durable, divisible, recognizable, fungible, scarce and difficult to counterfeit.
 
 \subsection{Scripts}
 Bitcoin offers much more than just moving currency around. It allows us to actually move currency conditionally, where the condition can be expressed as a \emph{Bitcoin script}. Bitcoin script is a stack-based language. An example of a Bitcoin script can be seen on \hyperref[fig:bitcoin-script]{figure}~\ref{fig:bitcoin-script}.
 
-\begin{figure}
+\begin{figure}[hb]
   \centering
   {
     \tt
@@ -102,10 +118,10 @@ This is the standard script for conventional fund transfer in Bitcoin. Let's say
 
 Bob's signature will be available. We will see that it can be found on the hash of the transaction containing the output. The script will then duplicate his public key, check that it matches the one on the \text{pubKeyScript} and if it does, it will check that he has provided a valid signature with that public key. If all these checks pass, the stack will end up with 1 on top and the execution will be valid.
 
-\subsection{Outputs}
+\subsection{\label{sec:outputs}Outputs}
 An \emph{output} is a tuple ({\sf value, pubKeyScript}). The \textsf{value} refers to an amount of Bitcoin in Satoshi (where $\sf 10^8 \, Satoshi = 1 \, \bitcoin$) and \textsf{pubKeyScript} is a script which needs to be run against some stack and return 1 in order for \textsf{value} to be transferable.
 
-\subsection{Inputs}
+\subsection{\label{sec:inputs}Inputs}
 An input is the way an output is redeemed. Specifically, it contains 3 things:
 \begin{itemize}
   \item The hash of the transaction where the output of interest is contained.
@@ -122,7 +138,7 @@ For the transaction to be valid, the script inside the specified output when run
 %% Goodbye today's self, see you tomorrow.. This boring !@#$#@!$ will end sometime...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Transactions}
+\subsection{\label{sec:transactions}Transactions}
 A \emph{transaction} is a collection of inputs and outputs. It uses the sum of the inputs' values as credit to debit each output accordingly. As it makes sense, a transaction is only valid as long as all its outputs and inputs are valid. It should also be clear that the value of the outputs should not exceed the value of the inputs, otherwise we would be creating value out of thin air with new transactions. Specifically this is expressed as $\sum_{\sf i \in inputs} {\sf i.value} \ge \sum_{\sf o \in outputs} {\sf o.value}$. This is sometimes called the \emph{Law of Conservation}.
 
 In cases where $\sum_{\sf i \in inputs} {\sf i.value} > \sum_{\sf o \in outputs} {\sf o.value}$ we call
@@ -148,23 +164,21 @@ A block contains a list of transactions, the first of which is called the \emph{
   \label{fig:block-structure}
 \end{figure}
 
-A block header contains mainly the hash of the previous block, a \hyperref[sec:merkle-trees]{Merkle root hash} (\hyperref[sec:merkle-trees]{section}~\ref{sec:merkle-trees}) to commit to a set of transactions, and a nonce. Blocks are always referenced by the hash of their block header.
+A block header contains mainly the hash of the previous block, a \hyperref[sec:merkle-trees]{Merkle root hash} to commit to a set of transactions, and a nonce. Blocks are always referenced by the hash of their block header. Once a transaction has been included in a valid block it's called \emph{confirmed}.
 
-\begin{figure}
+\subsection{\label{sec:blockchain}Blockchain}
+Now, the reader can visualize the famous term \emph{blockchain}. The blockchain is a chain of blocks. The blockchain is public and it holds the history of all valid transactions in a cryptocurrency's network. It holds the timeline of a cryptocurrency's life. It is easy to see that, by the definition of the blockchain, there can be no parallel chains. There is not such thing in economics as two valid transaction histories.
+
+It's possible that there are contending chains of blocks. We then say, there is a \emph{fork} on the chain. On \hyperref[fig:blocks]{figure}~\ref{fig:blocks}, the chain has forked on blocks 3 and 6.
+
+We call any valid blocks which are not part of our active chain \emph{orphans}. In our example blocks 4b, 7a and 8a are orphans. As expected, orphans blocks, although typically valid, cannot be part of the transaction history. So, transactions that are included in an orphan block (and have not been included in another block yet) return back in the pool (become \emph{unconfirmed}\footnote{Note: The reader may find this peculiar. However, we observe that as the blockchain grows, older blocks become "safer" (less probability to become orphans). That means that after a transaction becomes confirmed (included in a valid block), one should wait until this valid block is "safe enough".}) and are expected to be included in a block in the future.
+
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.9\columnwidth,keepaspectratio]{Images/blocks.png}
   \caption{A blockchain (the orange blocks are orphans)~\cite{mastering}}
   \label{fig:blocks}
 \end{figure}
-
-Once a transaction has been included in a valid block it's called \emph{confirmed}.
-
-\subsection{\label{sec:blockchain}Blockchain}
-Now, the reader can visualize the famous term \emph{blockchain}. The blockchain is a chain of blocks. The blockchain is public and it holds the history of all valid transactions in a cryptocurrency's network. It holds the timeline of a cryptocurrency's life. It is easy to see that, by the definition of the blockchain, there can be no parallel chains. There is not such thing in economics as two valid histories.
-
-It's possible that there are contending chains of blocks. We then say, there is a \emph{fork} on the chain. On \hyperref[fig:blocks]{figure}~\ref{fig:blocks}, the chain has forked on blocks 3 and 6.
-
-We call any valid blocks which are not part of our active chain \emph{orphans}. In our example blocks 4b, 7a and 8a are orphans.
 
 \subsection{\label{proofOfWork}Proof of Work (PoW)}
 The key to making Bitcoin decentralized is a technique called Proof of Work (PoW). Proof of Work was first invented in 1992 by Dwork et al.~\cite{dwork} as a measure of limiting email spam and denial of service attacks and later explored by Back~\cite{hashcash} as Hashcash.
@@ -188,7 +202,7 @@ To account for the block generation rate, which Bitcoin tries to keep to 1 block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Simplified Payment Verification (SPV)}
-The size of the blockchain has reached 197GB by the begging of January 2019, which makes it a very time consuming or even infeasible process to synchronise a full node. Fortunately, a solution was proposed in the original whitepaper ~\cite{Nakamoto_bitcoin:a}, which allows the creation of so-called \emph{lite nodes}.
+The size of the blockchain has reached 197GB by the beggining of January 2019, which makes it a very time consuming or even infeasible process to synchronise a full node. Fortunately, a solution was proposed in the original whitepaper ~\cite{Nakamoto_bitcoin:a}, which allows the creation of so-called \emph{lite nodes}.
 
 Lite nodes only know the headers of the entire blockchain, which are constant-size for each block (80 bytes). At the time of writing of this thesis, the size of all block headers was $\sim$45MB. The lite node then asks the network for transactions concerning it (e.g. transactions concerning a specific public key). Full nodes of the network find such transactions and return them to the requester. For each transaction, the block header of the block it is included in, is returned along with a \hyperref[sec:merkle-trees]{Merkle tree} proof of inclusion which the lite node can then verify.
 
@@ -226,7 +240,7 @@ Mining is also the mechanism used to introduce Bitcoins into the system: Miners 
 \end{wrapfigure}
 Originally, Bitcoin mining was conducted on the CPUs of individual computers, with more cores and greater speed resulting in more profitability. After that, the system became dominated by multi-graphics card systems, then field-programmable gate arrays (FPGAs) and finally application-specific integrated circuits (ASICs), in the attempt to find more hashes per hour with less electrical power usage (see \hyperref[fig:mining]{figure}~\ref{fig:mining}).
 
-Due to this constant escalation, it has become hard for prospective new miners to start. This adjustable difficulty is an intentional mechanism created to prevent inflation. To get around that problem, individuals often work in mining pools.
+Due to this constant escalation, it has become hard for prospective new miners to start. This adjustable difficulty is an intentional mechanism created to prevent inflation. To get around that problem, individuals often work in \emph{mining pools}. Mining pools are groups of miners who join their collective computational power and share their profit according to the contribution of each party.
 
 Bitcoin generally started with individuals and small organizations handling the mining. At that time, start-up could be enabled by a single high-end gaming system. However, nowadays larger mining organizations might spend tens of thousands on one high-performance, specialized application-specific integrated circuit.
 
@@ -250,13 +264,23 @@ Many questions like the above have been asked and usually the answer is not desc
 
 This is hurtful for a system, which by design is supposed to bring decentralization in the financial market. Because, without hobbyists, we are actually left with big companies handling almost all of the mining. Companies will comply with regulations that the government of each country enforces and cannot be expected to react and inspire political movements. Since countries can and they have, historically, collaborated against threats, a union of countries who can enforce regulations to companies that control more than 51\% of the hashing power, can bring a cryptocurrency to its knees, if seen as a threat. That scenario, does not fit in most definitions of security.
 
-One of the reasons that cryptocurrencies have a bootstrapping period is because they need a big support society to distribute mining in order to guarantee security. When the total hashing power is a few high-end gaming systems, aquaring 51\% of the hashing power is feasible. As the support expands, the security is satisfied for all practical purposes. But when mining is dominated by companies then a totally trustless system gaves birth to a trusted party. That's against the motivation for the inception of a cryptocurrency and it raises questions like "\emph{Why should I trust the mining companies and support this cryptocoin? Do I trust my bank more? After all, my bank is just another company...}"
+One of the reasons that cryptocurrencies have a bootstrapping period is because they need a big support community to distribute mining in order to guarantee security. When the total hashing power is a few high-end gaming systems, aquaring 51\% of the hashing power is feasible. As the support expands, the security is satisfied for all practical purposes. But when mining is dominated by companies then a totally trustless system gaves birth to a trusted party. That's against the motivation for the inception of a cryptocurrency and it raises questions like "\emph{Why should I trust the mining companies and support this cryptocoin? Do I trust my bank more? After all, my bank is just another company...}"
 
 We are focusing on mining, but one should think about the possibilities of a \hyperref[proofOfWork]{Proof of Work (PoW)} mechanism in order to understand the contribution of a memory-hard hash function. The PoW mechanism is actually a voting system. Users vote for the right order of the transactions, for enabling new features in the protocol and for the honest money supply distribution. Therefore, it is important that during the voting process all participants have equal voting rights.
 
-To sum up, for reasons of security and decentralization, it is healthy for some cryptocurrency's mining power to be distributed among users. Memory-hardness sustains the competition, but it makes it less harsh and keeps the door open for hobbyists to support the community. It is extremely difficult for the corporate mining to aquire tremendous power for two reasons, and that is essential in a trustless system that aims to remain trustless. The reasons are: a) it is not that lucrative for companies. If someone makes a big investment, he will get big rewards, but not insanely huge rewards leaving every hobbyist out of the mining society. b) Even if a lot of companies decide to participate, it is extremely difficult for them to aquire a combined 51\% of the total hashing power.
+To sum up, for reasons of security and decentralization, it is healthy for some cryptocurrency's mining power to be distributed among users. Memory-hardness sustains the competition, but it makes it less harsh and keeps the door open for hobbyists to support the community. It is extremely difficult for the corporate mining to aquire tremendous power for two reasons, and that is essential in a trustless system that aims to remain trustless.
 
-Memory-hardness defends a system against the aforementioned prospect and thus strengthens the notion of any PoW cryptocurrency's security. Furthermore, no matter how much someone trusts the corporations involved, in the words of Edward Snowden: security is a binary state. A system cannot be secure against malicious attackers and insecure against other "noble" parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.
+\noindent The reasons are:
+\begin{enumerate}[label=(\greek*)]
+  \item It is not that lucrative for companies. If someone makes a big investment, he will get big rewards, but not insanely huge rewards leaving every hobbyist out of the mining community.
+  \item Even if a lot of companies decide to participate, it is extremely difficult for them to aquire a combined 51\% of the total hashing power.
+\end{enumerate}
+
+Memory-hardness defends a system against the aforementioned prospect and thus strengthens the notion of any PoW cryptocurrency's security. Furthermore, no matter how much someone trusts the corporations involved,
+\\
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black,title=in the words of Edward Snowden:]
+  Security is a binary state. A system cannot be secure against malicious attackers and insecure against other "noble" parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.
+\end{tcolorbox}
 %
 \section{\label{sec:Monero}Monero}
 %\setlength{\intextsep}{0pt}
