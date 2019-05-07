@@ -270,7 +270,7 @@ That seems to be fine for our analysis. But, the next problem is this: Multiplic
 
 The above multiplication is perfomed this way because of the modern CPU registers. The 8 bytes multiplication is optimized. ASICs couldn't do this as fast as a modern CPU could, but technology advances and now there are chips that do the same computation roughly with the same time cost.
 
-However, after our theoretical analysis and the thought that the time cost of a 16 byte multiplication or maybe an 8 byte multiplication implementation that maps inputs' uniform distribution can make a system less efficient against ASICs but not completely inefficient, we should propose something better. But that is a detail and does not make a great difference in our analysis. So, from now on we can assume that the above problem is solved and we have a multiplication implementation that produces an uniformly random distributed result.
+However, after our theoretical analysis and the thought that the time cost of a 16 byte multiplication or maybe an 8 byte multiplication implementation that maps inputs' uniform distribution can make a system less efficient against ASICs but not completely inefficient, we should propose something better. But that is a detail and does not make a great difference in our analysis. So, from now on we can assume that the above problem is solved and we have a multiplication implementation that produces a uniformly random distributed result.
 
 %% Introduce our model: AES as PRF, parametrize everything, set up the focus on the second stage, multiplication.
 % You will explain probabilities in the next chapter, but still, you can analyze the game perhaps?
