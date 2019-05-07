@@ -202,7 +202,7 @@ To account for the block generation rate, which Bitcoin tries to keep to 1 block
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Simplified Payment Verification (SPV)}
-The size of the blockchain has reached 197GB by the beggining of January 2019, which makes it a very time consuming or even infeasible process to synchronise a full node. Fortunately, a solution was proposed in the original whitepaper ~\cite{Nakamoto_bitcoin:a}, which allows the creation of so-called \emph{lite nodes}.
+The size of the blockchain has reached 197GB by the beggining of January 2019, which makes it a very time consuming or even infeasible process to synchronise a full node. Fortunately, a solution was proposed in the original white paper ~\cite{Nakamoto_bitcoin:a}, which allows the creation of so-called \emph{lite nodes}.
 
 Lite nodes only know the headers of the entire blockchain, which are constant-size for each block (80 bytes). At the time of writing of this thesis, the size of all block headers was $\sim$45MB. The lite node then asks the network for transactions concerning it (e.g. transactions concerning a specific public key). Full nodes of the network find such transactions and return them to the requester. For each transaction, the block header of the block it is included in, is returned along with a \hyperref[sec:merkle-trees]{Merkle tree} proof of inclusion which the lite node can then verify.
 
@@ -268,7 +268,7 @@ One of the reasons that cryptocurrencies have a bootstrapping period is because 
 
 We are focusing on mining, but one should think about the possibilities of a \hyperref[proofOfWork]{Proof of Work (PoW)} mechanism in order to understand the contribution of a memory-hard hash function. The PoW mechanism is actually a voting system. Users vote for the right order of the transactions, for enabling new features in the protocol and for the honest money supply distribution. Therefore, it is important that during the voting process all participants have equal voting rights.
 
-To sum up, for reasons of security and decentralization, it is healthy for some cryptocurrency's mining power to be distributed among users. Memory-hardness sustains the competition, but it makes it less harsh and keeps the door open for hobbyists to support the community. It is extremely difficult for the corporate mining to aquire tremendous power for two reasons, and that is essential in a trustless system that aims to remain trustless.
+To sum up, for security and decentralization reasons, it is healthy for some cryptocurrency's mining power to be distributed among users. Memory-hardness sustains the competition, but it makes it less harsh and keeps the door open for hobbyists to support the community. It is extremely difficult for the corporate mining to aquire tremendous power for two reasons, and that is essential in a trustless system that aims to remain trustless.
 
 \noindent The reasons are:
 \begin{enumerate}[label=(\greek*)]
@@ -288,16 +288,18 @@ Memory-hardness defends a system against the aforementioned prospect and thus st
 \centering
 \includegraphics[width=0.20\textwidth]{Images/Monero/monero.png}
 \end{wrapfigure}
-Monero (XMR) is a decentralised open-source cryptocurrency. The project's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The people behind a Monero transaction are not known; this results in considerable increase of privacy compared to Bitcoin and its forks~\cite{monerodef}.
+Monero (XMR) is a decentralised open-source cryptocurrency. The project's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The parties behind a Monero transaction are not known; this results in considerable increase of privacy compared to Bitcoin and its forks~\cite{monerodef}.
 
 \subsection{History}
-First outlined in an October 2013 whitepaper by the pseudonymous figure Nicolas van Saberhagen and called \hyperref[sec:CryptoNote]{CryptoNote}~\cite{citeulike:14139412}. Later, in 2014, Bitcointalk forum user known as \emph{thankful\_for\_today} forked the codebase of Bytecoin (CryptoNote's reference implementation) into the name \textbf{BitMonero}, which is a compound of bit and Monero (literally meaning "coin" in Esperanto). The release of \textbf{BitMonero} was very poorly received by the community that initially backed it. Plans to fix and improve Bytecoin with changes to block time, tail emission and block reward had all been ignored, and \emph{thankful\_for\_today} simply disappeared from the development scene. A group of users led by Johnny Mnemonic decided that the community should take over the project and five days later they did, while also changing the name to \emph{Monero}.
+First, the construction was outlined in an October 2013 white paper by the pseudonymous figure Nicolas van Saberhagen and called \hyperref[sec:CryptoNote]{CryptoNote}~\cite{citeulike:14139412}. Later, in 2014, Bitcointalk forum user known as \emph{thankful\_for\_today} forked the codebase of Bytecoin (CryptoNote's reference implementation) into the name \textbf{BitMonero}, which is a compound of bit and Monero (literally meaning "coin" in Esperanto~\cite{esperanto}).
+
+The release of BitMonero was very poorly received by the community that initially backed it. Plans to fix and improve Bytecoin with changes to block time, tail emission and block reward had all been ignored, and \emph{thankful\_for\_today} simply disappeared from the development scene. A group of users led by Johnny Mnemonic decided that the community should take over the project and five days later they did, while also changing the name to \emph{Monero}.
 
 Due to its privacy features, Monero experienced rapid growth in market capitalization and transaction volume during the year 2016, faster and bigger than any other cryptocurrency that year. This growth was driven by its uptake in the darknet market. From the beginning, Monero has been used by people holding other cryptocurrencies like \hyperref[sec:Bitcoin]{Bitcoin} to break the link between transactions, with the other cryptocoins first converted to Monero, then after some delay converted back and sent to an address unrelated to those used before.
 
-On January 10, 2017, the privacy of Monero transactions was further strengthened by the adoption of Bitcoin Core developer Gregory Maxwell's algorithm Confidential Transactions, hiding the amounts being transacted, in combination with an improved version of Ring Signatures.
+On January 10, 2017, the privacy of Monero transactions was further strengthened by the adoption of Bitcoin Core developer Gregory Maxwell's algorithm \emph{Confidential Transactions}, hiding the amounts being transacted, in combination with an improved version of \emph{Ring Signatures}.
 
-In late 2017, malware and antivirus service providers blocked a JavaScript implementation of Monero miner \textbf{Coinhive} that was embedded in websites and apps. Coinhive generated the script as an alternative to advertisements; a website or app could embed it, and use website visitor's CPU to mine the cryptocurrency while the visitor is consuming the content of the webpage. However, some websites and apps did this without informing visitors, and some hackers implemented it in a way that drained visitors' CPUs. As a result the script was blocked by companies that offer ad blocking subscription lists, antivirus services and antimalware services.
+In late 2017, malware and antivirus service providers blocked a JavaScript implementation of Monero miner \emph{Coinhive} that was embedded in websites and apps. Coinhive generated the script as an alternative to advertisements; a website or app could embed it and use website visitor's CPU to mine the cryptocurrency while the visitor is consuming the content of the webpage. However, some websites and apps did this without informing visitors and some hackers implemented it in a way that drained visitors' CPUs. As a result, the script was blocked by companies that offer ad blocking subscription lists, antivirus services and antimalware services.
 
 Monero is actively encouraged to those seeking financial privacy, since payments and account balances remain entirely hidden, which is not the standard for most cryptocurrencies.
 
@@ -314,17 +316,21 @@ Monero is~\cite{monero}:
 \subsubsection{Account}
 In Monero, a wallet is called an account and it is a private account owned and operated by a Monero user. An account contains all of the Monero transactions a user has sent and received. Some user's account balance is a sum of all the Monero received, less the Monero sent.
 
-A Monero account has two balances, a locked and an unlocked balance. The unlocked balance contains funds that can be spent immediately, and the locked balance contains funds that can't be spent right now. A Monero user may receive a transaction that has an unlock time set, or he/she may have sent some Monero and are waiting for the change to come back to his/her wallet, both situations that could lead to those funds being locked for a time.
+A Monero account has two balances, a locked and an unlocked balance. The unlocked balance contains funds that can be spent immediately, and the locked balance contains funds that can't be spent right away. A Monero user may receive a transaction that has an unlock time set, or he/she may have sent some Monero and are waiting for the change to come back to his/her wallet, both situations that could lead to those funds being locked for a time.
 
 An account resides only under user's control, normally on his/her computer, and cannot be accessed by anyone else if he/she practices good security~\cite{getmonero}.
 
 \subsubsection{Keys}
-A Monero account is based on two keys. They are called a \emph{spend key} and a \emph{view key}. The \emph{spend key} is special in that it is the single key required to spend your Monero funds, whereas the \emph{view key} allows you to reveal your transactions to a third party. That makes sense in case of auditing or accounting purposes.\\
+A Monero account is based on two keys. They are called \emph{spend key} and \emph{view key}. The \emph{spend key} is special in that it is the single key required to spend your Monero funds, whereas the \emph{view key} allows you to reveal your transactions to a third party. That makes sense in case of auditing or accounting purposes.\\
+
+The spine of the Monero project is the \hyperref[sec:CryptoNote]{CryptoNote} protocol. All the above specifications are based in ideas that exist in the CryptoNote white paper~\cite{citeulike:14139412}. Monero is the most successful implementation of this protocol, among numerous efforts. Describing every implementation is impractical and beyond the scope of this thesis.
+
+However, it would be an inexcusable omission not to describe the features and specifications of the CryptoNote protocol itself. For our purposes, we will illustrate the above with Monero project in mind and especially one specific element, the CryptoNight function, which is the feature of interest in this thesis.
 
 Unlike many cryptocurrencies that are derivatives of Bitcoin, Monero uses a proof of work mechanism to issue new coins and incentivize miners to secure the network and validate transactions. One key part, for Monero project to offer the above, is a proof-of-work algorithm called CryptoNight, developed by the \hyperref[sec:CryptoNote]{CryptoNote} project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the memory-hardness property of this algorithm.
 %
 \section{\label{sec:CryptoNote}CryptoNote}
-CryptoNote, as described in the bitcoin forum~\cite{btcforum}, is the technology that allows creation of privacy-centric cryptocurrencies. The level of anonymity provided by CryptoNote isn't possible with Bitcoin code base by design. Bytecoin (BCN) was the CryptoNote reference implementation, and Monero (XMR) is based on BCN's code.
+The CryptoNote Technology is designed to provide some of the most innovative privacy features predicated on advanced cryptography, an egalitarian approach towards decentralization, and censorship-resistance. CryptoNote, as described in the bitcoin forum~\cite{btcforum}, is the technology that allows creation of privacy-centric cryptocurrencies. The level of anonymity provided by CryptoNote isn't possible with Bitcoin code base by design. Bytecoin (BCN) was the CryptoNote reference implementation, and Monero (XMR) is based on BCN's code.
 
 The CryptoNote protocol possesses significant algorithmic differences relating to blockchain obfuscation. One of the main features of CryptoNote, are ring signatures that mask sender identities by mixing and one-time keys that make transactions unlinkable. Their combined effect gives a high degree of anonymity without any extra effort on the part of the user.
 
@@ -332,14 +338,14 @@ Unlike Bitcoin, a user's funds are not held in the address he/she gives out to o
 
 For example if $556.44$ XMR are sent, the protocol will break it down into $500 + 50 + 6 + 0.4 + 0.04$ and a ring signature will be performed with other $500$'s, $50$'s, $6$'s, $0.4$'s, and $0.04$'s in the blockchain. Unlike the "CoinJoin" mixing method~\cite{coinjoin}, CryptoNote mixes outputs not transactions. This means no other senders need to be participating with some user at the same time or with the same amounts. Any arbitrary amount sent at any time can always be rendered fundamentally indistinguishable (a mathematical proof is given in the white paper)~\cite{citeulike:14139412}.
 
-The degree of anonymity is also a choice rather than decided by the protocol: do you want to be hidden as one among five or one among fifty? The size of the signature grows linearly as $O(n+1)$ with the ambiguity so greater anonymity is paid for with higher fees to miners.
+The degree of anonymity is also a choice rather than decided by the protocol: do you want to be hidden as one among five or one among fifty? The size of the signature grows linearly as $O(n+1)$ with the ambiguity, so greater anonymity is paid for, with higher fees to miners.
 
 \subsection{Untraceable Transactions}
 CryptoNote cryptographic scheme relies on the cryptographic primitive called a \emph{group signature}. First presented by D. Chaum and E. van Heyst~\cite{group}, it allows a user to sign his message on behalf of the group. The idea is actually simple. After signing the message the sender provides the keys of all the users of his group. A verifier is conviced that the real signer is a member of the group but cannot be exclusively identified.
 
 However, this primitive required a trusted third party (Group Manager) who could trace the signer. The \emph{ring signature} was introduced by Rivest et al.~\cite{ring} and it was an autonomous scheme without anonymity revocation. Based on this work various modifications arose like \emph{linkable ring signature}~\cite{link1,link2,short}, a scheme that allowed to determine if two signatures were produced by the same group member, \emph{traceable ring signature}~\cite{traceable1,traceable2}, a scheme that limited anonymity (it is possible to trace the signer of two messages) and \emph{ad-hoc group signature}~\cite{ad-hoc1,ad-hoc2}. The last scheme focuses on the arbitrary group formation. The other schemes rather imply a fixed set of members.
 
-Based on~\cite{traceable2} with a few modifications, in CryptoNote whitepaper~\cite{citeulike:14139412} is presented the \emph{one-time ring signature}. They weakened the traceability property and kept the linkability. That is needed because they wanted some user's public key to appear in many foreign verifying sets and from the private key to generate a unique anonymous signature. In case of a double spend attempt, these two signatures will be linked together. However, revealing the signer is not necessary.
+Based on~\cite{traceable2} with a few modifications, in CryptoNote white paper~\cite{citeulike:14139412} is presented the \emph{one-time ring signature}. They weakened the traceability property and kept the linkability. That is needed because they wanted some user's public key to appear in many foreign verifying sets and from the private key to generate a unique anonymous signature. In case of a double spend attempt, these two signatures will be linked together. However, revealing the signer is not necessary.
 
 In 2015, Shen Noether wrote a paper using a technique, introduced by Bitcoin Core developer Gregory Maxwell in~\cite{CT}, of using a commitment scheme to hide the amount of a transaction. The paper, introduced \emph{RingCT (Ring Confidential Transactions)}. This signature scheme is called \emph{A Multi-layered Linkable Spontaneous Anonymous Group signature} and that is how transaction amounts are hidden in Monero. Reproducing from~\cite{getmonero}:
 
@@ -352,7 +358,7 @@ For further information the reader is refered to Shen Noether's paper~\cite{ring
 
 The transaction structure remains similar to the structure in Bitcoin: every user can choose several independent incoming payments (transactions outputs), sign them with the corresponding private keys and send them to different destinations. Contrary to Bitcoin’s model, where a user possesses unique private and public key, in the proposed model a sender generates a one-time public key based on the recipient’s address and some random data. In this sense, an incoming transaction for the same recipient is sent to a one-time public key (not directly  to a unique  address) and only the recipient can recover the corresponding private part to redeem his funds (using his unique private key). The recipient can spend the funds using a ring signature, keeping his ownership and actual spending anonymous.
 
-\noindent Ring signatures are explained below. We will start with a normal signature scheme shown in \hyperref[fig:normal_sig]{Fig.}~\ref{fig:normal_sig}. Reproduced from CryptoNote~\cite{cryptonote}:\\
+Ring signatures are explained below. We will start with a normal signature scheme shown in \hyperref[fig:normal_sig]{Fig.}~\ref{fig:normal_sig}. Reproduced from CryptoNote~\cite{cryptonote}:\\
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.9 \columnwidth,keepaspectratio]{Images/CryptoNote/normal_sig.png}
@@ -396,3 +402,13 @@ The example above is illustrated in \hyperref[fig:transaction]{Fig.}~\ref{fig:tr
   \label{fig:transaction}
 \end{figure}
 %
+\subsection{Unlinkable transactions}
+\subsection{Double-spending proof}
+\subsection{Blockchain analysis resistance}
+%%%% Maybe after here the complete transaction
+\subsection{More about CryptoNote}
+%%%% In here: Adaptive limits, smooth emission and ...? Maybe more, maybe nothing...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Maybe some preparation for the next chapter? %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
