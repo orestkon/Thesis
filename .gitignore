@@ -3,6 +3,9 @@ readme.txt
 history.txt
 Cryptographic_Hash_function.jpg
 
+## Exceptions to the rules:
+!block-structure.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
