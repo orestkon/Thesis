@@ -403,9 +403,9 @@ The example above is illustrated in \hyperref[fig:transaction]{Fig.}~\ref{fig:tr
 \end{figure}
 %
 \subsection{Unlinkable transactions}
-First, we should clarify the problem which is solved with unlinkability. Even if a transaction is untraceable, when the receiver posts his/her public address anyone can check all his/hers incoming transactions(see \hyperref[fig:linkable]{figure}~\ref{fig:linkable}). A naive solution is to create a bunch of keys and addresses that can be sent privately to the payer. This approach is highly problematical since:
+First, we should clarify the problem which is solved with unlinkability. Even if a transaction is untraceable, when the receiver posts his/her public address anyone can check all his/hers incoming transactions (see \hyperref[fig:linkable]{figure}~\ref{fig:linkable}). A naive solution is to create a bunch of keys and addresses that can be sent privately to the payers (one distinct key per payer). This approach is highly problematical since:
 \begin{enumerate}[label=\alph*)]
-  \item Deprives the receiver of the convenience of having a single public addresses
+  \item Deprives the receiver of the convenience of having a single public address
   \item Implies that the default use of the structure \textbf{DOES NOT} create unlinkable transactions
 \end{enumerate}
 
@@ -430,9 +430,200 @@ The sender can produce only the public part of the key, whereas only the receive
 An important part of CryptoNote is usage of random data by the sender. It always results in a different one-time key even if the sender and the receiver both remain the same for all transactions (that is why the key is called "one-time"). Moreover, even if they are both the same person, all the one-time keys will also be absolutely unique.
 
 \subsubsection{Stealth addresses}
-The structure of the above concept is inherited in all CryptoNote projects. But the details of each implementation may differ. What we will present here is the implementation details of unlinkability as found in the Monero project. This feature is mentioned as Monero's \emph{stealth addresses}.
+%\setlength{\intextsep}{0pt}
+\begin{wrapfigure}[6]{L}{0.3\textwidth}
+\centering
+\includegraphics[width=0.30\textwidth]{Images/CryptoNote/stealth.jpg}
+\end{wrapfigure}
+The structure of the above concept is inherited in all CryptoNote projects. But the details of each implementation may differ. What we will present here is the implementation details of unlinkability, as found in the Monero project. The reader can find all the information of this section and more in CryptoNote paper~\cite{citeulike:14139412} and Monero project's code. An additional valuable source of information and interactive conversation that the reader is refered to is Monero stack exchange forum~\cite{stackexchange}. The implementation of CryptoNote's unlinkable transactions in Monero project is mentioned as \emph{stealth addresses}.
 
-%%%% Here continue Tomorrow
+%% Monero stack exchange
+Stealth address technology originated from Cryptonote technology, but Bitcoin (e.g. \emph{libbitcoin}) and its altcoins can also implement stealth addresses. For Bitcoin and its altcoins, stealth addresses must be explicitly supported by the sender's and recipient's wallets, but such support is implicit to Cryptonote wallets.
+
+\begin{figure}
+  \begin{verbatim}
+    vJmsp9MxWMj6jiUg8Rejh23pqRCthWQhwtUKvmLw2kcE83AHer1MchTN4DVacHt
+    43r8hSKBQpjPuqYDKuKgyVBkGkUdcsNAdnk2aZW
+  \end{verbatim}
+  \caption{Bitcoin stealth address.}
+  \label{fig:btcstealth}
+\end{figure}
+
+For Bitcoin, stealth addresses are a bit longer than normal Bitcoin addresses (see \hyperref[fig:btcstealth]{figure}~\ref{fig:btcstealth}). However, the transactions associated with a stealth address looks no different than normal transactions on the Bitcoin Blockchain. Stealth addresses contain one public \textbf{view} (in CryptoNote vernacular) or \textbf{scan} (in Bitcoin vernacular) key, and one or more \textbf{spend} public keys. These keys are always encoded in a stealth address to support the first portion of Diffie-Helman-Merkle key exchange. Bitcoin's public/private key pairs are derived from the \emph{secp256k1} elliptic curve, while Cryptonote uses \emph{Ed25519} derived public/private key pairs.
+
+One can publish their stealth address on a business card, and sustain their privacy when funds are sent to a dynamically computed destination address by the sender of funds. Stealth addresses essentially put the onus of dynamic address calculation, typically associated with a recipient's hierarchical deterministic (HD) wallet, on the sender's wallet. One stealth address is functionally akin to an HD wallet account, and can thus be used over and over for many fund transfers. Stealth addresses provide confidentiality for the recipient of transaction pairs that utilize information from a stealth address.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+So, simplifying a bit, in Bitcoin if there is one bitcoin associated to the public key $P$ and if Bob knows the corresponding private key $x$ such that $P = xG$\footnote{$G$ is the generator for the algebraic ring that is the base of the key construction. For our purpose, it suffices to think $G$ as a parameter of the user's existence in the Monero network, which is public and thus available to anyone}, then he can spend the Bitcoin by submitting a message (transaction) to the network signed with $x$.
+
+There is one privacy issue, though: if Bob keeps using the same $P$ to receive Bitcoins, then any observer will be able to see all payments were made to the same entity that controls $P$ (Bob). This is the problem that stealth addresses solve.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Stealth addresses innately perform the first half of a Diffie-Helman-Merkle key exchange when a sender of funds receives a stealth address. With Bitcoin, two blockchain transactions are required to complete the sending of funds to a stealth address that will belong to the recipient of funds.
+
+Since it is operationally improbable a sender's and recipient's wallets will communicate directly to each other, the first transaction is a persistent \verb|OP_RETURN| transaction that is used to complete the second half of a Diffie-Helman-Merkle key exchange. The second transaction is the actual sending of funds to a dynamically calculated destination address that is strongly based upon an ephemeral random number generator in the sender's wallet. The second half of the Diffie-Helman-Merkle key exchange, the \verb|OP_RETURN|, allows a recipient's wallet of a stealth transaction to dynamically calculate the private redemption key associated with a particular transaction to redeem the funds at a later date.
+
+Stealth addresses can be extended to support multisig. This is a multisig capability that is more inherent to Bitcoin than Cryptonote.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In the context of stealth addresses, addresses are now composed of two public keys, and the coins sent to Bob will not be sent to his stealth address on the blockchain, rather the stealth address will be used by the sender to produce fresh new bitcoin addresses for every new transaction. These new addresses, even though generated by the sender (Alice) and unknown to Bob until the transaction is made, will nonetheless be controlled by Bob! Here is how it works:
+
+Bob creates two pairs of private and public keys. Let's denote them by $(a,A)$ and $(b,B)$, where by definition
+\begin{align*}
+  A = aG \mbox{ and } B = bG
+\end{align*}
+Bob makes the pair of public keys $(A,B)$ available to the network; this will be his stealth address.
+
+Alice wishes to send one bitcoin to Bob. She wants to assign one bitcoin to a public key $P$ such that Bob knows $x$ and $P = xG$. She will construct such $P$ using Bob's stealth address by using a hashing function $\mathcal{H}$, choosing a random big number $r$, and setting
+\begin{align*}
+  P = \mathcal{H}(rA)G + B
+\end{align*}
+Then Alice sends the bitcoin to $P$, the transaction is broadcast along with $R = rG$ (but not $r$, which can't be recovered from $R$).
+
+In order to get the money, Bob has to keep listening to the network for all new transactions and check whether one or more of these transactions are money that he should receive. When he sees Alice's transaction, he checks if $x := \mathcal{H}(aR)+b$ and realizes that:
+\begin{align*}\label{eq:checkstealth}
+  xG &= (\mathcal{H}(aR)+b)G \\
+     &= \mathcal{H}(aR)G+bG \\
+     &= \mathcal{H}(arG)G+B \\
+     &= \mathcal{H}(raG)G+B \\
+     &= \mathcal{H}(rA)G+B \\
+     &= P
+\end{align*}
+
+Bob can reconstruct $x$ such that $P = xG$ and is therefore the owner of the bitcoin! Notice that neither Alice nor any observer has the ability to derive $x$ (because they don't know $a$ and $b$), and that besides Alice and Bob no one knows that $(x,P)$ was generated from Bob's stealth address (because they don't know $r$).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% check whether you will write about Kovri or just cite the feature.
+
+Ignoring middleman snooping on IP addresses associated with stealth address transaction pairs, only the two core parties involved in a transaction pair will know any identity details associated with sending funds to a stealth address. Hence, the need for Kovri I2P technology. Hence, stealth transactions by themselves don't provide 100\% anonymity protection. Also Confidential Transactions (CT) technology is needed by Bitcoin to mask details about the amount transferred by a transaction.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Note that, as mentioned, this protects Bob privacy, but it is still visible to the network that Alice, the entity that used to control that bitcoin, made a transaction. In order to obfuscate that action, Monero implements the use of Ring Signatures, which will allow Alice to, instead of directly signing the transaction, produce a proof that her, or several other people, did send a coin to Bob.
+
+To sum up, in Monero, coins are received to a unique, one-time stealth address. The formula for stealth addresses, is as follows:
+
+\begin{align*}
+  P = \mathcal{H}(rA)G + B
+\end{align*}
+
+\noindent Where:
+\begin{description}
+  \item [G] The standard Ed25519 base point
+  \item [A] Bob's public view key
+  \item [B] Bob's public spend key
+  \item [r] The new random scalar Alice chose for this transaction
+  \item [$\mathcal{H}$] a hashing algorithm that returns a scalar (i.e., the hash output is interpreted as an integer and reduced modulo $l$)
+  \item [P] The final stealth address (one-time output key, the destination where funds will actually be sent)
+\end{description}
+So, in a nutshell:
+\begin{itemize}
+  \item \emph{Stealth addresses} take care of \textbf{recipient's} privacy.
+  \item \emph{Ring Signatures} take care of \textbf{sender's} privacy.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Construction example} %% needs a lot of fixing and citation.
+Here is a functional example for deriving a Monero stealth address. Here we will examine the developer mechanics not cryptographic theory. Results below duplicate functionality that is part of \emph{Crypto Note Test Address}~\cite{teststealth}.
+
+It is worth noting custom \verb|bytes_to_words|, \verb|sc_reduce32|, and \verb|secret_key_to_| \verb|public_key| executables (coded in C or C++) below were named after Monero's functions that yielded output results. C++ coding insights came from \verb|main.cpp|. The \verb|bx| command line is bitcoin-explorer, see~\cite{bx}.
+
+Monero's \verb|secret_key_to_public_key()| functionality is using \emph{Ed25519} technology but not in a inclusive way. Only the necessary computations for the production of stealth addresses are implemented. Results are different from \emph{TOR} test vectors results that custom executables utilizing \emph{libsodium} and \emph{ed25519-donna} yield, but Monero C/C++ code results match that from \emph{Crypto Note Test Address}. Let us see the components and the calculations that take place in order to construct a stealth address.
+
+The example that is presented here was posted by user \verb|skaht| on Monero stack exchange forum~\cite{stackexchange}. The calculations were checked and confirmed.
+\begin{itemize}
+  \item 256-bit hexadecimal-encoded seed is assumed to be:
+  \begin{verbatim}
+    198584347013dd91832be3d82529437db7cc8e1850e559cdd3872b29
+    ca819601
+  \end{verbatim}
+  \item Electrum mnemonic words\footnote{These are the words that a wallet owner should remember in order to restore his wallet, if he forgets his password.} corresponding to seed (\verb|./bytes_to_words <above seed>|):
+  \begin{verbatim}
+    $ ./bytes_to_words 198584347013dd91832be3d82529437db7cc8
+    e1850e559cdd3872b29ca819601
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    wallets drinks insult popular fall textbook scoop apology unsafe fifteen cuffs pimple roster nerves pixels upstairs academy sprig eclipse leopard peeled faxed gutter happens roster
+  \end{tcolorbox}
+  \item Private spend key calculation (\verb|./sc_reduce32 <private spend key>|):
+  \begin{verbatim}
+    $ ./sc_reduce32 198584347013dd91832be3d82529437db7cc8e185
+    0e559cdd3872b29ca819601
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    \small{198584347013dd91832be3d82529437db7cc8e1850e559cdd3872b29ca819601}
+  \end{tcolorbox}
+  \item Private view key calculation (\verb|./keccak|\footnote{Hash function.}\verb=<private spend key> | ./sc_reduce=):
+  \begin{verbatim}
+    $ ./keccak 198584347013dd91832be3d82529437db7cc8e1850e559c
+    dd3872b29ca819601
+    $ ./sc_reduce32 <the keccak output>
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    \footnotesize{889DA12A88D36BCE0966AB1A79125779DD1F2FC6F1145DE131FD52A5B468796D}
+    \tcblower
+    \small{faa5defce980fdbd03b9dd4841371dfcdc1f2fc6f1145de131fd52a5b468790d}
+  \end{tcolorbox}
+  \item Public spend key calculation (\verb|./secret_key_to_public_key <private spend key>|):
+  \begin{verbatim}
+    $ ./secret_key_to_public_key 198584347013dd91832be3d82529437
+    db7cc8e1850e559cdd3872b29ca819601
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    \small{b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4a90}
+  \end{tcolorbox}
+  \item Public view key calculation (\verb|./secret_key_to_public_key <private view key>|):
+  \begin{verbatim}
+    $ ./secret_key_to_public_key faa5defce980fdbd03b9dd4841371
+    dfcdc1f2fc6f1145de131fd52a5b468790d
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    \small{3c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52a4ff}
+  \end{tcolorbox}
+\end{itemize}
+
+Now, we should note that the calculation of the stealth address (hexadecimal format) is:
+\begin{verbatim}
+  prefix + public_spend_key + view_public_key + keccak_checksum_postfix
+\end{verbatim}
+The \verb|prefix| in Monero addresses is always $12$ and is a marking of a Monero address. In this context the character \verb|+| is used to mark concatenation of strings. The \verb|keccak_checksum_postfix| computation is:
+\begin{itemize}
+  \item Stealth address checksum calculation (\verb|./keccak <almost an address>|):
+  \begin{verbatim}
+    $ ./keccak 12 +
+    b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4a90 +
+    3c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52a4ff
+  \end{verbatim}
+  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+    \footnotesize{ADD568169DBF2C6D3F595EE8610A189955BECD1EDF150627CBF2F2C49B0AEA71}
+  \end{tcolorbox}
+  \item So, the hexadecimal format of a Monero stealth address is:
+  \begin{verbatim}
+    12b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4
+    a903c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52
+    a4ffADD56816
+  \end{verbatim}
+\end{itemize}
+
+In order to convert a hexadecimal representation of a stealth address in base58 format we calculate the base58 format of each 8 bytes and concatenate the results (presented between brackets). For the conversion, we used \verb|bx| (bitcoin explorer~\cite{bx}):
+
+\begin{enumerate}
+  \item \verb|$ bx base58-encode 12b66991d7d7c685| ($\rightarrow$ \verb|48Y3H2eSZ6C|)
+  \item \verb|$ bx base58-encode 13533d0560f820d7| ($\rightarrow$ \verb|4EUjY1B5viS|)
+  \item \verb|$ bx base58-encode 5adfb0911487ba62| ($\rightarrow$ \verb|GCbCLPcmMiy|)
+  \item \verb|$ bx base58-encode 274b759f7b3ccd4a| ($\rightarrow$ \verb|7aD69yqUsaH|)
+  \item \verb|$ bx base58-encode 903c450f27cd6849| ($\rightarrow$ \verb|R8GLE3rvSwr|)
+  \item \verb|$ bx base58-encode d9130addb2c566d9| ($\rightarrow$ \verb|dJtpZYG1peC|)
+  \item \verb|$ bx base58-encode 10c5ef9bf4cecaed| ($\rightarrow$ \verb|3oipCqfUvCc|)
+  \item \verb|$ bx base58-encode 547004496fda52a4| ($\rightarrow$ \verb|F89i86kuEjV|)
+  \item \verb|$ bx base58-encode ffADD56816| ($\rightarrow$ \verb|Vr5GCdj|)
+\end{enumerate}
+
+Finally, we get the Monero stealth address:
+\begin{tcolorbox}[colback=green!5!white,colframe=green!65!black]
+  \small{48Y3H2eSZ6C4EUjY1B5viSGCbCLPcmMiy7aD69yqUsaHR8GLE3rvSwrdJtpZYG\\
+  1peC3oipCqfUvCcF89i86kuEjVVr5GCdj}
+\end{tcolorbox}
+
+%%%% Cu tomorrow... Nice work today!
 
 \subsection{Double-spending proof}
 \subsection{Blockchain analysis resistance}
