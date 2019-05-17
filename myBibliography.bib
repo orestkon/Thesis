@@ -1,3 +1,78 @@
+@misc{signal,
+  key = {signal},
+  title = {Open Whisper Systems},
+  note = {\url{https://signal.org/}}
+}
+%
+@article{edward,
+	doi = {10.1090/S0273-0979-07-01153-6},
+	note = {\url{https://doi.org/10.1090/S0273-0979-07-01153-6}},
+	year = {2007},
+	month = {July},
+	publisher = {American Mathematical Society ({AMS})},
+	volume = {44},
+	number = {3},
+	pages = {393-422},
+	author = {Harold M. Edwards},
+	title = {A normal form for elliptic curves},
+	journal = {Bulletin of the American Mathematical Society}
+}
+%
+@article{montgomery,
+	doi = {10.1090/s0025-5718-1987-0866113-7},
+	note = {\url{https://doi.org/10.1090%2Fs0025-5718-1987-0866113-7}},
+	year = {1987},
+	month = {jan},
+	publisher = {American Mathematical Society ({AMS})},
+	volume = {48},
+	number = {177},
+	pages = {243--243},
+	author = {Peter L. Montgomery},
+	title = {Speeding the Pollard and elliptic curve methods of factorization},
+	journal = {Mathematics of Computation}
+}
+%
+@inproceedings{curve25519,
+  author={Bernstein, Daniel J.},
+  editor={Yung, Moti and Dodis, Yevgeniy and Kiayias, Aggelos and Malkin, Tal},
+  title={Curve25519: New Diffie-Hellman Speed Records},
+  booktitle={Public Key Cryptography - PKC 2006},
+  year={2006},
+  publisher={Springer Berlin Heidelberg},
+  address={Berlin, Heidelberg},
+  pages={207--228},
+  abstract={This paper explains the design and implementation of a high-security elliptic-curve-Diffie-Hellman function achieving record-setting speeds: e.g., 832457 Pentium III cycles (with several side benefits: free key compression, free key validation, and state-of-the-art timing-attack protection), more than twice as fast as other authors' results at the same conjectured security level (with or without the side benefits).},
+  isbn={978-3-540-33852-9}
+}
+%
+@article{eddsa,
+  author={Bernstein, Daniel J. and Duif, Niels and Lange, Tanja and Schwabe, Peter and Yang, Bo-Yin},
+  title={High-speed high-security signatures},
+  journal={Journal of Cryptographic Engineering},
+  year={2012},
+  month={Sep},
+  day={01},
+  volume={2},
+  number={2},
+  pages={77--89},
+  abstract={This paper shows that a {\$}390 mass-market quad-core 2.4GHz Intel Westmere (Xeon E5620) CPU can create 109000 signatures per second and verify 71000 signatures per second on an elliptic curve at a 2128 security level. Public keys are 32 bytes, and signatures are 64 bytes. These performance figures include strong defenses against software side-channel attacks: there is no data flow from secret keys to array indices, and there is no data flow from secret keys to branch conditions.},
+  issn={2190-8516},
+  doi={10.1007/s13389-012-0027-1},
+  note={https://doi.org/10.1007/s13389-012-0027-1}
+}
+%
+@misc{secg,
+  key = {secg},
+  title = {Standards for Efficient Cryptography Group},
+  note = {\url{https://www.secg.org/}}
+}
+%
+@misc{coinhive,
+  key = {coinhive},
+  title = {Coinhive},
+  note = {\url{https://github.com/cazala/coin-hive}}
+}
+%
 @misc{coindesk,
   key = {coindesk},
   title = {CoinDesk},
@@ -36,16 +111,16 @@
 }
 %
 @article{0_knowledge,
-author = {Goldwasser, S. and Micali, S. and Rackoff, C.},
-title = {The Knowledge Complexity of Interactive Proof Systems},
-journal = {SIAM Journal on Computing},
-volume = {18},
-number = {1},
-pages = {186-208},
-year = {1989},
-doi = {10.1137/0218012},
-URL = {https://doi.org/10.1137/0218012},
-eprint = {https://doi.org/10.1137/0218012}
+  author = {Goldwasser, S. and Micali, S. and Rackoff, C.},
+  title = {The Knowledge Complexity of Interactive Proof Systems},
+  journal = {SIAM Journal on Computing},
+  volume = {18},
+  number = {1},
+  pages = {186-208},
+  year = {1989},
+  doi = {10.1137/0218012},
+  note = {\url{https://doi.org/10.1137/0218012}},
+  eprint = {https://doi.org/10.1137/0218012}
 }
 %
 @misc{zcash,
@@ -123,42 +198,46 @@ month={May}
 }
 %
 @article{Diffie:2006:NDC:2263321.2269104,
- author = {Diffie, W. and Hellman, M.},
- title = {New Directions in Cryptography},
- journal = {IEEE Trans. Inf. Theor.},
- issue_date = {November 1976},
- volume = {22},
- number = {6},
- month = sep,
- year = {2006},
- issn = {0018-9448},
- pages = {644--654},
- numpages = {11},
- url = {http://dx.doi.org/10.1109/TIT.1976.1055638},
- doi = {10.1109/TIT.1976.1055638},
- acmid = {2269104},
- publisher = {IEEE Press},
- address = {Piscataway, NJ, USA},
+  author = {Diffie, W. and Hellman, M.},
+  title = {New Directions in Cryptography},
+  journal = {IEEE Trans. Inf. Theor.},
+  issue_date = {November 1976},
+  volume = {22},
+  number = {6},
+  month = sep,
+  year = {2006},
+  issn = {0018-9448},
+  pages = {644--654},
+  numpages = {11},
+  url = {http://dx.doi.org/10.1109/TIT.1976.1055638},
+  doi = {10.1109/TIT.1976.1055638},
+  acmid = {2269104},
+  publisher = {IEEE Press},
+  address = {Piscataway, NJ, USA}
 }
 %
 @misc{esperanto,
+  key={esperanto},
   title = {Esperanto language},
   note = {\url{http://esperanto.net/en/}}
 }
 %
 @misc{ecdsa,
+  key = {ecdsa},
   title = {Elliptic Curve Digital Signature Algorithm (wiki)},
   note = {\url{https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm}},
 }
 @misc{cryptoanarchy,
+  key = {cryptoanarchy},
   title = {Cryptoanarchy Wiki},
   year = {1998},
   note = {\url{https://cryptoanarchy.wiki/}},
 }
 %
-@misc{CT,
+@misc{elements,
   author = {Gregory Maxwell},
-  title = {Confidential Transactions}
+  title = {Confidential Transactions},
+  note = {\url{https://elementsproject.org/}}
 }
 %
 @misc{ringCT,
@@ -313,6 +392,7 @@ month={May}
 }
 %
 @misc{p2pkh,
+  key={p2pkh},
   title = {BitcoinWiki},
   note = {\url{https://en.bitcoinwiki.org/wiki/Pay-to-Pubkey_Hash}}
 }
