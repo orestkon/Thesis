@@ -5,15 +5,12 @@ The elliptic curve \emph{ed25519} is both a signature scheme and a use case for 
 
 \emph{Curve25519} first arrived in 2006~\cite{curve25519}, a few years before the Edwards normal form papers on elliptic curves. Montgomery curves, the form of curve used for Curve25519, was originally used to speed up elliptic curve factorisation~\cite{montgomery}. The original proposal for Curve25519 was for use as a Diffie-Hellman (key exchange) protocol~\cite{Diffie:2006:NDC:2263321.2269104}. This is still its use and is now often called \emph{X25519}.
 
-Later, Edwards came up with his own form of elliptic curve~\cite{edward}. Daniel J. Bernstein, Tanja Lange et al. researched these forms and realised they too were fast, especially for signatures and we got Ed25519~\cite{eddsa} using the Edwards form of Curve25519.
-
-So far we have the following nomenclature:
+Later, Edwards came up with his own form of elliptic curve~\cite{edward}. Daniel J. Bernstein, Tanja Lange et al. researched these forms and realised they too were fast, especially for signatures and we got Ed25519~\cite{eddsa} using the Edwards form of Curve25519. So far, we have the following nomenclature:
 \begin{description}
   \item [Curve25519, Curve41417, Ed448-Goldilocks] generally the name of the curve itself.
   \item [X25519, X448, X41417] Diffie-Hellman key exchange schemes using the above curve.
   \item [EdDSA, Ed25519, Ed448] The first being the generic Edwards variant of DSA, plus other fixes, the others being specific instances matched to their curve names.
 \end{description}
-
 Confusingly, Open Whisper Systems came up with \emph{XEdDSA}~\cite{signal}. To quote them:
 \begin{verbatim}
   XEdDSA enables use of a single key pair format for both elliptic
@@ -21,86 +18,98 @@ Confusingly, Open Whisper Systems came up with \emph{XEdDSA}~\cite{signal}. To q
 \end{verbatim}
 
 Hence, \emph{X EdDSA} is taken to mean "exchange and EdDSA" of the given curve. In this instance, the key exchange part still happens using the montgomery form of the curve, but the signature part (EdDSA) uses the same curve in Edwards form.
+\pagebreak
 
 \section{Stealth address construction} \label{sec:construction}
 Here is a functional example for deriving a Monero stealth address. Here we will examine the developer mechanics not cryptographic theory. Results below duplicate functionality that is part of \emph{Crypto Note Test Address}~\cite{teststealth}.
 
 It is worth noting custom \verb|bytes_to_words|, \verb|sc_reduce32|, and \verb|secret_key_to_| \verb|public_key| executables (coded in C or C++) below were named after Monero's functions that yielded output results. C++ coding insights came from \verb|main.cpp|. The \verb|bx| command line is bitcoin-explorer, see~\cite{bx}.
 
-Monero's \verb|secret_key_to_public_key()| functionality is using \emph{Ed25519} technology but not in a inclusive way. Only the necessary computations for the production of stealth addresses are implemented. Results are different from \emph{TOR} test vectors results that custom executables utilizing \emph{libsodium} and \emph{ed25519-donna} yield, but Monero C/C++ code results match that from \emph{Crypto Note Test Address}. Let us see the components and the calculations that take place in order to construct a stealth address.
+Monero's \verb|secret_key_to_public_key()| functionality is using \hyperref[sec:ed25519]{\emph{Ed25519}} (see \hyperref[sec:ed25519]{section}~\ref{sec:ed25519}) technology but not in an inclusive way. Only the necessary computations for the production of stealth addresses are implemented. Results are different from \emph{Tor}~\cite{tor} test vectors results that custom executables utilizing \emph{libsodium} and \emph{ed25519-donna} yield, but Monero C/C++ code results match that from \emph{Crypto Note Test Address}. Let us see the components and the calculations that take place in order to construct a stealth address.
 
 The example that is presented here was posted by user \verb|skaht| on Monero stack exchange forum~\cite{stackexchange}. The calculations were checked and confirmed.
 \begin{itemize}
   \item 256-bit hexadecimal-encoded seed is assumed to be:
   \begin{verbatim}
-    198584347013dd91832be3d82529437db7cc8e1850e559cdd3872b29
-    ca819601
+  198584347013dd91832be3d82529437db7cc8e1850e559cdd3872b29
+  ca819601
   \end{verbatim}
-  \item Electrum mnemonic words\footnote{These are the words that a wallet owner should remember in order to restore his wallet, if he forgets his password.} corresponding to seed (\verb|./bytes_to_words <above seed>|):
+  \item Electrum mnemonic words\footnote{These are the words that a wallet owner should remember in order to restore his wallet, if he forgets his password.} corresponding to seed\\
+  (\verb|./bytes_to_words <above seed>|)
   \begin{verbatim}
-    $ ./bytes_to_words 198584347013dd91832be3d82529437db7cc8
-    e1850e559cdd3872b29ca819601
+  $ ./bytes_to_words 198584347013dd91832be3d82529437db7cc8
+  e1850e559cdd3872b29ca819601
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     wallets drinks insult popular fall textbook scoop apology unsafe fifteen cuffs pimple roster nerves pixels upstairs academy sprig eclipse leopard peeled faxed gutter happens roster
   \end{tcolorbox}
-  \item Private spend key calculation (\verb|./sc_reduce32 <private spend key>|):
+  \item Private spend key calculation\\
+  (\verb|./sc_reduce32 <private spend key>|)
   \begin{verbatim}
-    $ ./sc_reduce32 198584347013dd91832be3d82529437db7cc8e185
-    0e559cdd3872b29ca819601
+  $ ./sc_reduce32 198584347013dd91832be3d82529437db7cc8e185
+  0e559cdd3872b29ca819601
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     \small{198584347013dd91832be3d82529437db7cc8e1850e559cdd3872b29ca819601}
   \end{tcolorbox}
-  \item Private view key calculation (\verb|./keccak|\footnote{Hash function.}\verb=<private spend key> | ./sc_reduce=):
+  \item Private view key calculation\\
+  (\verb|./keccak|\footnote{Hash function.}\verb=<private spend key> | ./sc_reduce=)
   \begin{verbatim}
-    $ ./keccak 198584347013dd91832be3d82529437db7cc8e1850e559c
-    dd3872b29ca819601
-    $ ./sc_reduce32 <the keccak output>
+  $ ./keccak 198584347013dd91832be3d82529437db7cc8e1850e559c
+  dd3872b29ca819601
+  $ ./sc_reduce32 <the keccak output>
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     \footnotesize{889DA12A88D36BCE0966AB1A79125779DD1F2FC6F1145DE131FD52A5B468796D}
     \tcblower
     \small{faa5defce980fdbd03b9dd4841371dfcdc1f2fc6f1145de131fd52a5b468790d}
   \end{tcolorbox}
-  \item Public spend key calculation (\verb|./secret_key_to_public_key <private spend key>|):
+  \item Public spend key calculation\\
+  (\verb|./secret_key_to_public_key <private spend key>|)
   \begin{verbatim}
-    $ ./secret_key_to_public_key 198584347013dd91832be3d82529437
-    db7cc8e1850e559cdd3872b29ca819601
+  $ ./secret_key_to_public_key 198584347013dd91832be3d82529437
+  db7cc8e1850e559cdd3872b29ca819601
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     \small{b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4a90}
   \end{tcolorbox}
-  \item Public view key calculation (\verb|./secret_key_to_public_key <private view key>|):
+  \item Public view key calculation\\
+  (\verb|./secret_key_to_public_key <private view key>|):
   \begin{verbatim}
-    $ ./secret_key_to_public_key faa5defce980fdbd03b9dd4841371
-    dfcdc1f2fc6f1145de131fd52a5b468790d
+  $ ./secret_key_to_public_key faa5defce980fdbd03b9dd4841371
+  dfcdc1f2fc6f1145de131fd52a5b468790d
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     \small{3c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52a4ff}
   \end{tcolorbox}
 \end{itemize}
 
-Now, we should note that the calculation of the stealth address (hexadecimal format) is:
+Note that the calculation of the stealth address (hexadecimal format) is:
 \begin{verbatim}
-  prefix + public_spend_key + view_public_key + keccak_checksum_postfix
+    prefix + public_spend_key + view_public_key +
+                                      keccak_checksum_postfix
 \end{verbatim}
+\clearpage
+\pagebreak
+
 The \verb|prefix| in Monero addresses is always $12$ and is a marking of a Monero address. In this context the character \verb|+| is used to mark concatenation of strings. The \verb|keccak_checksum_postfix| computation is:
 \begin{itemize}
   \item Stealth address checksum calculation (\verb|./keccak <almost an address>|):
   \begin{verbatim}
-    $ ./keccak 12 +
-    b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4a90 +
-    3c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52a4ff
+$ ./keccak 12 +
+b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3
+ccd4a90 +
+3c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fd
+a52a4ff
   \end{verbatim}
-  \begin{tcolorbox}[colback=green!5!white,colframe=green!65!black,title=Output:]
+  \begin{tcolorbox}[colback=blue!5!white,colframe=blue!65!black,title=Output:]
     \footnotesize{ADD568169DBF2C6D3F595EE8610A189955BECD1EDF150627CBF2F2C49B0AEA71}
   \end{tcolorbox}
   \item So, the hexadecimal format of a Monero stealth address is:
   \begin{verbatim}
-    12b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7b3ccd4
-    a903c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed547004496fda52
-    a4ffADD56816
+12b66991d7d7c68513533d0560f820d75adfb0911487ba62274b759f7
+b3ccd4a903c450f27cd6849d9130addb2c566d910c5ef9bf4cecaed54
+7004496fda52a4ffADD56816
   \end{verbatim}
 \end{itemize}
 

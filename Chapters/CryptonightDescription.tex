@@ -4,6 +4,7 @@
 % Also need to be checked, but this will happen after
 % the figure insertion.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Still needs figures...
 
 \chapter{Cryptonight} \label{ch:cryptonight}
 %
@@ -143,7 +144,6 @@ This concludes the second part. The scratchpad is written twice per iteration. T
 The third stage of the algorithm uses the final state of the scratchpad to produce the output. During this stage AES operation is used. At first, the function extracts 10 key values from 32 bytes of the hashed input of the function, similar to the \hyperref[hashing]{step}~\ref{hashing} of the first stage.
 
 \noindent Extracting keys:
-% Extract keys
 \begin{enumerate}
   \item Choose the bytes $[32...63]$ of the final Keccak state.
   \item Interpret them as an AES-256 key.
@@ -224,13 +224,9 @@ For AES, NIST selected three members of the Rijndael family, each with a block s
 AES has been adopted by the U.S. government and is now used worldwide. The algorithm described by AES is a symmetric-key algorithm, meaning the same key is used for both encrypting and decrypting the data.
 \pagebreak
 
-In CryptoNight function AES is used for its properties as a cryptographic function. If a different key and a different input is chosen every time, then it is safe to assume that no prediction about the output of AES on this input can exist. To make this assumption more formal, we assume that AES is a \hyperref[sec:PRF]{pseudorandom function} (\hyperref[sec:PRF]{PRF}, see \hyperref[sec:PRF]{section}~\ref{sec:PRF}) and the seed is the key of AES.
+In CryptoNight function AES is used for its properties as a cryptographic function. If a different key and a different input is chosen every time, then it is safe to assume that no prediction about the output of AES on this input can exist. To make this assumption more formal, we assume that AES is a \hyperref[sec:PRF]{pseudorandom function} (\hyperref[sec:PRF]{PRF}) and the seed is the key of AES.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Here you must declare the game and the Security
-% model for this assumption. Check the photos on
-% the Desktop's desktop.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In \hyperref[sec:PRF]{section}~\ref{sec:PRF} the reader can find the mathematical definition of PRFs. We define the notion and then we define a game. Based on this game we describe a security model to base the above assumption.
 
 \subsection{Operations}
 Apart from the AES use, the memory-hard stage of CryptoNight function performs one addition, two XOR-operations and one multiplication. In order to be able to produce conclusions, we try to analyze what are the side effects of these operations. All of these operations get two inputs of size 16 bytes and produce a 16 byte result.
@@ -252,23 +248,17 @@ It is trickier to see the same here, but with a little effort one can see that i
    the result are swapped.
 \end{verbatim}
 
-The last case, is more complex. At first we notice the following: if one of the inputs is null then the result is also null. That could be a problem. We try to calculate the probability that the result is null, due to the null value of one or both inputs. We don't care about the null value of the result due to modulo operation. That probability is obviously equal to the probability that the result is equal with some other value. We would like the "extra" null probability because of the input's null value, to be negligible.
+The last case, is more complex. At first we notice the following: if one of the inputs is null then the result is also null. That could be a problem. We try to calculate the probability that the result is null, due to the null value of one or both inputs. We don't care about the null value of the result due to modulo operation. That probability is obviously equal to the probability that the result is equal with some other value. We would like the "extra" null probability because of the input's null value to be negligible.
 
 Due to the special way CryptoNight function performs the multiplication, the inputs' size are 64 bits = 8 bytes = $\frac{n}{2}$. In addition, considering that AES is a PRF (assumption) and $SP$ is unifomly random (at least at the first round by assumption), then the two inputs are independent. The probability of one or both inputs to be null is:
 \begin{equation} \label{prob_zero}
   \frac{1}{2^{n/2}} + \frac{1}{2^{n/2}} - \frac{1}{2^{n/2} \cdot 2^{n/2}} = \frac{2\cdot2^{n/2}-1}{2^n} < \frac{1}{2^{(n/2)-1}} = \mbox{\textbf{negl(n)}}
 \end{equation}
+\clearpage
+\pagebreak
 
 That seems to be fine for our analysis. But, the next problem is this: Multiplication of two 8 byte numbers produce a result modulo 16 bytes (mod $2^{128}$). The reader can see that the probability of a value to be an output of the multiplication declines, as the values grow. Even after the swap that is performed at the end of the multiplication the problem persists. We have not a uniformly at random distributed result, even if the inputs are chosen uniformly at random.
 
 The above multiplication is perfomed this way because of the modern CPU registers' size. The 8 bytes multiplication is optimized. ASICs couldn't do this as fast as a modern CPU could, but technology advances and now there are chips that do the same computation roughly with the same time cost.
 
-%%%%% Please fix the way this paragraph expresses the notion.
-However, after our theoretical analysis and the thought that the time cost of a 16 byte multiplication or maybe an 8 byte multiplication implementation that maps inputs' uniform distribution can make a system less efficient against ASICs but not completely inefficient, we should propose something better. But that is a detail and does not make a great difference in our analysis. So, from now on, we can assume that the above problem is solved and we have a multiplication implementation that produces a uniformly at random distributed result.
-
-% You will explain probabilities in the next chapter, but still, you can analyze the game perhaps?
-% Definition of security ...? both AES as PRF and memory-hardness (don't know if
-% it is needed here, check preliminaries)
-% A glimpse on what set of variables are NOT independent, or NOT DEFINITELY independent. (Maybe this goes to the proof section)
-% Just set up your model, so you can write next chapter easily...
-%% Still needs figures...
+However, after our theoretical analysis we think that we should propose something better. The time cost of a 16 byte multiplication or maybe an 8 byte multiplication implementation that maps inputs' uniform distribution can make a system less efficient against ASICs, compared to the official implementation proposal, but not completely inefficient. Nevertheless, this is a detail and does not make great difference in our analysis. From now on, we can assume that the above problem is solved and we have a multiplication implementation that produces a uniformly at random distributed result.

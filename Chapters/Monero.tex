@@ -168,7 +168,6 @@ An important part of CryptoNote is usage of random data by the sender. It always
 \end{wrapfigure}
 The structure of the above concept is inherited in all CryptoNote projects. But the details of each implementation may differ. What we will present here is the implementation details of unlinkability, as found in the Monero project. The reader can find all the information of this section and more in CryptoNote paper~\cite{citeulike:14139412} and Monero project's code. An additional valuable source of information and interactive conversation venue that the reader is refered to is Monero stack exchange forum~\cite{stackexchange}. The implementation of CryptoNote's unlinkable transactions in Monero project is mentioned as \emph{stealth addresses} or \emph{subaddresses}.
 
-%% Monero stack exchange
 Stealth address technology originated from CryptoNote technology, but Bitcoin (e.g. \emph{libbitcoin}) and its altcoins can also implement stealth addresses. For Bitcoin and its altcoins, stealth addresses must be explicitly supported by the sender's and recipient's wallets, but such support is implicit to CryptoNote wallets.
 \begin{figure}
   \begin{verbatim}
