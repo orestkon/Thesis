@@ -52,7 +52,7 @@ The definition of collision resistance for hash functions states that no efficie
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 \section{Merkle Trees} \label{sec:merkle-trees}
-In this section we will describe a data structure needed by the meticulous reader in order to understand the description of the \hyperref[sec:Bitcoin]{Bitcoin protocol} (\hyperref[sec:Bitcoin]{section }~\ref{sec:Bitcoin}).
+In this section we will describe a data structure needed by the meticulous reader in order to understand the description of the \hyperref[sec:Bitcoin]{Bitcoin} protocol (see \hyperref[sec:Bitcoin]{section }~\ref{sec:Bitcoin}).
 A Merkle tree~\cite{merkle} is a data structure which allows a party to commit to a set of items using only a single hash and prove the inclusion of any item in the committed set, by providing a logarithmic proof in terms of the cardinality of the set.
 
 More specifically, the hashes of the items consist the leafs of the tree and the last level. The internal levels are defined recursively as follows: To create level $k-1$ each pair of level $k$ $(A, B)$ is transformed as a node of value $H(A || B)$ which points to both $A$ and $B$. If the number of nodes at level $k$ is odd, the last node at that level is paired with itself\footnote{This specific construction is the one Bitcoin implements. There are various other constructions which are beyond the scope of our work.}.
@@ -60,7 +60,7 @@ More specifically, the hashes of the items consist the leafs of the tree and the
 Merkle trees are useful in Bitcoin in order to commit to a set of transactions that will be included in a block while keeping the block header of a constant size.
 
 To provide proof of inclusion, all a prover has to do is provide a path of siblings up to the root $\sf{siblings}$ and a bit vector $\sf{left}$ indicating whether each sibling is on the left or the right. The verification process is shown in \hyperref[alg:merkle-verification]{Algorithm}~\ref{alg:merkle-verification}~\cite{gtklocker}.
-
+\vspace{0.3cm}
 \begin{algorithm}
   \caption{\label{alg:merkle-verification}The \textsf{Verify} algorithm
     for a Merkle proof}
@@ -82,11 +82,11 @@ To provide proof of inclusion, all a prover has to do is provide a path of sibli
 
 An example of a Bitcoin Merkle tree, along with a proof of inclusion for $K$ can be seen on \hyperref[fig:merkletree]{figure}~\ref{fig:merkletree}.
 
-\begin{figure}[ht!]
+\begin{figure}[ht!]{\label{fig:merkletree}}
   \centering
   \includegraphics[width=0.9\columnwidth,keepaspectratio]{Images/merkle-tree-proof.png}
   \caption{A Bitcoin Merkle tree. Source:~\cite{mastering}}
-  \label{fig:merkletree}
+%  \label{fig:merkletree}
 \end{figure}
 %
 \section{Password Scramblers}
@@ -152,7 +152,7 @@ The above definition, although extremely rigid, is not that intuitive. In order 
 In their paper, a formal generalization of this notion is given, but it is beyond of the scope of this thesis. For more information about memory-hardness the reader is refered to their work~\cite{ForlerLW13}.
 %
 \section{Pseudorandom Functions} \label{sec:PRF}
-In cryptography, a pseudorandom function family, abbreviated $PRF$, is a collection of efficiently-computable functions which emulate a random oracle in the following way: no efficient algorithm can distinguish (with significant advantage) between a function chosen randomly from the PRF family and a random oracle (a function whose outputs are fixed completely at random). With that in mind,
+In cryptography, a pseudorandom function family, abbreviated PRF, is a collection of efficiently-computable functions which emulate a random oracle in the following way: no efficient algorithm can distinguish (with significant advantage) between a function chosen randomly from the PRF family and a random oracle (a function whose outputs are fixed completely at random). With that in mind,
 we must first recall the definition of oracle indistinguishability and then proceed to define a pseudorandom function.
 
 \begin{definition}{(Oracle Indistinguishability).} \textnormal{\cite{ACI}}

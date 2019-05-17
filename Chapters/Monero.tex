@@ -11,7 +11,7 @@
 Monero (XMR) is a decentralised open-source cryptocurrency. The project's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The parties behind a Monero transaction are not known; this results in considerable increase of privacy compared to Bitcoin and its forks~\cite{monerodef}.
 
 \section{History}
-First, the construction was outlined in an October 2013 white paper by the pseudonymous figure Nicolas van Saberhagen and called \hyperref[sec:CryptoNote]{CryptoNote}~\cite{citeulike:14139412}. Later, in 2014, Bitcointalk forum user known as \verb|thankful_for_today| forked the codebase of \emph{Bytecoin} (CryptoNote's reference implementation) into the name \emph{BitMonero}, which is a compound of bit and Monero (literally meaning \emph{coin} in Esperanto~\cite{esperanto}).
+First, the construction was outlined in an October 2013 white paper by the pseudonymous figure Nicolas van Saberhagen and called \hyperref[sec:CryptoNote]{CryptoNote}  protocol~\cite{citeulike:14139412}. Later, in 2014, Bitcointalk forum user known as \verb|thankful_for_today| forked the codebase of \emph{Bytecoin} (CryptoNote's reference implementation) into the name \emph{BitMonero}, which is a compound of bit and Monero (literally meaning \emph{coin} in Esperanto~\cite{esperanto}).
 
 %\setlength{\intextsep}{0pt}
 \begin{wrapfigure}[5]{R}{0.15\textwidth}
@@ -72,7 +72,7 @@ The spine of the Monero project is the \hyperref[sec:CryptoNote]{CryptoNote} pro
 
 However, it would be an inexcusable omission not to describe the features and specifications of the CryptoNote protocol itself. For our purposes, we will illustrate the above with Monero project in mind and especially one specific element, the \hyperref[ch:cryptonight]{CryptoNight} function (see \hyperref[ch:cryptonight]{chapter}~\ref{ch:cryptonight}), which is the feature of interest in this thesis.
 
-Unlike many cryptocurrencies that are derivatives of Bitcoin, Monero uses a proof of work mechanism to issue new coins and incentivize miners to secure the network and validate transactions. One key part, for Monero project to offer the above, is a proof-of-work algorithm called \hyperref[ch:cryptonight]{CryptoNight}, developed by the \hyperref[sec:CryptoNote]{CryptoNote} project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the \hyperref[sec:memory-hard]{memory-hardness} property of this algorithm.
+Unlike many cryptocurrencies that are derivatives of Bitcoin, Monero uses a proof of work mechanism to issue new coins and incentivize miners to secure the network and validate transactions. One key part, for Monero project to offer the above, is a proof-of-work algorithm called \hyperref[ch:cryptonight]{CryptoNight}, developed by the \hyperref[sec:CryptoNote]{CryptoNote} project~\cite{citeulike:14139412}. On top of typical security attributes, this algorithm is also suspected to be memory-hard. The aim of this work is to study the \hyperref[sec:memory-hard]{memory-hardness} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}) of this algorithm.
 \clearpage
 \pagebreak
 
@@ -247,7 +247,7 @@ So, in a nutshell:
   \item \emph{Ring Signatures} take care of \textbf{sender's} privacy.
 \end{itemize}
 
-An example is presented in the \hyperref[sec:construction]{Appendix}~\ref{sec:construction} of this thesis. There, the reader can find a real world construction of a Monero stealth address.
+An \hyperref[sec:construction]{example} is presented in the \hyperref[sec:construction]{Appendix}~\ref{sec:construction} of this thesis. There, the reader can find a real world construction of a Monero stealth address.
 \clearpage
 \pagebreak
 
@@ -287,12 +287,14 @@ CryptoNote is designed to mitigate the risks associated with key re-usage and on
 Trying to draw a graph with addresses in the vertices and transactions on the edges, one will get a tree: a graph without any cycles (because no key/address was used twice). Moreover, there are billions of possible graphs, since every ring signature produces ambiguity. Thus, you can't be certain from which possible sender the transaction-edge comes to the address-vertice. Depending on the size of the ring you will guess from "one out of two" to "one out of a thousand". Every next transaction increases the entropy and creates additional obstacles for an analyst.
 
 \subsection{More about CryptoNote}
-There are several noteworthy details about CryptoNote and several implementation details of this protocol in the Monero project. However, it would be unproductive and it would harm the readability of this thesis to describe every aspect of this protocol. We believe that the reader has now a good understanding of the backbone of Monero's privacy and anonymity features. Nevertheless, before we start the \hyperref[ch:cryptonight]{CryptoNight analysis} we will elaborate on some additional details about CryptoNote. Reproduced from~\cite{cryptonote}:
+There are several noteworthy details about CryptoNote and several implementation details of this protocol in the Monero project. However, it would be unproductive and it would harm the readability of this thesis to describe every aspect of this protocol. We believe that the reader has now a good understanding of the backbone of Monero's privacy and anonymity features. Nevertheless, before we start the \hyperref[ch:cryptonight]{CryptoNight} description (see \hyperref[ch:cryptonight]{section}~\ref{ch:cryptonight}) we will elaborate on some additional details about CryptoNote. Reproduced from~\cite{cryptonote}:
 
 \subsubsection{Adaptive limits}
 A decentralized payment system must not depend on a single person's decisions, even if this person is a core developer. Hard constants and magic numbers in the code deter the system's evolution and therefore should be eliminated (or at least be cut down to the minimum).
 
 Every crucial limit (like max block size or min fee amount) should be re-calculated based on the system's previous state. Therefore, it always changes adaptively and independently, allowing the network to develop on it's own. CryptoNote has the following parameters which adjust automatically for each new block:
+\clearpage
+\pagebreak
 
 \begin{description}
   \item [Difficulty] The general idea of our algorithm is to sum all the work that nodes have performed during the last 720 blocks and divide it by the time they have spent to accomplish it. The measure of the work is the corresponding difficulty value for each of the blocks. The time is calculated as follows: sort all the 720 timestamps and cut-off 20\% of the outliers. The range of the rest 600 values is the time which was spent for 80\% of the corresponding blocks.
@@ -316,7 +318,7 @@ During our research, we found the above description peculiar and confusing. Afte
 Therefore the restriction that the above feature is refering to, is about individual outputs and not the total sum of all outputs that can exist on the blockchain.
 \vspace{0.2cm}
 
-This is currently an implementation limitation related to Monero's \hyperref[sec:bulletproofs]{\emph{bulletproofs}}~\cite{getmonero} which proves that amounts are not negative, by proving they are less than $2^{64}$. Because Monero units are expressed as positive integers which are subject to modular arithmetic, a very high number can be equivalent to a negative number when added to another Monero amount, which is why this "less than" check proves the number is not effectively negative.
+This is currently an implementation limitation related to Monero's \hyperref[sec:bulletproofs]{\emph{bulletproofs}}~\cite{getmonero} (see \hyperref[sec:bulletproofs]{section}~\ref{sec:bulletproofs}) which proves that amounts are not negative, by proving they are less than $2^{64}$. Because Monero units are expressed as positive integers which are subject to modular arithmetic, a very high number can be equivalent to a negative number when added to another Monero amount, which is why this "less than" check proves the number is not effectively negative.
 
 It's easy for this limit to be increased, if necessary, in the future (it's extremely unlikely to be necessary). Note that this observation is specifically related to theoretical limitations. It may be possible that certain Monero wallet implementations also store amounts using a data storage technique that would prevent numbers larger than $2^{64}$ from being stored.
 \clearpage
