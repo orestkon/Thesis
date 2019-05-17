@@ -1,4 +1,28 @@
-\chapter{Stealth address construction} \label{sec:construction}
+\chapter{Monero}
+%
+\section{CryptoNote elliptic curve} \label{sec:ed25519}
+The elliptic curve \emph{ed25519} is both a signature scheme and a use case for Edwards form Curve25519~\cite{eddsa}. EdDSA (\emph{Edwards-curve Digital Signature Algorithm}) generalises this signature scheme to any curve in Edwards form.
+
+\emph{Curve25519} first arrived in 2006~\cite{curve25519}, a few years before the Edwards normal form papers on elliptic curves. Montgomery curves, the form of curve used for Curve25519, was originally used to speed up elliptic curve factorisation~\cite{montgomery}. The original proposal for Curve25519 was for use as a Diffie-Hellman (key exchange) protocol~\cite{Diffie:2006:NDC:2263321.2269104}. This is still its use and is now often called \emph{X25519}.
+
+Later, Edwards came up with his own form of elliptic curve~\cite{edward}. Daniel J. Bernstein, Tanja Lange et al. researched these forms and realised they too were fast, especially for signatures and we got Ed25519~\cite{eddsa} using the Edwards form of Curve25519.
+
+So far we have the following nomenclature:
+\begin{description}
+  \item [Curve25519, Curve41417, Ed448-Goldilocks] generally the name of the curve itself.
+  \item [X25519, X448, X41417] Diffie-Hellman key exchange schemes using the above curve.
+  \item [EdDSA, Ed25519, Ed448] The first being the generic Edwards variant of DSA, plus other fixes, the others being specific instances matched to their curve names.
+\end{description}
+
+Confusingly, Open Whisper Systems came up with \emph{XEdDSA}~\cite{signal}. To quote them:
+\begin{verbatim}
+  XEdDSA enables use of a single key pair format for both elliptic
+  curve Diffie-Hellman and signatures.
+\end{verbatim}
+
+Hence, \emph{X EdDSA} is taken to mean "exchange and EdDSA" of the given curve. In this instance, the key exchange part still happens using the montgomery form of the curve, but the signature part (EdDSA) uses the same curve in Edwards form.
+
+\section{Stealth address construction} \label{sec:construction}
 Here is a functional example for deriving a Monero stealth address. Here we will examine the developer mechanics not cryptographic theory. Results below duplicate functionality that is part of \emph{Crypto Note Test Address}~\cite{teststealth}.
 
 It is worth noting custom \verb|bytes_to_words|, \verb|sc_reduce32|, and \verb|secret_key_to_| \verb|public_key| executables (coded in C or C++) below were named after Monero's functions that yielded output results. C++ coding insights came from \verb|main.cpp|. The \verb|bx| command line is bitcoin-explorer, see~\cite{bx}.
@@ -99,3 +123,24 @@ Finally, we get the Monero stealth address:
   \small{48Y3H2eSZ6C4EUjY1B5viSGCbCLPcmMiy7aD69yqUsaHR8GLE3rvSwrdJtpZYG\\
   1peC3oipCqfUvCcF89i86kuEjVVr5GCdj}
 \end{tcolorbox}
+
+\section{CryptoNote Transaction} \label{sec:cryptonote_transaction}
+%
+Here we will present a complete CryptoNote transaction from Bob to Carol. Again reproduced from CryptoNote~\cite{cryptonote}, we will subjoin an example and a figure showing the details. The example below is illustrated in \hyperref[fig:transaction]{figure}~\ref{fig:transaction}, in the next page.
+
+Bob decides to spend an output, which was sent to the one-time public key. He needs Extra \textbf{(1)}, TxOutNumber \textbf{(2)}, and his Account private key \textbf{(3)} to recover his one-time private key \textbf{(4)}.
+
+When sending a transaction to Carol, Bob generates its Extra value by random \textbf{(5)}. He uses Extra \textbf{(6)}, TxOutNumber \textbf{(7)} and Carol's Account public key \textbf{(8)} to get her Output public key \textbf{(9)}.
+
+In the input Bob hides the link to his output among the foreign keys \textbf{(10)}. To prevent double-spending he also packs the Key image, derived from his One-time private key \textbf{(11)}.
+
+Finally, Bob signs the transaction, using his One-time private key \textbf{(12)}, all the public keys \textbf{(13)} and Key Image \textbf{(14)}. He appends the resulting Ring Signature to the end of the transaction \textbf{(15)}.
+\clearpage
+\pagebreak
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[scale=0.31, angle=90, keepaspectratio]{Images/CryptoNote/transaction.png}
+  \caption{A sample transaction from Bob to Carol.~\cite{cryptonote}}
+  \label{fig:transaction}
+\end{figure}

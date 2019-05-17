@@ -1,4 +1,4 @@
-\chapter{Math tools} \label{Preliminaries}
+\chapter{Math tools} \label{ch:math}
 %
 \section{Overview}
 Here we will include any notion or mathematical tool that the reader will need to study this thesis. Our goal is to make the citation and references in this document unnecessary for the understanding of the problem we researched. We believe that we can make this project complete on its own and any available source will be needed only for the experienced reader who may want to get a deeper understanding of the mechanics discused.
@@ -38,7 +38,7 @@ The definition of collision resistance for hash functions states that no efficie
 \begin{definition} \textnormal{\cite{Katz:2007:IMC:1206501}}
   A hash function $H$ is \textbf{collision resistant} if for all probabilistic polynomial-time adversaries $\mathcal{A}$ there exists a negligible function $\textbf{negl}$ such that
 
-\begin{equation}\label{eqn:collision}
+\begin{equation} \label{eqn:collision}
   Pr[{Hash-coll}_{\mathcal{A},H}(n) = 1] \leq \textbf{negl} \: (n)
 \end{equation}
 \end{definition}
@@ -51,7 +51,7 @@ The definition of collision resistance for hash functions states that no efficie
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-\section{\label{sec:merkle-trees}Merkle Trees}
+\section{Merkle Trees} \label{sec:merkle-trees}
 In this section we will describe a data structure needed by the meticulous reader in order to understand the description of the \hyperref[sec:Bitcoin]{Bitcoin protocol} (\hyperref[sec:Bitcoin]{section }~\ref{sec:Bitcoin}).
 A Merkle tree~\cite{merkle} is a data structure which allows a party to commit to a set of items using only a single hash and prove the inclusion of any item in the committed set, by providing a logarithmic proof in terms of the cardinality of the set.
 
