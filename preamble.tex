@@ -16,7 +16,16 @@
 \usepackage{moreenum} %% more enumeration options i guess.. i need it for /greek option.
 \usepackage[toc,page]{appendix}
 \usepackage[super]{nth}
-\usepackage{epigraph}
+\usepackage{epigraph} %% quotes in chapters
+
+\usepackage{biblatex}
+\addbibresource{myBibliography.bib}
+\defbibfilter{papers}{
+  type=article or
+  type=inproceedings or
+  type=book or
+  type=unpublished
+}
 
 \usepackage{xunicode}
 \usepackage{xltxtra}
@@ -138,3 +147,13 @@
     \vrule height .3ex width .15ex\hskip .08em
     \vrule height .3ex width .15ex\hfil}
     \vbox{\copy2\box0}\box2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Spliting bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{category}[A]{First category}
+%  \SBentries{signal,montgomery}
+%\end{category}
+%\begin{category}[B]{Second category}
+%  \SBentries{edward,curve25519}
+%\end{category}

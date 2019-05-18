@@ -8,7 +8,7 @@
 \centering
 \includegraphics[width=0.2\textwidth]{Images/Monero/monero.png}
 \end{wrapfigure}
-Monero (XMR) is a decentralised open-source cryptocurrency. The project's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The parties behind a Monero transaction are not known; this results in considerable increase of privacy compared to Bitcoin and its forks~\cite{monerodef}.
+Monero (XMR) is a decentralised open-source cryptocurrency. The project's fundamental feature is privacy - it aims to be a digital medium of exchange with untraceable payments, unlinkable transactions and resistance to blockchain analysis. The parties behind a Monero transaction are not known; this results in considerable increase of privacy compared to Bitcoin and its forks~\cite{monero}.
 
 \section{History}
 First, the construction was outlined in an October 2013 white paper by the pseudonymous figure Nicolas van Saberhagen and called \hyperref[sec:CryptoNote]{CryptoNote}  protocol~\cite{citeulike:14139412}. Later, in 2014, Bitcointalk forum user known as \verb|thankful_for_today| forked the codebase of \emph{Bytecoin} (CryptoNote's reference implementation) into the name \emph{BitMonero}, which is a compound of bit and Monero (literally meaning \emph{coin} in Esperanto~\cite{esperanto}).
@@ -88,7 +88,7 @@ The CryptoNote protocol possesses significant algorithmic differences relating t
 
 Unlike Bitcoin, a user's funds are not held in the address he/she gives out to others. Instead, every time he/she receives a payment it goes to an unlinkable address generated with random numbers. When he/she decides to spend the funds in that one-time address, the amount will be broken down and the components will be indistinguishable from identical outputs in the blockchain.
 
-For example if 556.44 XMR are sent, the protocol will break it down into 500 + 50 + 6 + 0.4 + 0.04 and a ring signature will be performed with other 500's, 50's, 6's, 0.4's, and 0.04's in the blockchain. Unlike the \emph{CoinJoin} mixing method~\cite{coinjoin}, CryptoNote mixes outputs not transactions. This means no other senders need to be participating with some user at the same time or with the same amounts. Any arbitrary amount sent at any time can always be rendered fundamentally indistinguishable (a mathematical proof is given in the white paper~\cite{citeulike:14139412}).
+For example if 556.44 XMR are sent, the protocol will break it down into 500 + 50 + 6 + 0.4 + 0.04 and a ring signature will be performed with other 500's, 50's, 6's, 0.4's, and 0.04's in the blockchain. Unlike the \emph{CoinJoin} mixing method~\cite{btcforum}, CryptoNote mixes outputs not transactions. This means no other senders need to be participating with some user at the same time or with the same amounts. Any arbitrary amount sent at any time can always be rendered fundamentally indistinguishable (a mathematical proof is given in the white paper~\cite{citeulike:14139412}).
 
 The degree of anonymity is also a choice rather than decided by the protocol: do you want to be hidden as one among five or one among fifty? The size of the signature grows linearly as $\mathcal{O}(n+1)$ with the ambiguity, so greater anonymity is paid for, with higher fees to miners.
 
