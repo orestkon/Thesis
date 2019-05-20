@@ -54,7 +54,7 @@ Bitcoin offers much more than just moving currency around. It allows us to actua
   \label{fig:bitcoin-script}
 \end{figure}
 
-This script introduces two kinds of formats. The first kind is commands prefixed with \code{OP\_}. These operations are called \emph{opcodes} and they perform calculations on values on the stack. The result is pushed again to the stack. The type of the calculations are intuitive, e.g. \code{OP\_HASH256} calculates the SHA256 hash of the value on the top of the stack, \code{OP\_EQUALS} compares the top 2 values on the stack and pushes 1 if they are indeed equal or 0 otherwise. The second kind is hex values. These values are simply pushed to the stack. Usually they will be used as input for some operation.
+This script introduces two kinds of formats. The first kind is commands prefixed with \code{OP\_}. These operations are called \emph{opcodes} and they perform calculations on values on the stack. The result is pushed again to the stack. The types of the calculations are intuitive, e.g. \code{OP\_HASH256} calculates the SHA256 hash of the value on the top of the stack, \code{OP\_EQUALS} compares the top 2 values on the stack and pushes 1 if they are indeed equal or 0 otherwise. The second kind is hex values. These values are simply pushed to the stack. Usually they will be used as input for some operation.
 
 It is easy for the reader to see that the script of \hyperref[fig:bitcoin-script]{figure}~\ref{fig:bitcoin-script} checks if the value on the stack is the preimage of the given hash value and returns 1 (true) or 0 (false). More information about Bitcoin scripts and details about the stack operations can be found in~\cite{wiki}. In practice, this output confirms the success of the evaluation. Such a script is called a \textsf{pubKeyScript}. However, in our example we assume the preimage was on the stack. The way this is implemented in Bitcoin is running another script called \textsf{scriptSig} that passes the parameters to \textsf{pubKeyScript}. The combination of these two scripts is enough powerful and the calculations they perform can be used to make a transaction in the Bitcoin network.
 
@@ -99,7 +99,7 @@ Bob's signature will be available. We will see that it can be found on the hash 
 An \emph{output} is a tuple ({\sf value, pubKeyScript}). The \textsf{value} refers to an amount of one Bitcoin in Satoshi (where $\sf 10^8 \, Satoshi = 1 \, \bitcoin$) and \textsf{pubKeyScript} is a script which needs to be run against some stack and return 1 in order for \textsf{value} to be transferable.
 
 \section{Inputs} \label{sec:inputs}
-An input is the way an output is redeemed. Specifically, it contains 3 things:
+An input is the way an output is redeemed. Specifically, it contains three things:
 \begin{itemize}
   \item The hash of the transaction where the output of interest is contained.
   \item An index clarifying which output in the transaction this input is referring to.
@@ -140,12 +140,12 @@ A block contains a list of transactions, the first of which is called the \emph{
 
 A block header contains mainly the hash of the previous block, a \hyperref[sec:merkle-trees]{Merkle root hash} (see \hyperref[sec:merkle-trees]{section}~\ref{sec:merkle-trees}) to commit to a set of transactions, and a nonce. Blocks are always referenced by the hash of their block header. Once a transaction has been included in a valid block it's called \emph{confirmed}.
 
-\section{\label{sec:blockchain}Blockchain}
+\section{Blockchain} \label{sec:blockchain}
 Now, the reader can visualize the famous term \emph{blockchain}. The blockchain is a chain of blocks. The blockchain is public and it holds the history of all valid transactions in a cryptocurrency's network. It holds the timeline of a cryptocurrency's life. It is easy to see that, by the definition of the blockchain, there can be no parallel chains. There is not such thing in economics as two valid transaction histories.
 
 It's possible that there are contending chains of blocks. We then say, there is a \emph{fork} on the chain. On \hyperref[fig:blocks]{figure}~\ref{fig:blocks}, the chain has forked on blocks 3 and 6.
 
-We call any valid blocks which are not part of our active chain \emph{orphans}. In our example blocks 4b, 7a and 8a are orphans. As expected, orphans blocks, although typically valid, cannot be part of the transaction history. So, transactions that are included in an orphan block (and have not been included in another block yet) return back in the pool (become \emph{unconfirmed}\footnote{Note: The reader may find this peculiar. However, we observe that as the blockchain grows, older blocks become "safer" (less probability to become orphans). That means that after a transaction becomes confirmed (included in a valid block), one should wait until this valid block is "safe enough".}) and are expected to be included in a block in the future.
+We call any valid blocks which are not part of our active chain \emph{orphans}. In our example blocks 4b, 7a and 8a are orphans. As expected, orphan blocks, although typically valid, cannot be part of the transaction history. So, transactions that are included in an orphan block (and have not been included in another block yet) return back in the pool (become \emph{unconfirmed}\footnote{Note: The reader may find this peculiar. However, we observe that as the blockchain grows, older blocks become "safer" (less probability to become orphans). That means that after a transaction becomes confirmed (included in a valid block), one should wait until this valid block is "safe enough".}) and are expected to be included in a block in the future.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.9\columnwidth,keepaspectratio]{Images/blocks.png}
@@ -166,7 +166,7 @@ Bitcoin introduces a couple of differences. $n$ varies according to the block ge
 \begin{equation} \label{eq:PoW}
   H({\sf blockHeader}) \le T
 \end{equation}
-where $T$ is called the \emph{target}. As the target goes up, the probability of being below it goes up and generating a valid block is easier. Conversely, if the target goes down it's harder to generate a valid block. To express this, in Bitcoin, $\frac{1}{T}$ is called the \emph{difficulty}.
+where $T$ is called the \emph{target}. As the target goes up, the probability of being below it goes up and generating a valid block is easier. Conversely, if the target goes down it's harder to generate a valid block. To express this, in Bitcoin, the value $\frac{1}{T}$ is called the \emph{difficulty}.
 
 To account for the block generation rate, which Bitcoin tries to keep to 1 block per 10 minutes, every 2016 blocks the target (and subsequently the difficulty) is adjusted accordingly. The target is calculated inside the Bitcoin software and is only a function of the blocks previously seen (frequently called their \emph{view}). So, as long as the Bitcoin nodes agree on the view, they'll agree on the target and all will consider the same set of incoming blocks as valid.
 
