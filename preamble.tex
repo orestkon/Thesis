@@ -18,7 +18,7 @@
 \usepackage[super]{nth}
 \usepackage{epigraph} %% quotes in chapters
 
-\usepackage{biblatex}
+\usepackage[backend=biber,style=numeric]{biblatex}
 \addbibresource{myBibliography.bib}
 \defbibfilter{papers}{
   type=article or
@@ -31,6 +31,15 @@
 \usepackage{xltxtra}
 %\usepackage{xgreek}
 \setmainfont[Mapping=TeX-text]{Times New Roman}
+%
+\usepackage[Glenn]{fncychap}
+\ChNameVar{\bfseries\Large}
+\usepackage{tabularx}
+\usepackage[normalem]{ulem}
+
+%% myPackages (Extra)
+\usepackage{enumitem}
+
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -39,13 +48,7 @@
     filecolor=magenta,      % color of file links
     urlcolor=cyan           % color of external links
 }
-\usepackage[Glenn]{fncychap}
-\ChNameVar{\bfseries\Large}
-\usepackage{tabularx}
-\usepackage[normalem]{ulem}
-
-%% myPackages (Extra)
-\usepackage{enumitem}
+\usepackage{bookmark}
 
 \renewcommand{\maketitle}{
   \begin{titlepage}
