@@ -2,7 +2,62 @@
 %
 % A glimpse on what set of variables are NOT independent, or NOT DEFINITELY independent. (Maybe this goes to the proof section)
 %
+\epigraph{Arguing that you don't care about the right to privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say.}{\textit{Edward Snowden}}
+%
+\section{Introduction}
+In order to prove that a function is \hyperref[sec:memory-hard]{\emph{memory-hard}} (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}) we need to show that no implementation exists, that can produce the same result using less memory without a significant time cost. In other words, using an implementation which needs less memory is not something that can give advantage to some miner because the time factor will make the procedure equally or more \emph{expensive}, even if the miner uses parallel computation techniques. Reproduced from CryptoNote~\cite{cryptonight}:
+\begin{verbatim}
+  CryptoNight is a memory-hard hash function. It is designed to be
+  inefficiently computable on GPU, FPGA and ASIC architectures.
+\end{verbatim}
+
+In Monero mining, CPUs cores are only efficient if they can use the super fast 2MB cache over and over. Each core needs about 2MB for CryptoNight to stay cached. So a miner should check how much L2 cache or in rare cases also L3 cache the CPU has. Then divide by 2MB and this will be how many cores he/she can run at the same time.
+
+There are several reasons to suspect that CryptoNight could be a memory-hard function. One of the most popular argument was that a megabyte of internal memory is an almost unacceptable size for a modern ASIC pipeline. But, hardware is evolving and eventually there was recently an effort for Monero ASIC production. The first documented effort was the ASIC called \emph{Antminer X3} by Bitmain~\cite{bitmain}. The announcement was made in March 2018. Observing the raise of hashrate in the Network, it was obvious that there were ASICs used for mining.
+
+Founded in 2013, Bitmain, is a firm that produces ASIC chips and mines Bitcoin. The firm as well operates \emph{Antpool}, which observers say it is the largest Bitcoin mining pool. An ASIC device by Bitmain has been mining Bitcoins for many years.
+
+The reason Monero is planning to make Bitman’s Antminer X3 ineffective is that it could enable some forms of attacks which would result in the mining pool taking over principal cryptocurrency’s hashrate. The act may enable double spending of coins, false transaction histories and censoring payments.
+
+Riccardo Spagni, in a response to a Twitter comment~\cite{fluffypony} which sees ASIC as a good thing, said:
+\begin{verbatim}
+  Removing all of the hashrate distributed among tens of
+  thousands of miners, in favour of a handful of miners
+  that can afford an overpriced machine from a single
+  manufacturer is GOOD for security?
+  I doubt even you believe that.
+\end{verbatim}
+
+There were some thoughts like "\emph{How did they did this? Isn't CryptoNight memory-bound?}". Well, one thing is that CryptoNight is \emph{ASIC-resistant}, not \emph{ASIC-proof}. But, that was not the problem. Another thought is that L3 cache supports a lot of extra functionality like being shared across cores, writing back to RAM, being behind two other levels of cache, etc. which all makes it a lot less efficient (among other issues with the approach). But, again, that was not the case in that particular effort.
+
+L3 latency wasn't the issue. ASICs just traded latency for bandwidth the same way GPUs do. They were built on stacks of DRAM, not lightning fast caches. The costs of cache complexity aren't only latency but also power usage and die space. Raw speed isn't even necessarily the goal for either CPUs or GPUs or ASICs here, it is efficiency.
+
+But, Monero project reacted and announced upgrades bi-annually in order to keep ASICs at bay. Upgrades are a problem, because upgrades produce bugs and vulnerabilities. Especially, when they are that frequent. On the other hand, upgrades in Monero are minor with no changes in the memory-hard part. From this experience, we understand that a formal proof or even a better understanding of the memory-hardness property in practice is vital for its mining function, in order to protect a cryptocurrency from centralization.
+
 \section{Proof approach}
 %% Trying the proof approach
 %
+Our starting plan was quite simple. The moment we understood the operations that took place in the computation we had a specific strategy in mind. We would prove:
+
+First case (\emph{honest} miner):
+\begin{itemize}
+  \item If the input is uniformly at random chosen, then the output is of the same nature. (one round)
+  \item Expand the above to the whole function, not just one round.
+\end{itemize}
+
+What we wanted to show with the two above steps is the following: No shortcuts exist for the calculations involved. If the miner is honest, then the hash of the block will be uniformly at random chosen and so are the elements of the input ($a$ and $b$). If that implies that the output of this process is also chosen uniformly at random, then every operation on the input cannot be guessed except with negligible probability, ergo no shortcut of this process exists.
+
+It is easy to expand the above hypothetical result to the function as a whole. Every round produces a uniformly at random chosen result. Thus, the last round will produce a uniformly at random distribuded result too.
+
+Second case (\emph{malicious} miner):
+\begin{itemize}
+  \item If the input is \textbf{NOT} chosen at random, then the output is \textbf{STILL} uniformly at random chosen. (one round)
+  \item Expand the above to the whole function, not just one round.
+\end{itemize}
+
+If we had the results for the honest case then the next step would be to show that even if the miner is malicious he cannot do any better for himself. Even if the input is not chosen uniformly at random the result is distribuded uniformly. That means that even if we "fix" the input to our taste we cannot guess the result except with negligible probability. The second step follows a similar train of thought as in the case of the honest miner.
+
+If we managed to prove the above, that would be a proof of the CryptoNight's memory-hardness property. If we cannot find a shortcut for the process then we cannot find a way to calculate the result with less memory or less time. Let us elaborate on the details of our research.
+
 %% Trying the attack approach
+\section{Attack approach}

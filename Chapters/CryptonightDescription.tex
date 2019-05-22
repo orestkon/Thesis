@@ -13,25 +13,24 @@
 \section{Description}
 In this section we will describe in detail the proposed implementation of the CryptoNight hash function. This function is used in the Monero project in order to achieve \hyperref[sec:egalitarian]{\emph{egalitarian mining}}. It is easy to understand why we characterize this implementation as \emph{proposed}, since each miner is free to use any implementation he/she can think of, as long as it produces the right result.
 
-In order to prove that a function is \hyperref[sec:memory-hard]{\emph{memory-hard}} (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}) we need to show that no implementation exists, that can produce the same result using less memory without a significant time cost. In other words, using an implementation which needs less memory is not something that can give advantage to some miner because the time factor will make the procedure equally or more "expensive", even if the miner uses parallel computation techniques. Reproduced from CryptoNote~\cite{cryptonight}:
+The first step we took, to understand how CryptoNight actually works, was reading Monero project's reviews. However, as Monero core developer \verb|smooth_xmr| has posted on reddit~\cite{reddit} when asked specifically about Cryptonight function reviews:
 \begin{verbatim}
-  CryptoNight is a memory-hard hash function. It is designed to be
-  inefficiently computable on GPU, FPGA and ASIC architectures.
+  CryptoNight was extensively reviewed, though not as part of
+  a "formal" review process, by Professor David Andersen who
+  also wrote the current implementation of the hashing code.
+
+  [...] stating that it would likely achieve its goals of resisting
+  extreme optimizations and narrowing the performance gap between
+  CPUs, GPUs, and ASICs.
 \end{verbatim}
+
+We tried to find and read this review, as it would be a great start for our work. Unfortunately, as we discovered, the review was really informal and the best we could find was a post in professor David Andersen's personal blog~\cite{andersen}. There, one can find the \emph{first}, to our knowledge, graphical representation of the \hyperref[sec:second]{second stage} of the CryptoNight function (see \hyperref[sec:second]{section}~\ref{sec:second}).
+
+Again to the best of our knowledge, this thesis is the close second.
 
 In the proposed implementation, a scratchpad\footnote{A large area of memory used to store intermediate values during the evaluation of a memory-hard function.} is used (2MB) to ensure that the memory needed fits the size of L3 cache (per core) in modern processors. In practice, the miner should measure mining power and calculate efficiency.
 
-In Monero mining, CPUs cores are only efficient if they can use the super fast 2MB cache over and over. Each core needs about 2MB for CryptoNight to stay cached. So a miner should check how much L2 cache or in rare cases also L3 cache the CPU has. Then divide by 2MB and this will be how many cores he/she can run at the same time.
-
-There are several reasons to suspect that CryptoNight could be a memory-hard function. One of the most popular argument was that a megabyte of internal memory is an almost unacceptable size for a modern ASIC pipeline. But, hardware is evolving and eventually there was recently an effort for Monero ASIC production. We could not find documents of the first construction of ASIC for Monero, but there was a time that many miners used ASICs and that was easy to see. Observing the raise of hashrate in the Network, it was obvious that there were ASICs used for mining.
-
-There were some thoughts like "\emph{How did they did this? Isn't CryptoNight memory-bound?}". Well, one thing is that CryptoNight is \emph{ASIC-resistant}, not \emph{ASIC-proof}. But, that was not the problem. Another thought is that L3 cache supports a lot of extra functionality like being shared across cores, writing back to RAM, being behind two other levels of cache, etc. which all makes it a lot less efficient (among other issues with the approach). But, again, that was not the case in that particular effort.
-
-L3 latency wasn't the issue. ASICs just traded latency for bandwidth the same way GPUs do. They were built on stacks of DRAM, not lightning fast caches. The costs of cache complexity aren't only latency but also power usage and die space. Raw speed isn't even necessarily the goal for either CPUs or GPUs or ASICs here, it is efficiency.
-
-But, Monero project reacted and announced upgrades bi-annually in order to keep ASICs at bay. Upgrades are a problem, because upgrades produce bugs and vulnerabilities. Especially, when they are that frequent. On the other hand, upgrades in Monero are minor with no changes in the memory-hard part. From this experience, we understand that a formal proof or even a better understanding of the memory-hardness property in practice for its mining function is vital, in order to protect a cryptocurrency from centralization.
-
-In this chapter we will just show the proposed implementation of CryptoNight without any analysis. We will demonstrate the three stages of the computation and the role for each element. A really quick overview of these stages would be something like this:
+In this chapter we will just show the proposed implementation of CryptoNight with a minor analysis in the last section. We will demonstrate the three stages of the computation and the role for each element. A really quick overview of these stages would be something like this:
 
 \begin{enumerate}
   \item Initialize the scratchpad in a pseudo-random manner.
@@ -43,7 +42,6 @@ In this chapter we will just show the proposed implementation of CryptoNight wit
 Enough with the overview of the function and its history! Let's dive into it and see in detail its components as it is described in \cite{cryptonight}.
 
 The input of this algorithm is a block and if the value of the Cryptonight function satisfies the target (see \hyperref[eq:target]{equation}~\ref{eq:target}), it is possible that this block is the next block in the blockchain.
-
 \begin{equation}
   \label{eq:target}
   \color{Bittersweet} \mbox{Cryptonight}
@@ -53,6 +51,7 @@ The input of this algorithm is a block and if the value of the Cryptonight funct
   \color{ForestGreen} \mbox{Target}
   \color{black}
 \end{equation}
+
 So, the input of the function is a block of transactions along with the necessary fields, which are specified by the Monero protocol. For our purposes, it is enough for the reader to think of the procedure as simple as it gets. We accept that the only way to meet the target is by bruteforcing. So, the miner tries many blocks as "candidates" and hopes for the best. Every time he/she "tries", he/she actually computes the Cryptonight digest for some random block and checks whether the \hyperref[eq:target]{equation}~\ref{eq:target} is satisfied.
 
 \subsection{The first stage}
@@ -93,11 +92,9 @@ Repeat:
   \item With the resulting blocks run \hyperref[step 7]{step}~\ref{step 7} again.
 \end{enumerate}
 
-Each time 128 bytes are written, they represent the
-result of the encryption of the previously written 128 bytes. The
-process is repeated until the scratchpad is fully initialized.
+Each time 128 bytes are written, they represent the result of the encryption of the previously written 128 bytes. The process is repeated until the scratchpad is fully initialized.
 
-\subsection{The second stage (memory-hardness)}
+\subsection{The second stage (memory-hardness)} \label{sec:second}
 The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (on all of them with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final state of the scratchpad using memory less than the size of the scratchpad. That is the intuition. Let's see the details.
 
 \paragraph{(The preparation part)} The core structure of this stage is a loop. However, before illustrating the computations that take place inside the loop, there are some computations needed for preparation and two technical clarifications.
@@ -222,7 +219,6 @@ AES is a subset of the Rijndael block cipher developed by two Belgian cryptograp
 For AES, NIST selected three members of the Rijndael family, each with a block size of 128 bits, but three different key lengths: 128, 192 and 256 bits.
 
 AES has been adopted by the U.S. government and is now used worldwide. The algorithm described by AES is a symmetric-key algorithm, meaning the same key is used for both encrypting and decrypting the data.
-\pagebreak
 
 In CryptoNight function AES is used for its properties as a cryptographic function. If a different key and a different input is chosen every time, then it is safe to assume that no prediction about the output of AES on this input can exist. To make this assumption more formal, we assume that AES is a \hyperref[sec:PRF]{pseudorandom function} (\hyperref[sec:PRF]{PRF}) and the seed is the key of AES.
 
@@ -254,10 +250,9 @@ Due to the special way CryptoNight function performs the multiplication, the inp
 \begin{equation} \label{prob_zero}
   \frac{1}{2^{n/2}} + \frac{1}{2^{n/2}} - \frac{1}{2^{n/2} \cdot 2^{n/2}} = \frac{2\cdot2^{n/2}-1}{2^n} < \frac{1}{2^{(n/2)-1}} = \mbox{\textbf{negl(n)}}
 \end{equation}
-\clearpage
-\pagebreak
+\vspace{0.3cm}
 
-That seems to be fine for our analysis. But, the next problem is this: Multiplication of two 8 byte numbers produce a result modulo 16 bytes (mod $2^{128}$). The reader can see that the probability of a value to be an output of the multiplication declines, as the values grow. Even after the swap that is performed at the end of the multiplication the problem persists. We have not a uniformly at random distributed result, even if the inputs are chosen uniformly at random.
+That seems to be fine for our analysis. But, the next problem is this: Multiplication of two 8 byte numbers produces a result modulo 16 bytes (mod $2^{128}$). The reader can see that the probability of a value to be an output of the multiplication declines, as the values grow. Even after the swap that is performed at the end of the multiplication the problem persists. We have not a uniformly at random distributed result, even if the inputs are chosen uniformly at random.
 
 The above multiplication is perfomed this way because of the modern CPU registers' size. The 8 bytes multiplication is optimized. ASICs couldn't do this as fast as a modern CPU could, but technology advances and now there are chips that do the same computation roughly with the same time cost.
 
