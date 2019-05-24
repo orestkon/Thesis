@@ -1,11 +1,18 @@
-\chapter{Summary of our Contribution}
+\chapter{Summary}
 %
+\epigraph{Arguing that you don't care about the right to privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say.}{\textit{Edward Snowden}}
 %
+\section{Future Work}
+At first, our intuition is that the next step is to analyze the relation between the inputs and the outputs in each round. Maybe there is something there, we could not find. But with a closer look it seems that if we cannot "fix" the relation to the equality one, then any control we might achieve by this analysis is lost due to our assumption that AES is a PRF.
+
+However, this is a solid assumption and we believe that it is hard to find a vulnerability in AES and a distinction between AES and PRFs.
+
+\subsubsection{Fresh point of view}
+If someone wants to continue our research, we recommend a huge step back. Maybe another model for the problem or something that does not lead to a similar point of view. As we presented in this thesis, we have found problems very early in our analysis and we couldn't pass beyond the second round of the second stage.
+
+If someone wants to perform a cryptographic analysis on CryptoNight's memory-hardness property, then he/she is supposed to analyze this second stage. This second stage is the place where the origins and the basis of the memory-hardness property lie.
+
 \section{What's new?}
-%% What's new?
-%
-%% Cryptonight Description
-%
-%% Graph Illustration
-%
-%% ....? Keep thinking...
+This thesis is the first, to our knowledge, to analyze the memory-hardness property of the CryptoNight function. We hope that our analysis is helpful to the researcher or the researchers, who would like to continue this work. We tried to make this document a good start for further exploration of this interesting and valuable problem.
+
+We wish good luck to the people that will continue this effort and help the Monero community in their effort for a better world. Surveillance efforts in the physical and digital world are apparent in our times and we believe that work for anonymity and privacy in the public domain, is something that many people seek. After all, privacy is a fundamental human right that many - if not all - human rights are based on. Without privacy, human rights, as for example \emph{freedom of speech}, collapse.
