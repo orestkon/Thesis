@@ -54,7 +54,7 @@ The input of this algorithm is a block and if the value of the Cryptonight funct
 
 So, the input of the function is a block of transactions along with the necessary fields, which are specified by the Monero protocol. For our purposes, it is enough for the reader to think of the procedure as simple as it gets. We accept that the only way to meet the target is by bruteforcing. So, the miner tries many blocks as "candidates" and hopes for the best. Every time he/she "tries", he/she actually computes the Cryptonight digest for some random block and checks whether the \hyperref[eq:target]{equation}~\ref{eq:target} is satisfied.
 
-\subsection{The first stage}
+\subsection{The first stage} \label{sec:first}
 The first stage of the algorithm sets the initial value of the scratchpad. In order to prevent several attack schemes, the scratchpad must be initialized with data chosen in a way, which is indistiguishable from the uniform distribution. This is the goal.
 
 We will describe the first stage in several parts and discuss the role of each part and its contribution regarding the properties of function's output. To begin, let's prepare the tools:
@@ -189,7 +189,7 @@ We we call the state of the hashed input after the above step as the \emph{modif
 \end{enumerate}
 The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
 
-\section{Analysis}
+\section{Analysis} \label{sec:analysis}
 Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the \hyperref[sec:memory-hard]{\emph{memory-hardness}} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}). The reader now should have an understanding about the general purpose of each stage. The first stage sets the scene for the memory-hardness part. We will assume that it initializes the scratchpad in a way, which is indistiguishable from the uniform distribution. It is also safe to assume that, for an honest miner, the input is chosen uniformly at random also. Our goal is to focus on the second stage, analyze it and then try to imagine, how an adversary miner can attack the memory-hardness property of this function. From the aforementioned assumptions we can conclude that the input of the second stage is chosen uniformly at random from its domain. Just to remember, the second stage's input is:
 \begin{itemize}
   \item $a$
@@ -206,7 +206,7 @@ We will arbitrarily choose $n$ as symbol for the size of $a$ and fix everything 
   \begin{array}{lcl}
     \mbox{Size of }a \mbox{: } & \: & n \\
     \mbox{Size of }b \mbox{: } & \: & n \\
-    \mbox{Size of }SP \mbox{: } & \: & \beta_{n} = 2 \cdot 2^{20} = 2 \cdot n^{5} \mbox{ (polynomial)} \\
+    \mbox{Size of }SP \mbox{: } & \: & \beta_{n} = 2 \cdot 10^{6} \mbox{ bytes } \approx 2 \cdot n^{5} \mbox{ (polynomial)} \\
     \mbox{Value of }SP \mbox{ in address }x \mbox{: } & \: & SP_{x} \mbox{ (of size }n\mbox{)} \\
   \end{array}
 \]
@@ -224,7 +224,7 @@ In CryptoNight function AES is used for its properties as a cryptographic functi
 
 In \hyperref[sec:PRF]{section}~\ref{sec:PRF} the reader can find the mathematical definition of PRFs. We define the notion and then we define a game. Based on this game we describe a security model to base the above assumption.
 
-\subsection{Operations}
+\subsection{Operations} \label{sec:operations}
 Apart from the AES use, the memory-hard stage of CryptoNight function performs one addition, two XOR-operations and one multiplication. In order to be able to produce conclusions, we try to analyze what are the side effects of these operations. All of these operations get two inputs of size 16 bytes and produce a 16 byte result.
 
 Let's examine them one by one. In the case of the XOR operation, it is easy to see that if the two inputs are chosen uniformly at random then the result is also uniformly at random chosen. In the case of addition, reproduced from CryptoNote~\cite{cryptonight}:

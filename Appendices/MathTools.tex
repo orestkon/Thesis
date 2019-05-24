@@ -3,7 +3,7 @@
 \section{Overview}
 Here we will include any notion or mathematical tool that the reader will need to study this thesis. Our goal is to make the citation and references in this document unnecessary for understanding the problem we analysed. We believe that we can make this project complete on its own and any available source will be needed only for the experienced reader who may want to get a deeper understanding of the mechanics discused.
 
-A great help, in order to keep this section as concrete as possible, was the work of my collegue and friend Kostis Karantias. He had already defined some notions, which are helpful in this thesis too, in a way that is impeccable. Some of his work is reproduced here but even more, he has given me an example of proper definitions and concrete mathematical language that was used in the rest of my thesis. I thank him for his help and appreciate his work. I definitely refer the reader to his thesis~\cite{gtklocker}.
+A great help, in order to keep this section as concrete as possible, was the work of my collegue and friend Kostis Karantias. He had already defined some notions, which are helpful in this thesis too. Some of his work is reproduced here. I thank him for his help and appreciate his work. I definitely refer the reader to his thesis~\cite{gtklocker}.
 %
 \section{Hash function}
 %
@@ -15,7 +15,7 @@ polynomial-time (p.p.t.) algorithm $H$ satisfying the following:
 \begin{itemize}
   \item[$\bullet$] There exists a, polynomial in $n$, function $l$ such that $H$ is a (deterministic) p.t. algorithm that takes as input any string $x \in { \{ 0,1 \}}^*$ and outputs a string:
 \end{itemize}
-\begin{equation}
+\begin{equation} \nonumber
   H(x) \in { \{ 0,1 \}}^{l(n)}
 \end{equation}
 If for every $n$, $H$ is defined only over inputs of length $l'(n)$ and $l'(n) > l(n)$, then
@@ -61,6 +61,7 @@ More specifically, the hashes of the items consist the leaves of the tree and th
 \vspace{0.3cm}
 
 Merkle trees are useful in Bitcoin in order to commit to a set of transactions that will be included in a block while keeping the block header of a constant size.
+\pagebreak
 
 To provide proof of inclusion, all a prover has to do is provide a path of siblings up to the root $\sf{siblings}$ and a bit vector $\sf{left}$ indicating whether each sibling is on the left or the right. The verification process is shown in \hyperref[alg:merkle-verification]{Algorithm}~\ref{alg:merkle-verification}~\cite{gtklocker}.
 \vspace{0.3cm}
@@ -105,7 +106,7 @@ In this section we will define the notion of the memory-hard function in the Par
 to the \textit{fixed input length random oracle $H$} (ideal compression function). After it receives the digest of $H$, is allowed to perform arbitrary computation before producing its output (the next state $\sigma_i$). The state $\sigma_0$ contains the input to the computation and no other state is kept by $\mathcal{A}$. Now, we need some complexity notions to be defined.
 
 The cumulative memory complexity (CMC) is defined to be
-\begin{equation}
+\begin{equation} \nonumber
     cmc(\mathcal{A}) = \underset{H}{\mathbb{E}} \Bigg{[} \underset{x,r}{\max} \sum_{i} \lvert \sigma_i \rvert \Bigg{]}
 \end{equation}
 where $\lvert \sigma \rvert$ is the bit-length of state $\sigma$, the expectation is taken over the choice of $H$ and $max_{x,r}$ denotes the maximum over all inputs and coins of $\mathcal{A}$.
@@ -120,13 +121,13 @@ $H$. Then,
   \item $f$ is an oracle function \\
 
   \item The \textit{amortized cumulative memory complexity} (aCMC) of $f$ is defined to be
-  \begin{equation}
+  \begin{equation} \nonumber
       cmc_{m,q}(f) = \min \Bigg{\{} \frac{cmc(\mathcal{A})}{n} : \: n \in [m], \mathcal{A} \in \mathbb{A}_{f,n,q} \Bigg{\}}
   \end{equation}
 \end{enumerate}
 This definition provides a good lower-bound on the \textit{amortized time complexity} of a function \cite{Alwen:2015:HPC:2746539.2746622}.
 
-For more detailed information about the above, we refer the reader to the appendix of \cite{cryptoeprint:2016:875}. The reader can find some technical details there that are beyond of the scope of this thesis. Now we are ready to define properly the notion of the memory-hard function. Reproduced from~\cite{cryptoeprint:2016:875}:
+For more detailed information about the above, we refer the reader to the appendix of \cite{cryptoeprint:2016:875}. The reader can find some technical details there that are beyond of the scope of this thesis. Now we are ready to define properly the notion of the memory-hard function.
 \pagebreak
 
 \begin{definition}[Memory-Hard Function] \label{Memhard1}
@@ -139,13 +140,13 @@ cmc_{m,q}(f_{\sigma, \tau})&\geq h(\sigma, \tau)           &  \frac{\mbox{space}
 %
 \end{definition}
 
-The above definition, although extremely rigid, is not that intuitive. In order to describe memory requirements, we will mention another definition given in \cite{ForlerLW13}, without causing any conflict with \hyperref[Memhard1]{definition}~\ref{Memhard1}. Before we give the second definition, one should notice that for any parallelized attack, using $b$ cores, the required memory per core is decreased by a factor of $\frac{1}{b}$, and vice versa.
+The above definition~\cite{cryptoeprint:2016:875}, although extremely rigid, is not that intuitive. In order to describe memory requirements, we will mention another definition given in \cite{ForlerLW13}, without causing any conflict with \hyperref[Memhard1]{definition}~\ref{Memhard1}. Before we give the second definition, one should notice that for any parallelized attack, using $b$ cores, the required memory per core is decreased by a factor of $\frac{1}{b}$, and vice versa.
 
 \begin{definition}[Memory-Hard Function - intuitive]
   Let $g$ denote the memory cost factor. For all $\alpha > 0$, a memory-hard function $f$ can be computed on a Random Access Machine using \textbf{space}$(g)$ space and \textbf{time}$(g)$ operations, where \textbf{space}$(g) \in \Omega(\mbox{\textbf{time}}(g)^{1-\alpha})$.\\
 
   \noindent Thus, for \textbf{space}$(\cdot)$ \textbf{time}$(\cdot)$\:$=G^2$ with $G=2^g$, using $b$ cores, we have
-  \begin{equation}\label{eqn:memhard}
+  \begin{equation} \label{eqn:memhard}
     \Bigg{(} \frac{1}{b} \cdot \mbox{\textbf{space}}(\cdot) \Bigg{)} \bigg{(} b \cdot \mbox{\textbf{time}}(\cdot) \bigg{)} = G^2.
   \end{equation}
 \end{definition}
@@ -159,7 +160,7 @@ we must first recall the definition of oracle indistinguishability and then proc
   Let $\{ O_n \}_{n \in \mathbb{N}}$ and $\{ O'_{n} \}_{n}$ be ensembles where $O_n, O'_n$ are probability
   distributions over functions $f: \{ 0,1 \}^{l_1(n)} \rightarrow \{ 0,1 \}^{l_2(n)}$ for some polynomials $l_1(\cdot)$, $l_2(\cdot)$. We say that $\{ O_{n} \}_{n}$ and $\{ O'_{n} \}_{n}$ are \textbf{computationally indistinguishable} (denoted by $\{ O'_{n} \}_{n} \approx \{ O'_n \}_{n \in \mathbb{N}}$
   ) if for all non-uniform p.p.t. oracles machines $D$, there exists a negligible function $\epsilon(\cdot)$ such that $\forall n \in \mathbb{N}$
-  \begin{equation}{\label{oracle}}
+  \begin{equation} \label{oracle}
     \Bigg{\lvert} \: Pr \big{[} F \leftarrow O_n : D^{F(\cdot)}(1^n)=1 \big{]} - Pr \big{[} F \leftarrow O'_n : D^{F(\cdot)}(1^n)=1 \big{]} \: \Bigg{\rvert} < \epsilon(n).
   \end{equation}
 \end{definition}
@@ -201,7 +202,7 @@ The intuition in this section is that we can't construct a function that actuall
 \begin{definition}[Security model]
   Let $f_{s}$ be a pseudorandom function for some $s \in \{0,1\}^{n}$, where $n$ is the security parameter. Then, $\forall$ p.p.t. adversarial algorithm $\mathcal{A}^{f'}$, with access to some random oracle function $f'$, there exists a negligible function $\epsilon(\cdot)$ such that $\forall n \in \mathbb{N}$:
 
-  \begin{equation}{\label{eq:secmodel}}
+  \begin{equation} \label{eq:secmodel}
     \Bigg{\lvert} \: \underset{s \overset{\$}{\gets} \{0,1\}^{n}}{Pr} \big{[} \mathcal{A}^{f_{s}}(1^{n}) = 0 \big{]} - \underset{f' \overset{\$}{\gets} \big{\{} \{0,1\}^{n}  \rightarrow \{0,1\}^{n} \big{\}}}{Pr} \big{[} \mathcal{A}^{f'}(1^{n}) = 0 \big{]} \: \Bigg{\rvert} < \epsilon(n).
   \end{equation}
 \end{definition}
@@ -227,19 +228,19 @@ In 1970, Hewitt and Paterson introduced a method for analyzing TMTs on directed 
   \begin{enumerate}
     \item \label{pebble:condition_1} At some step every target node is pebbled (though not necessarily simultaneously).
 %
-    \begin{equation}\label{eqn:pebcondition_1}
+    \begin{equation} \label{eqn:pebcondition_1}
       \forall x \in T \ \ \exists z \leq t \quad : \quad x \in P_z.
     \end{equation}
 %
     \item \label{pebble:condition_2} Pebbles are added only when their predecessors already have a pebble at the end of the previous step.
 %
-    \begin{equation}\label{eqn:pebcondition_2}
+    \begin{equation} \label{eqn:pebcondition_2}
       \forall i \in [t] \quad : \quad x \in (P_i \setminus P_{i-1}) \ \Rightarrow \ \mbox{\textbf{parents}}(x) \subseteq P_{i-1}.
     \end{equation}
 %
     \item \label{pebble:condition_3} At most one pebble placed per step.
 %
-    \begin{equation}\label{eqn:pebcondition_3}
+    \begin{equation} \label{eqn:pebcondition_3}
       \forall i \in [t] \quad : \quad \lvert P_i \setminus P_{i-1} \rvert \leq 1.
     \end{equation}
 %

@@ -13,13 +13,13 @@ In order to prove that a function is \hyperref[sec:memory-hard]{\emph{memory-har
 
 In Monero mining, CPUs cores are only efficient if they can use the super fast 2MB cache over and over. Each core needs about 2MB for CryptoNight to stay cached. So a miner should check how much L2 cache or in rare cases also L3 cache the CPU has. Then divide by 2MB and this will be how many cores he/she can run at the same time.
 
-There are several reasons to suspect that CryptoNight could be a memory-hard function. One of the most popular argument was that a megabyte of internal memory is an almost unacceptable size for a modern ASIC pipeline. But, hardware is evolving and eventually there was recently an effort for Monero ASIC production. The first documented effort was the ASIC called \emph{Antminer X3} by Bitmain~\cite{bitmain}. The announcement was made in March 2018. Observing the raise of hashrate in the Network, it was obvious that there were ASICs used for mining.
+There are several reasons to suspect that CryptoNight could be a memory-hard function. One of the most popular argument was that a megabyte of internal memory is an almost unacceptable size for a modern ASIC pipeline. But, hardware is evolving and eventually there was recently an effort for Monero ASIC production. The first documented effort was the ASIC called \emph{Antminer X3} by Bitmain~\cite{bitmain}. The announcement was made in March 2018. Observing the raise of hashrate in the network, it was obvious that there were ASICs used for mining.
 
 Founded in 2013, Bitmain, is a firm that produces ASIC chips and mines Bitcoin. The firm as well operates \emph{Antpool}, which observers say it is the largest Bitcoin mining pool. An ASIC device by Bitmain has been mining Bitcoins for many years.
 
 The reason Monero is planning to make Bitman’s Antminer X3 ineffective is that it could enable some forms of attacks which would result in the mining pool taking over principal cryptocurrency’s hashrate. The act may enable double spending of coins, false transaction histories and censoring payments.
 
-Riccardo Spagni, in a response to a Twitter comment~\cite{fluffypony} which sees ASIC as a good thing, said:
+Riccardo Spagni, in a response to a Twitter comment which sees ASICs as a good thing~\cite{fluffypony}, said:
 \begin{verbatim}
   Removing all of the hashrate distributed among tens of
   thousands of miners, in favour of a handful of miners
@@ -41,23 +41,115 @@ Our starting plan was quite simple. The moment we understood the operations that
 
 First case (\emph{honest} miner):
 \begin{itemize}
-  \item If the input is uniformly at random chosen, then the output is of the same nature. (one round)
+  \item If the input is uniformly at random chosen, then the output is of the same nature \textbf{AND} independent from the input. (one round)
   \item Expand the above to the whole function, not just one round.
 \end{itemize}
 
-What we wanted to show with the two above steps is the following: No shortcuts exist for the calculations involved. If the miner is honest, then the hash of the block will be uniformly at random chosen and so are the elements of the input ($a$ and $b$). If that implies that the output of this process is also chosen uniformly at random, then every operation on the input cannot be guessed except with negligible probability, ergo no shortcut of this process exists.
+What we wanted to show with the two steps above is the following: No shortcuts exist for the calculations involved. If the miner is honest, then the hash of the block will be uniformly at random chosen and so are the elements of the input ($a$, $b$ and $SP$) of the second stage. If that implies that the output of this process is also chosen uniformly at random, then every operation on the input cannot be guessed except with negligible probability, ergo no shortcut of this process exists.
+
+Of course, another requirement is the input ($a,b,SP$) to be independent from the output ($a',b',SP'$), where $SP'$ is the modified $SP$ after the round. If this is not the case, then there is a relation between two or more elements and in the nature of that relation may hide a chance for an attack.
 
 It is easy to expand the above hypothetical result to the function as a whole. Every round produces a uniformly at random chosen result. Thus, the last round will produce a uniformly at random distribuded result too.
 
 Second case (\emph{malicious} miner):
 \begin{itemize}
-  \item If the input is \textbf{NOT} chosen at random, then the output is \textbf{STILL} uniformly at random chosen. (one round)
+  \item If the input is \textbf{NOT} chosen at random, then the output is \textbf{STILL} uniformly at random chosen \textbf{AND} independent from the input. (one round)
   \item Expand the above to the whole function, not just one round.
 \end{itemize}
 
-If we had the results for the honest case then the next step would be to show that even if the miner is malicious he cannot do any better for himself. Even if the input is not chosen uniformly at random the result is distribuded uniformly. That means that even if we "fix" the input to our taste we cannot guess the result except with negligible probability. The second step follows a similar train of thought as in the case of the honest miner.
+If we had the results for the honest case then the next step would be to show that even if the miner is malicious he cannot do any better for himself. Even if the input is not chosen uniformly at random the result will be distribuded uniformly. That means that even if we "fixed" the input to our taste we could not guess the result except with negligible probability. The second step follows a similar train of thought as in the case of the honest miner.
 
 If we managed to prove the above, that would be a proof of the CryptoNight's memory-hardness property. If we cannot find a shortcut for the process then we cannot find a way to calculate the result with less memory or less time. Let us elaborate on the details of our research.
 
+\subsection{The model}
+Based on the aforementioned plan and with help from the observations and assumptions we made in \hyperref[sec:analysis]{section}~\ref{sec:analysis} we now present the model of computation we assume for CryptoNight's second stage.
+
+The reader can see that there is a natural division of the process in three parts. The first part is the set of all operations done on the first address' value. Explicitly, that involves:
+\begin{description}
+  \item [Read] An AES operation. Under our assumption, it is a pseudorandom function (PRF).
+  \item [Write] A XOR ($\oplus$) operation.
+\end{description}
+
+The second part involves any operation done on the second address' value. More precisely:
+\begin{description}
+  \item [Read] The storage of the value in the address.
+  \item [Write] A multiplication and an addition.
+\end{description}
+
+The third part is not of much interest for our purposes. It extracts the two outputs needed as input for next round of the second stage:
+\begin{itemize}
+  \item A XOR ($\oplus$) operation on the result of the addition that produces the first input of the next round ($a'$).
+  \item The result of the PRF operation (AES) that is passed as the second input of the next round ($b'$).
+\end{itemize}
+
+Here we note again (see \hyperref[sec:operations]{section}~\ref{sec:operations}) the special nature of the multiplication. Just for our purposes, we assume that it sustains the properties of its input. If the input (the two integers, each of size $n$) is uniformly at random chosen then the output of the multiplication is of the same nature. We strongly declare that this is \textbf{NOT} the case for the specific implementation of this operation. However, we will see that even with this assumption, we will not achieve our goal.
+
+\subsection{The road to proof construction}
+Based on the above we begin our analysis. Under the following assumptions,
+\begin{itemize}
+  \item $a,b$ are uniformly at random chosen
+  \item AES is a PRF
+\end{itemize}
+we get that the first address of the round is changed in a way that does not change the distribution of the scratchpad. Everything seems fine.
+
+For the second address we get the same result. Our assumptions are:
+\begin{itemize}
+  \item AES is a PRF
+  \item $\forall c : SP_c$ is uniformly at random chosen
+  \item Multiplication and addition sustain the distribution of their inputs
+\end{itemize}
+
+Let's see the values of $a'$ and $b'$:
+\begin{align} \label{eq:normal_1}
+  a' &= \Big( a + \big( PRF(a, SP_{a}) \cdot SP_{PRF(a, SP_a)} \big) \Big) \oplus SP_{PRF(a, SP_a)}\\ b' &= PRF(a, SP_{a}) \label{eq:normal_2}
+\end{align}
+
+Here we have a major problem. The problem is not the distribution of the output. Under our assumptions that is appropriate. But,
+\begin{itemize}
+  \item $a'$ is \textbf{NOT} independent from $a$
+  \item $b'$ is \textbf{NOT} independent from $b$
+  \item $SP'$ (scratchpad after the round) is not uniformly at random chosen
+\end{itemize}
+The third statement comes out of the observation that the value of $SP_a$, after the write operation, is dependent on the value of $b$. That is something that breaks our plan.
+
+However, this is a hint for the possibility of the existence of a successful attack on the memory-hardness property of CryptoNight function. Part of the input of this stage (values of $a,b$) is produced right from the hashed input of CryptoNight (see \hyperref[sec:first]{sections}~\ref{sec:first},~\ref{sec:second}). If someone can control the value of $a$, or maybe some bits of $a$ then he has a partial control of the value of $a'$, or at least some control over the range of $a'$. The same apply for the value of $b$ and $b'$.
+
+This is of course, nothing more than an intuition, so let's see if we can achieve the planning of said attack.
 %% Trying the attack approach
 \section{Attack approach}
+The above intuition, apart from the assumptions involved, implies a level of control on the value of $a$ and $b$. This can be done, with grinding techniques. In a very high level the miner can hash with Keccak the input multiple times, changing every time something in the block (nonce, sequence of transactions, etc.). That will give him every time a different digest, ergo a different value for $a$ and $b$. This is quite efficient, especially if an ASIC is involved.
+
+But we will make a stronger assumption. We will assume that some adversarial miner has a total control over the value of $a$ and $b$. We will show that even in that case, an attack seems impossible. Due to the nature of our results, it doesn't make sense to analyze the way an attacker can gain control over the value of $a$ or $b$.
+
+\subsection{What we can do?}
+What is the level of impact that we can cause, if we could control the values of $a$ and $b$? What is the best we can do in order to achieve our goal?
+
+If someone takes his/her time observing the process, he/she can see the only thing that we can hope for. That is to find an address $a$, with a content $SP_a$ such that:
+\begin{equation} \nonumber
+  \mbox{AES}(a,SP_a) = a
+\end{equation}
+
+Now it is time to measure the probability of this event. If this probability is negligible, we can't find anything more that we can do. We have $\beta_n$ addresses on the scratchpad and in the CryptoNight description~\cite{cryptonight} we see that:
+\begin{verbatim}
+  When a 16-byte value needs to be converted into an address in
+  the scratchpad, it is interpreted as a little-endian integer,
+  and the 21 low-order bits are used as a byte index. However,
+  the 4 low-order bits of the index are cleared to ensure the
+  16-byte alignment.
+\end{verbatim}
+
+This means that, for a uniformly at random chosen 16-byte number, the probability for the value to be converted into a specific address in the scratchpad is:
+\begin{equation} \nonumber
+  \frac{1 \cdot \mbox{\textbf{sizeof}}(\mbox{address})}{\mbox{\textbf{sizeof}}(SP)} =
+  \frac{1 \cdot n}{\beta_n} = \frac{n}{2 \cdot n^5} = \frac{1}{2 \cdot n^4} = \frac{1}{\mbox{\textbf{poly}}(n)}
+\end{equation}
+
+That is, for all intents and purposes, \textbf{NOT} a negligible probability with respect to the size of $n$. Hence, that is something that we can do efficiently enough. Let's see what this scenario gives us, as a round outcome. If the reader cares to do some math, he/she will see that \hyperref[eq:normal_1]{equations}~\ref{eq:normal_1},~\ref{eq:normal_2} become:
+\begin{align} \nonumber
+  a' &= \Big( a + \big( a \cdot (a \oplus b) \big) \Big) \oplus (a \oplus b) &
+  &\mbox{and} & b' &= a
+\end{align}
+
+This looks really promising. Until we see what happens to the next round. The one thing that the reader is suggested to observe is that, although $a'$ is a function of $a$ and $b$, it is certainly not equal to either of them.
+
+In the next round, the value $a'$ will point to a different location on the scratchpad ($SP_{a'}$) and the value $\mbox{PRF}(a', SP_{a'})$ will point to a random address in the scratchpad. And this is exactly the moment we lose the control we had over the process.
