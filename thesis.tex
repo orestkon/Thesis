@@ -10,14 +10,20 @@
 %
 \input{firstPage.tex}
 \input{secondPage.tex}
+%
+%%
 \input{abstract.tex}
 \input{abstract_gr.tex}
+%
+\frontmatter
+\input{Chapters/Acknowledgements.tex}
 %
 \input{tableOfContents.tex}
 %
 %% Start
 %
-\pagenumbering{arabic}
+%\pagenumbering{arabic}
+\mainmatter
 
 \input{Chapters/Introduction.tex}
 \input{Chapters/Bitcoin.tex}
@@ -25,7 +31,6 @@
 \input{Chapters/Monero.tex}
 \input{Chapters/CryptonightDescription.tex}
 \input{Chapters/ProblemStatement.tex}
-\input{Chapters/FutureWork.tex}
 \input{Chapters/Summary.tex}
 
 \begin{appendices}
