@@ -1,59 +1,68 @@
 ## Structure of my thesis:
 
+   Acknowledgements
+
 1. Introduction
-   1. Overview
-   2. Thesis Structure
+   1. Why Monero?
+   2. An important thank you note
+   3. Not MY work
 
-2. Preliminaries
-   1. Overview
-   2. Hash functions
-   3. Memory-hardness
-   4. Password scramblers
-   5. Pebbling game
-   6. Information about pebbling algorithms and complexity
+2. Bitcoin
+   1. Introduction
+   2. Scripts
+   3. P2PKH
+   4. Outputs
+   5. Inputs
+   6. Transactions
+   7. Blocks
+   8. Blockchain
+   9. Proof of Work (PoW)
+   10. Simplified Payment Verification (SPV)
 
-3. Cryptocurrency Mining
-   1. Overview
-   2. Bitcoin
-   3. Mining
-   4. Egalitarian Mining
-   5. Monero
-   6. CryptoNote
+3. Mining
+   1. Introduction
+   2. Egalitarian Mining
+      1. Formal definition
 
-4. Cryptonight Analysis
+4. Monero
+   1. Introduction
+   2. History
+   3. Specifications
+      1. Account
+      2. Keys
+   4. CryptoNote
+      1. Untraceable transactions
+      2. Unlinkable transactions
+      3. Double-spending proof
+      4. Blockchain analysis resistance
+      5. More about CryptoNote
+   5. Monero vs CryptoNote
+      1. RingCT
+      2. Bulletproofs
+      3. Kovri I2P Network
+
+4. Cryptonight
    1. Description
    2. The three Stages
-   3. Stage 2 and Memory-hardness
-   4. Details and Graphics representation
+      1. The first stage
+      2. The second stage (memory-hardness)
+      3. The third stage
+   3. Analysis
+      1. Parameters
+      2. AES as PRF
+      3. Operations
 
 5. Problem Statement and our Remarks
-   1. Trying the proof approach
-   2. Trying the attack approach
+   1. Introduction
+   2. Proof approach
+      1. The model
+      2. The road to proof construction
+   3. Attack approach
+      1. What we can do?
 
-6. Future Work
-   1. Differential Analysis
-   2. Linear Analysis
-   3. ...? Maybe more...
-
-7. Summary of our Contribution (What's new?)
-   1. Cryptonight Description
-   2. Graph Illustration
-   3. ...? Maybe more...
+7. Summary
+   1. Knowledge gained
+   2. Future Work
+   3. What's new?
 
 * * *
-
-### Thoughts about additions:
-
-1. More about pebbling?
-
-2. Data dependent hash functions?
-
-3. Data independent hash functions?
-
-4. Scrypt?
-
-5. Description and details of pebbling algorithm?
-
-6. Why the above are NOT helpful in Cryptonight Analysis?
-
-7. Big key Crypto?
