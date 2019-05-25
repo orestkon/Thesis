@@ -1,21 +1,48 @@
 \setcounter{chapter}{-1}
 \chapter{Introduction}
 %
-\section{Overview}
+\section{Why Monero?}
+\setlength{\intextsep}{0pt}
+\begin{wrapfigure}{L}{0.25\textwidth}
+\centering
+\includegraphics[width=0.25\textwidth]{Images/Introduction/hello.jpg}
+\end{wrapfigure}
+I would like to take a moment here and share the experiene of selecting a research topic. This was as important to me as the rest of my work. I am not talking about concepts of "good topic" or a list of "factors to consider". I am definitely not an expert on this subject and you can find many valuable information about this process online. I would like to share with you the impact of an argument, about selecting this topic over other options, that was addressed to me by my colleague and friend, Dionysis Zindros. He said to me that in his opinion this topic would be "beneficial for the Monero community".
+
+I strongly recommend before you select your topic of research to take an evening of your time and read a paper titled "The Moral Character of Cryptographic Work", written by Phillip Rogaway~\cite{moral}. No matter how small this world makes you feel, when you select a topic you have responsibility. I was lucky to work with people who understood this and lead me to take a moment and think what cause do I really want to contribute to.
+
+In our days, cryptographic work is a political action. There is no doubt about that. Think your intentions and the person you want to be before you select your path. Remember, you have responsibility.
 %
+\section{An important thank you note}
+During my research I had a lot of help from forum answers and conversations and most of all, from the monero stack exchange users~\cite{stackexchange}. I would like to thank many users for their valuable share of knowledge. I had help from users \verb|jtgrassie|, \verb|Laxmana|, \verb|knaccc| and a lot more from other stack exchange forums, who pointed me to the right direction or help me clarify my misunderstanding of notions from time to time.
+\pagebreak
+
+I want to thank them for the aid, but most important I want to thank everyone who contributes to this knowledge sharing. It means a lot to me and gives me a perspective on my occupation. I don't see my work as a cryptographer an 8-hour employment to make ends meet. I hope my interests and my efforts to be much more than a day job. I feel part of a community that contributes in the real world and keeps me motivated and convicted that our work makes the world a better place to live. I thank you all for your example.
 %
-%
+\section{Not MY work}
+I will change the first person singular narrative because this document is not \textbf{MY} intellectual work. I had a great help from collegues, friends and people all over the world, but most important this document is a product of who I am. Apart from all the people I have already thanked, my personality has been shaped by my family, my friends, important acquaintances and stories about my heros. All of them are part of me, part of who I am.
+
+As a result, I see this work as a collaboration of all of us and that completes the reasons that I will keep a first person plural narrative. I could not do that to the above paragraphs because this section, as you can understand, is extremely personal. I thank you all.
+
+Another change will be the way I am addressing to you, my reader. It will be, from now on, in a third person point of view. This is just a personal aesthetic choice. I thank you for taking the time to read our work. I hope you find it enjoyable.
+
 \section{Thesis structure}
-We tried to make this document readable. From this point of view, we tried to achieve completeness, in the sense that the reader should not refer to external resources to understand the basic arguments involved. Of course, a more experienced reader can find refererances for further understanding the notions involved in our work, but that is something that we wanted to be as optional as possible.
+\setlength{\intextsep}{2pt}
+\begin{wrapfigure}{L}{0.2\textwidth}
+\centering
+\includegraphics[width=0.2\textwidth]{Images/Introduction/structure.png}
+\end{wrapfigure}
+We tried to make this document readable. From this point of view, we tried to achieve completeness, in the sense that the reader should not refer to external resources to understand the basic arguments involved. Of course, a more keen reader can find refererances for a detailed study of the notions involved in our work, but that is something that we wanted to be as optional as possible.
 
-In the first chapter, the reader will find an overview of the first complete description of a cryptocurrency. That was Satoshi Nakamoto's paper~\cite{Nakamoto_bitcoin:a}, introducing to the world the Bitcoin project. It is certainly not a detailed description of all aspects of Bitcoin, as this would be unproductive for the problem discussed in this work. However, we believe that we give a satisfactory overview about the Bitcoin project and we hope that the reader will aquire an adequate understanding of the structure of this construction.
+In the first chapter, the reader will find an overview of the first complete implementation of a cryptocurrency. That was a paper published under the pseudonym Satoshi Nakamoto~\cite{Nakamoto_bitcoin:a}, introducing to the world the \hyperref[sec:Bitcoin]{Bitcoin} project. This overview is certainly not a detailed description of all aspects of Bitcoin, as this would be unproductive for the discussion in this work. However, we believe that we give a satisfactory description of the project and we hope that the reader will aquire an adequate understanding of the structure of this novelty.
 
-In the second chapter, we introduce the reader to the concept of mining, based on the knowledge gained through the read of the first chapter. The purpose of this description is to introduce the notion of egalitarianism and more precisely, the notion of egalitarian mining. This notion was for a long time a folklore subject of dispute in the community, being a starter for many passionate conversations. It was formally defined recently, in the work of Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros ~\cite{egalitarianism}.
+In the second chapter, we introduce the reader to the concept of \hyperref[sec:mining]{mining}, based on the knowledge gained through the study of the first chapter. The purpose of this description is to introduce the notion of \emph{egalitarianism} and more precisely, the notion of \hyperref[sec:egalitarian]{egalitarian mining}. This notion was for a long time a folklore subject of dispute in the community, being a starter for many passionate conversations. It was formally defined recently, in the work of Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros ~\cite{egalitarianism}.
+\pagebreak
 
-In the third chapter we introduce another cryptocurrency, named Monero, and the purposes of its community along with a technical description of its features. The basic structure for Monero project is described in CryptoNote protocol. We describe its features as well.
+In the third chapter we introduce another cryptocurrency, named \hyperref[sec:Monero]{Monero}, and the purposes of its community along with a technical description of its features. The basic structure for Monero project is \hyperref[sec:CryptoNote]{CryptoNote} protocol, described in a paper published under the pseudonym Nicolas van Saberhagen~\cite{citeulike:14139412}. We describe its features as well.
 
-Then, we get to the point where we can discuss the problem of interest of this thesis. This is Monero's mining function, CryptoNight. This function is part of the CryptoNote protocol and it is the reason that Monero claims to offer egalitarianism in its mining process. This feature's existence is due to a known property, called memory-hardness. This function is alleged to be memory-hard, although we found no formal research on this matter. CryptoNight's functionality and features are described in chapter four.
+Then, we get to the point where we can discuss the problem of interest of this thesis. This is Monero's mining function, \hyperref[ch:cryptonight]{CryptoNight}. This function is part of the CryptoNote protocol and it is the reason that Monero claims to offer egalitarianism in its mining process. This feature's existence is due to a known property, called \hyperref[sec:memory-hard]{memory-hardness}. This function is alleged to be memory-hard, although we found no formal research on this matter. CryptoNight's functionality and features are described in chapter four.
 
-In the next chapter, we try to construct a formal mathematical proof of the CryptoNight's memory-hardness property and we discuss the reasons we fail. Using these reasons for the aforementioned failure, we attempt to construct an attack on this property.
+In the next chapter, we try to construct a formal mathematical proof of the CryptoNight's memory-hardness property and we discuss the reasons we fail to do so. Using these reasons, we attempt to construct an attack on this property.
 
-Finally, we sum up our observations and try to highlight important knowledge gained through this journey. In the first appendix, the reader can find formal mathematical definitions of the notions used or refered, which might be needed for this thesis to be readable. Constructions and details about the Monero project that are interesting, can be found in the second Appendix. However, this information is not needed to keep up with the flow of our work or to understand our remarks.
+Finally, we sum up our observations and try to highlight important knowledge gained through this journey. In the first appendix, the reader can find formal mathematical definitions of the notions used or refered, in an effort for this thesis to be readable and complete. Constructions and details about the Monero project, can be found in the second Appendix. However, this information is not needed to the reader to keep up with the flow of our work or to understand our remarks.

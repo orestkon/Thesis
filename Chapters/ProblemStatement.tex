@@ -110,14 +110,14 @@ Here we have a major problem. The problem is not the distribution of the output.
   \item $b'$ is \textbf{NOT} independent from $b$
   \item $SP'$ (scratchpad after the round) is not uniformly at random chosen
 \end{itemize}
-The third statement comes out of the observation that the value of $SP_a$, after the write operation, is dependent on the value of $b$. That is something that breaks our plan.
+The third statement comes out of the observation that the value of $SP_a$, after the write operation, is dependent on the value of $b$. These are observations that break our plan.
 
 However, this is a hint for the possibility of the existence of a successful attack on the memory-hardness property of CryptoNight function. Part of the input of this stage (values of $a,b$) is produced right from the hashed input of CryptoNight (see \hyperref[sec:first]{sections}~\ref{sec:first},~\ref{sec:second}). If someone can control the value of $a$, or maybe some bits of $a$ then he has a partial control of the value of $a'$, or at least some control over the range of $a'$. The same apply for the value of $b$ and $b'$.
 
 This is of course, nothing more than an intuition, so let's see if we can achieve the planning of said attack.
 %% Trying the attack approach
 \section{Attack approach}
-The above intuition, apart from the assumptions involved, implies a level of control on the value of $a$ and $b$. This can be done, with grinding techniques. In a very high level the miner can hash with Keccak the input multiple times, changing every time something in the block (nonce, sequence of transactions, etc.). That will give him every time a different digest, ergo a different value for $a$ and $b$. This is quite efficient, especially if an ASIC is involved.
+The above intuition, apart from the assumptions involved, implies a level of control on the value of $a$ and $b$. This can be done with grinding techniques. In a very high level the miner can hash with Keccak the input multiple times, changing every time something in the block (nonce, sequence of transactions, etc.). That will give him every time a different digest, ergo a different value for $a$ and $b$. This is quite efficient, especially if an ASIC is involved.
 
 But we will make a stronger assumption. We will assume that some adversarial miner has a total control over the value of $a$ and $b$. We will show that even in that case, an attack seems impossible. Due to the nature of our results, it doesn't make sense to analyze the way an attacker can gain control over the value of $a$ or $b$.
 

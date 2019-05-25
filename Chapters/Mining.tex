@@ -1,4 +1,4 @@
-\chapter{Mining}
+\chapter{Mining} \label{sec:mining}
 %
 \epigraph{Security is a binary state. A system cannot be secure against malicious attackers and insecure against other "noble" parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.}{\textit{Edward Snowden}}
 \section{Introduction}
@@ -61,15 +61,14 @@ One of the reasons that cryptocurrencies have a bootstrapping period is because 
 Now the reader should have a good understanding about the notion of \emph{egalitarianism}. However, the claims for egalitarianism in several cryptocurrencies have been hand wavy and no such claim is accompanied by exact data. Egalitarianism was a vague and undefined term until quite recently. In 2019, Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros published a paper~\cite{egalitarianism} aiming to end this era of ambiguity. They presented a quantitative definition for this term and set the basis for future work in this direction.
 
 As a means towards establishing their definition, they define the \emph{egalitarian curve} $f$ of a cryptocurrency. Reproduced from~\cite{egalitarianism}:
-
 \begin{verbatim}
   The horizontal axis of this curve plots the financial capital
   which is available for investment denominated in a fiat
   currency, USD. The vertical axis plots the Return On
   Investment (ROI), which measures the cryptocurrency amount that
-  is freshly generated in the investment period and remains unspent
-  at the end of the investment period, given an optimal allocation
-  of the initial capital.
+  is freshly generated in the investment period and remains
+  unspent at the end of the investment period, given an optimal
+  allocation of the initial capital.
 \end{verbatim}
 
 They continue with the necessary definition of the \emph{egalitarian curve} in order to prepare a concrete and sound definition of the term \emph{egalitarianism}. We reproduce here the two definitions. Again, from the \cite{egalitarianism}:
@@ -80,7 +79,7 @@ They continue with the necessary definition of the \emph{egalitarian curve} in o
     $f_{c,d}: \mathbb{R}^+ \longrightarrow \mathbb{R}^+$ of $c$ for
     investment period $d$ as:
 
-    \begin{equation}
+    \begin{equation} \nonumber
       f_{c,d}(v) = \frac{\underset{B \in \mathcal{B}}{\max}{\mathbb{E}[B(v)]} - v}{v}
     \end{equation}
 \end{definition}
@@ -95,15 +94,13 @@ returns which the \emph{optimal} strategy ensures for a given initial capital $v
   for investment duration $d$ under initial capital distribution $\mathcal{D}$
   as follows:
 
-  \begin{equation}
+  \begin{equation} \nonumber
     e_{c,d,\mathcal{D}} = -\textsf{Var}_{v \gets \mathcal{D}}[f_{c,d}(v)]
   \end{equation}
   where $f$ is the egalitarian curve of $c$.
 \end{definition}
 
-As they remark in their paper, the intuition behind this definition is that, to have egalitarianism, the ROI
-must remain the same across different capital investments. As such, any
-deviation from the mean is non-egalitarian. For further reading the reader is refered to their work~\cite{egalitarianism}.
+As they remark in their paper, the intuition behind this definition is that, to have egalitarianism, the ROI must remain the same across different capital investments. As such, any deviation from the mean is non-egalitarian. For further reading the reader is refered to their work~\cite{egalitarianism}.
 \pagebreak
 
 We are focusing on mining, but one should think about the possibilities of a \hyperref[sec:proofofwork]{Proof of Work (PoW)} (see \hyperref[sec:proofofwork]{section}~\ref{sec:proofofwork}) mechanism in order to understand the contribution of a memory-hard hash function. The PoW mechanism is actually a voting system. Users vote for the right order of the transactions, for enabling new features in the protocol and for the honest money supply distribution. Therefore, it is important that during the voting process all participants have equal voting rights.
@@ -111,7 +108,7 @@ We are focusing on mining, but one should think about the possibilities of a \hy
 To sum up, for security and decentralization arguments, it is healthy for some cryptocurrency's mining power to be distributed among users. Memory-hardness sustains the competition, but it makes it less harsh and keeps the door open for hobbyists to support the community. It is extremely difficult for the corporate mining to aquire tremendous power for two reasons and that is essential in a trustless system that aims to remain trustless. The reasons are:
 \begin{enumerate}[label=(\greek*)]
   \item It is not that lucrative for companies. If someone makes a big investment, he will get big rewards but not insanely huge rewards leaving every hobbyist out of the mining community.
-  \item Even if a lot of companies decide to participate, it is extremely difficult for them to aquire a combined 51\% of the total hashing power.
+  \item Even if a lot of companies decide to participate, it is difficult for them to aquire a combined 51\% of the total hashing power (It is no more about what devices you buy, just how many).
 \end{enumerate}
 
 Memory-hardness defends a system against the aforementioned prospect and thus strengthens the notion of any PoW cryptocurrency's security.
