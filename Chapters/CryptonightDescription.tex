@@ -65,7 +65,7 @@ We will describe the first stage in several parts and discuss the role of each p
   \item Expand them to 10 round keys.
 \end{enumerate}
 
-Keccak is the versatile cryptographic function that is most known as SHA-3. The parameter analysis and the description of their part is beyond the scope of this thesis. The reader is refered to their work.
+Keccak is the versatile cryptographic function that is most known as SHA-3. The parameter analysis and the description of their part is beyond the scope of this thesis. The reader is referred to their work.
 
 We will consider Keccak a collision-free hash function. The next three steps produce random keys for encryption. We consider these keys random enough in the way that they are interpreted as keys and expanded according to \cite{nla.cat-vn4183631}. Create the scratchpad:
 \begin{enumerate}
@@ -95,7 +95,7 @@ Repeat:
 Each time 128 bytes are written, they represent the result of the encryption of the previously written 128 bytes. The process is repeated until the scratchpad is fully initialized.
 
 \subsection{The second stage (memory-hardness)} \label{sec:second}
-The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (on all of them with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final state of the scratchpad using memory less than the size of the scratchpad. That is the intuition. Let's see the details.
+The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (on all of them with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final state of the scratchpad using less memory than the size of the scratchpad. That is the intuition. Let's see the details.
 
 \paragraph{(The preparation part)} The core structure of this stage is a loop. However, before illustrating the computations that take place inside the loop, there are some computations needed for preparation and two technical clarifications.
 
@@ -161,7 +161,7 @@ Now, using the first key of \hyperref[keys]{step}~\ref{keys} as key to the AES o
 Repeat the last two steps as follows:
 
 \begin{itemize}
-  \item Take as input the encrypted result of the last step.
+  \item Take the encrypted result of the last step as input.
   \item Take the next 128 bytes of the scratchpad (\emph{scratchpad[1]}).
   \item Use, as AES key, the next extracted key.
   \item Execute \hyperref[xor]{step}~\ref{xor} and \hyperref[encrypt]{step}~\ref{encrypt}.
@@ -172,7 +172,7 @@ until the last bytes of the scratchpad are used to the aforementioned operations
   \setcounter{enumi}{5}
   \item \label{modified} Use the result to replace the bytes $[64...191]$ of the hashed input.
 \end{enumerate}
-We we call the state of the hashed input after the above step as the \emph{modified Keccak state}. To produce the final result the function performs the next steps.
+We call the state of the hashed input after the above step as the \emph{modified Keccak state}. To produce the final result the function performs the next steps.
 
 \begin{enumerate}
   \setcounter{enumi}{5}
@@ -190,7 +190,9 @@ We we call the state of the hashed input after the above step as the \emph{modif
 The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
 
 \section{Analysis} \label{sec:analysis}
-Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the \hyperref[sec:memory-hard]{\emph{memory-hardness}} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}). The reader now should have an understanding about the general purpose of each stage. The first stage sets the scene for the memory-hardness part. We will assume that it initializes the scratchpad in a way, which is indistiguishable from the uniform distribution. It is also safe to assume that, for an honest miner, the input is chosen uniformly at random also. Our goal is to focus on the second stage, analyze it and then try to imagine, how an adversary miner can attack the memory-hardness property of this function. From the aforementioned assumptions we can conclude that the input of the second stage is chosen uniformly at random from its domain. Just to remember, the second stage's input is:
+Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the \hyperref[sec:memory-hard]{\emph{memory-hardness}} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}). The reader now should have an understanding about the general purpose of each stage.
+
+The first stage sets the scene for the memory-hardness part. We will assume that it initializes the scratchpad in a way, which is indistiguishable from the uniform distribution. It is safe to assume that, for an honest miner, the input is chosen uniformly at random as well. Our goal is to focus on the second stage, analyze it and then try to imagine, how an adversary miner can attack the memory-hardness property of this function. Due to the aforementioned assumptions we can conclude that the input of the second stage is chosen uniformly at random from its domain. Just to remember, the second stage's input is:
 \begin{itemize}
   \item $a$
   \item $b$
@@ -225,9 +227,9 @@ In CryptoNight function AES is used for its properties as a cryptographic functi
 In \hyperref[sec:PRF]{section}~\ref{sec:PRF} the reader can find the mathematical definition of PRFs. We define the notion and then we define a game. Based on this game we describe a security model to base the above assumption.
 
 \subsection{Operations} \label{sec:operations}
-Apart from the AES use, the memory-hard stage of CryptoNight function performs one addition, two XOR-operations and one multiplication. In order to be able to produce conclusions, we try to analyze what are the side effects of these operations. All of these operations get two inputs of size 16 bytes and produce a 16 byte result.
+Apart from the AES use, the memory-hard stage of CryptoNight function performs one addition, two XOR-operations and one multiplication. In order to be able to produce conclusions, we try to analyze what the side effects of these operations are. All of these operations get two inputs of 16 bytes size and produce a 16 byte result.
 
-Let's examine them one by one. In the case of the XOR operation, it is easy to see that if the two inputs are chosen uniformly at random then the result is also uniformly at random chosen. In the case of addition, reproduced from CryptoNote~\cite{cryptonight}:
+Let's examine them one by one. In the case of the XOR operation, it is easy to see that if the two inputs are chosen uniformly at random, then the result is also uniformly chosen at random. In the case of addition, reproduced from CryptoNote~\cite{cryptonight}:
 \begin{verbatim}
    The 8byte_add function represents each of the arguments as a
    pair of 64-bit little-endian values and adds them together,
@@ -235,7 +237,7 @@ Let's examine them one by one. In the case of the XOR operation, it is easy to s
    16 bytes.
 \end{verbatim}
 
-It is trickier to see the same here, but with a little effort one can see that if the input is chosen uniformly at random then the result is uniformly at random chosen, too. In the case of multiplication, reproduced from CryptoNote~\cite{cryptonight}, again:
+It is trickier to see the same here, but with a little effort one can see that if the input is chosen uniformly at random, then the result is uniformly chosen at random too. In the case of multiplication, reproduced from CryptoNote~\cite{cryptonight} again:
 \begin{verbatim}
    The 8byte_mul function, however, uses only the first 8 bytes
    of each argument, which are interpreted as unsigned 64-bit
@@ -244,15 +246,15 @@ It is trickier to see the same here, but with a little effort one can see that i
    the result are swapped.
 \end{verbatim}
 
-The last case, is more complex. At first we notice the following: if one of the inputs is null then the result is also null. That could be a problem. We try to calculate the probability that the result is null, due to the null value of one or both inputs. We don't care about the null value of the result due to modulo operation. That probability is obviously equal to the probability that the result is equal with some other value. We would like the "extra" null probability because of the input's null value to be negligible.
+The last case, is more complex. At first we notice the following: if one of the inputs is null, then the result is also null. That could be a problem. We try to calculate the probability that the result is null, due to the null value of one or both inputs. We don't care about the null value of the result due to modulo operation. That probability is obviously equal to the probability that the result is equal with some other value. We would like the "extra" probability, that the value of the result is null due to input's null value, to be negligible.
 
-Due to the special way CryptoNight function performs the multiplication, the inputs' size are 64 bits = 8 bytes = $\frac{n}{2}$. In addition, considering that AES is a PRF (assumption) and $SP$ is unifomly random (at least at the first round by assumption), then the two inputs are independent. The probability of one or both inputs to be null is:
+Because of the special way CryptoNight function performs the multiplication, the inputs' sizes are 64 bits = 8 bytes = $\frac{n}{2}$. In addition, considering that AES is a PRF (assumption) and $SP$ is unifomly random (at least at the first round by assumption), then the two inputs are independent. The probability of one or both inputs to be null is:
 \begin{equation} \label{prob_zero}
   \frac{1}{2^{n/2}} + \frac{1}{2^{n/2}} - \frac{1}{2^{n/2} \cdot 2^{n/2}} = \frac{2\cdot2^{n/2}-1}{2^n} < \frac{1}{2^{(n/2)-1}} = \mbox{\textbf{negl(n)}}
 \end{equation}
 \vspace{0.3cm}
 
-That seems to be fine for our analysis. But, the next problem is this: Multiplication of two 8 byte numbers produces a result modulo 16 bytes (mod $2^{128}$). The reader can see that the probability of a value to be an output of the multiplication declines, as the values grow. Even after the swap that is performed at the end of the multiplication the problem persists. We have not a uniformly at random distributed result, even if the inputs are chosen uniformly at random.
+That seems to be fine for our analysis. But, the next problem is this: Multiplication of two 8 byte numbers produces a result modulo 16 bytes (mod $2^{128}$). The reader can see that the probability of a value to be an output of the multiplication declines, as the values grow. Even after the swap that is performed at the end of the multiplication, the problem persists. We have not a uniformly at random distributed result, even if the inputs are chosen uniformly at random.
 
 The above multiplication is perfomed this way because of the modern CPU registers' size. The 8 bytes multiplication is optimized. ASICs couldn't do this as fast as a modern CPU could, but technology advances and now there are chips that do the same computation roughly with the same time cost.
 
