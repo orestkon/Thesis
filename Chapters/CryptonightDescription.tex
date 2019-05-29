@@ -54,10 +54,16 @@ The input of this algorithm is a block and if the value of the Cryptonight funct
 
 So, the input of the function is a block of transactions along with the necessary fields, which are specified by the Monero protocol. For our purposes, it is enough for the reader to think of the procedure as simple as it gets. We accept that the only way to meet the target is by bruteforcing. So, the miner tries many blocks as "candidates" and hopes for the best. Every time he/she "tries", he/she actually computes the Cryptonight digest for some random block and checks whether the \hyperref[eq:target]{equation}~\ref{eq:target} is satisfied.
 
+In this section, we will present CryptoNight's inner computations graphically. The illustration of this section is the work of the UI and graphic designer, Vasilis Agiotis~\cite{bill}. His help is valuable, as the visual representation is needed. CryptoNight has a relatively complex operation sequence and our analysis requires focus on details.
+
 \subsection{The first stage} \label{sec:first}
 The first stage of the algorithm sets the initial value of the scratchpad. In order to prevent several attack schemes, the scratchpad must be initialized with data chosen in a way, which is indistiguishable from the uniform distribution. This is the goal.
 
-We will describe the first stage in several parts and discuss the role of each part and its contribution regarding the properties of function's output. To begin, let's prepare the tools:
+We will describe the first stage in several parts and discuss the role of each part and its contribution regarding the properties of function's output. The first stage is presented graphically in \hyperref[fig:initialization]{figure}~\ref{fig:initialization}. We recommend the reader to refer to the graphical representation for clarity.
+\pagebreak
+
+\subsubsection{Description of the first stage}
+To begin, let's prepare the tools:
 \begin{enumerate}
   \item \label{hashing} Hash the input using Keccak~\cite{keccak} ($b=1600$, $c=512$).
   \item Choose the first 32 bytes of the final state.
@@ -67,7 +73,7 @@ We will describe the first stage in several parts and discuss the role of each p
 
 Keccak is the versatile cryptographic function that is most known as SHA-3. The parameter analysis and the description of their part is beyond the scope of this thesis. The reader is referred to their work.
 
-We will consider Keccak a collision-free hash function. The next three steps produce random keys for encryption. We consider these keys random enough in the way that they are interpreted as keys and expanded according to \cite{nla.cat-vn4183631}. Create the scratchpad:
+We will consider Keccak a collision-free hash function. The next three steps produce random keys for encryption. We consider these keys random enough for the purpose of their use. They are interpreted as keys and expanded according to \cite{nla.cat-vn4183631}. Create the scratchpad:
 \begin{enumerate}
   \setcounter{enumi}{4}
   \item Allocate 2097152 bytes (2MiB).
@@ -93,6 +99,15 @@ Repeat:
 \end{enumerate}
 
 Each time 128 bytes are written, they represent the result of the encryption of the previously written 128 bytes. The process is repeated until the scratchpad is fully initialized.
+\clearpage
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.65,keepaspectratio]{Images/Bill/initialization.png}
+  \caption{Scratchpad initialization.~\cite{bill}}
+  \label{fig:initialization}
+\end{figure}
+\clearpage
 
 \subsection{The second stage (memory-hardness)} \label{sec:second}
 The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (on all of them with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final state of the scratchpad using less memory than the size of the scratchpad. That is the intuition. Let's see the details.
@@ -104,11 +119,29 @@ The second stage of the algorithm uses the initialized scratchpad and two values
 \end{enumerate}
 Elements $a$ and $b$ are the two values which, along with the scratchpad, are given as input to the loop. More specifically, the first 64 bytes of the hashed input (the Keccak state) are split in two parts (32 bytes each part) and XOR-ed ($\oplus$), and the resulting 32 bytes are used to initialize variables $a$ and $b$, 16 bytes each.
 
-\noindent \emph{(Clarification 1).} The reader may notice in figure ... that the function uses a 16-byte value as an address in the scratchpad. Actually, the value is interpreted as a little-endian integer. The 21 low-order bits are used as a byte index. To ensure the 16-byte alignment, the four low-order bits of the index are cleared. This alignment is essential, as the data is read from and written to the scratchpad in 16-byte blocks.
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.62,keepaspectratio]{Images/Bill/input_stage_2_modified.png}
+  \caption{Extracting $a$ and $b$ values.~\cite{bill}}
+  \label{fig:stage2input}
+\end{figure}
 
-\noindent \emph{(Clarification 2).} The main loop is iterated $524,288 = 2^{19}$ times. Every time, two blocks of the scratchpad are written, so with high probability, the whole scratchpad will be overwritten. In every iteration, along with the two blocks of the scratchpad, values $a'$ and $b'$ are computed, which are used as input to the next iteration.
+In \hyperref[fig:stage2input]{figure}~\ref{fig:stage2input} the reader can see the visualization of this preparation part.
+\clearpage
 
-Now we are ready to describe the inner computations of the loop. We will divide this stage into parts, as it will help us later in the analysis. The number of parts are determined, based on some intermediate values. Here, we note that the intermediate values are not memory requirements, as we can implement the computations with only 32 bytes of memory (for $a$ and $b$) plus the memory needed for the scratchpad. But during theoretical analysis and understanding of the function's computations, these intermediate values seem natural stops of the train of thought. So, after the \hyperref[memh: step 1]{step}~\ref{memh: step 1}:
+\begin{tcolorbox}[colback=yellow!5!white,colframe=yellow!65!black,title=\emph{Clarification 1:}]
+  The reader may notice in \hyperref[fig:stage2]{figure}~\ref{fig:stage2} that the function uses a 16-byte value as an address in the scratchpad. Actually, the value is interpreted as a little-endian integer. The 21 low-order bits are used as a byte index. To ensure the 16-byte alignment, the four low-order bits of the index are cleared. This alignment is essential, as the data is read from and written to the scratchpad in 16-byte blocks.
+\end{tcolorbox}
+\vspace{0.2cm}
+
+\begin{tcolorbox}[colback=yellow!5!white,colframe=yellow!65!black,title=\emph{Clarification 2:}]
+  The main loop is iterated $524,288 = 2^{19}$ times. Every time, two blocks of the scratchpad are written, so with high probability, the whole scratchpad will be overwritten. In every iteration, along with the two blocks of the scratchpad, values $a'$ and $b'$ are computed, which are used as input to the next iteration.
+\end{tcolorbox}
+\vspace{0.2cm}
+
+Now we are ready to describe the inner computations of the loop. We will divide this stage into parts, as it will help us later in the analysis. The number of parts are determined based on some intermediate values. We refer the reader to the graphical representation of this stage, presented in \hyperref[fig:stage2]{figure}~\ref{fig:stage2}.
+
+Here, we note that the intermediate values are not memory requirements, as we can implement the computations with only 32 bytes of memory (for $a$ and $b$) plus the memory needed for the scratchpad. But during theoretical analysis and understanding of the function's computations, these intermediate values seem natural stops of the train of thought. So, after the \hyperref[memh: step 1]{step}~\ref{memh: step 1}:
 
 \begin{enumerate}
   \setcounter{enumi}{1}
@@ -136,11 +169,17 @@ This concludes the second part. The scratchpad is written twice per iteration. T
   \setcounter{enumi}{9}
   \item Compute $d \oplus \mbox{(<the result of \hyperref[memh: step 8]{step}~\ref{memh: step 8}>) }$ to compute $a'$.
 \end{enumerate}
+\clearpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.65,keepaspectratio]{Images/Bill/stage_2.png}
+  \caption{The memory-hard part.~\cite{bill}}
+  \label{fig:stage2}
+\end{figure}
 
 \subsection{The third stage}
-The third stage of the algorithm uses the final state of the scratchpad to produce the output. During this stage AES operation is used. At first, the function extracts 10 key values from 32 bytes of the hashed input of the function, similar to the \hyperref[hashing]{step}~\ref{hashing} of the first stage.
-
-\noindent Extracting keys:
+The third stage of the algorithm uses the final state of the scratchpad to produce the output. During this stage AES operation is used. At first, the function extracts 10 key values from 32 bytes of the hashed input of the function, similar to the \hyperref[hashing]{step}~\ref{hashing} of the first stage. Extracting keys:
 \begin{enumerate}
   \item Choose the bytes $[32...63]$ of the final Keccak state.
   \item Interpret them as an AES-256 key.
@@ -172,22 +211,37 @@ until the last bytes of the scratchpad are used to the aforementioned operations
   \setcounter{enumi}{5}
   \item \label{modified} Use the result to replace the bytes $[64...191]$ of the hashed input.
 \end{enumerate}
-We call the state of the hashed input after the above step as the \emph{modified Keccak state}. To produce the final result the function performs the next steps.
+We call the state of the hashed input after the above step as the \emph{modified Keccak state}. To produce the final result the function performs the next steps (see \hyperref[fig:stage3.1]{figure}~\ref{fig:stage3.2}).
 
 \begin{enumerate}
   \setcounter{enumi}{5}
   \item Pass the \emph{modified Keccak state} through Keccak-$f$ (the Keccak permutation~\cite{keccak}).
   \item Choose the 2 low-order bits of the first byte of the \emph{modified Keccak state}.
   \item Based on these bits choose a hash function:
-  \begin{itemize}
-    \item case 00: BLAKE-256
-    \item case 01: Groestl-256
-    \item case 10: JH-256
-    \item case 11: Skein-256
-  \end{itemize}
+  \begin{align*}
+     &\mbox{case 00: BLAKE-256} &
+     &\mbox{case 01: Groestl-256}\\
+     &\mbox{case 10: JH-256} &
+     &\mbox{case 11: Skein-256}
+  \end{align*}
   \item \label{output} Apply the chosen function to the \emph{modified Keccak state}.
 \end{enumerate}
 The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.62, natwidth=210mm, natheight=297mm]{Images/Bill/stage_3.1.png}
+  \caption{The third stage (1).~\cite{bill}}
+  \label{fig:stage3.1}
+\end{figure}
+\clearpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.62, natwidth=210mm, natheight=148mm]{Images/Bill/stage_3.2_modified.png}
+  \caption{The third stage (2).~\cite{bill}}
+  \label{fig:stage3.2}
+\end{figure}
 
 \section{Analysis} \label{sec:analysis}
 Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the \hyperref[sec:memory-hard]{\emph{memory-hardness}} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}). The reader now should have an understanding about the general purpose of each stage.

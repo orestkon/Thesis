@@ -60,7 +60,7 @@ If we had the results for the honest case, then the next step would be to show t
 If we managed to prove the above, that would be a proof of the CryptoNight's memory-hardness property. If we cannot find a shortcut for the process, then we cannot find a way to calculate the result with less memory or less time. Let us elaborate on the details of our research.
 
 \subsection{The model}
-Based on the aforementioned plan and with help from the observations and assumptions we made in \hyperref[sec:analysis]{section}~\ref{sec:analysis}, we now present the model of computation we assume for CryptoNight's second stage.
+Based on the aforementioned plan and with help from the observations and assumptions we made in \hyperref[sec:analysis]{section}~\ref{sec:analysis}, we now present the model of computation we assume for CryptoNight's second stage (see \hyperref[fig:model]{figure}~\ref{fig:model}).
 
 The reader can see that there is a natural division of the process in three parts. The first part is the set of all operations performed on the first address' value. Explicitly, that involves:
 \begin{description}
@@ -79,6 +79,15 @@ The third part is not of much interest for our purposes. It extracts the two out
   \item A XOR ($\oplus$) operation on the result of the addition that produces the first input of the next round ($a'$).
   \item The result of the PRF operation (AES) that is passed as the second input of the next round ($b'$).
 \end{itemize}
+\clearpage
+%% natwidth=210mm, natheight=297mm :: A4 sizes
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.55, keepaspectratio]{Images/Bill/model.png}
+  \caption{The model.~\cite{bill}}
+  \label{fig:model}
+\end{figure}
 
 Here we note again (see \hyperref[sec:operations]{section}~\ref{sec:operations}) the special nature of the multiplication. Just for our purposes, we assume that it sustains the properties of its input. If the input (the two integers, each of size $n$) is uniformly at random chosen then the output of the multiplication is of the same nature. We strongly declare that this is \textbf{NOT} the case for the specific implementation of this operation. However, we will see that even with this assumption, we will not achieve our goal.
 
@@ -127,7 +136,7 @@ If someone takes his/her time observing the process, he/she can see the only thi
   \mbox{AES}(a,SP_a) = a
 \end{equation}
 
-Now it is time to measure the probability of this event. If this probability is negligible, we cannot find anything more that we can do. We have $\beta_n$ addresses on the scratchpad and in the CryptoNight description~\cite{cryptonight} we see that:
+The reader can see the visualization of this scenario in \hyperref[fig:attack]{figure}~\ref{fig:attack}. Now it is time to measure the probability of this event. If this probability is negligible, we cannot find anything more that we can do. We have $\beta_n$ addresses on the scratchpad and in the CryptoNight description~\cite{cryptonight} we see that:
 \begin{verbatim}
   When a 16-byte value needs to be converted into an address in
   the scratchpad, it is interpreted as a little-endian integer,
@@ -151,3 +160,11 @@ That is, for all intents and purposes, \textbf{NOT} a negligible probability wit
 This looks really promising. Until we see what happens to the next round. The one thing that the reader is suggested to observe is that, although $a'$ is a function of $a$ and $b$, it is certainly not equal to either of them.
 
 In the next round, the value $a'$ will point to a different location on the scratchpad ($SP_{a'}$) and the value $\mbox{PRF}(a', SP_{a'})$ will point to a random address in the scratchpad. And this is exactly the moment we lose the control we had over the process.
+\clearpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.65, keepaspectratio]{Images/Bill/attack.png}
+  \caption{The attack scenario.~\cite{bill}}
+  \label{fig:attack}
+\end{figure}
