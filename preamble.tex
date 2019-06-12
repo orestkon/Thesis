@@ -156,6 +156,24 @@
     \vbox{\copy2\box0}\box2}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Footnote in verbatim
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \newcommand{\vfchar}[1]{%
+  % the usual trick for using a "variable" active character
+  \begingroup\lccode`~=`#1 \lowercase{\endgroup\def~##1~}{%
+  % separate the footnote mark from the footnote text
+  % so the footnote mark will occupy the same space as
+  % any other character
+  \makebox[0.5em][l]{\footnotemark}%
+  \footnotetext{##1}%
+  }%
+  \catcode`#1=\active
+  }
+  \newenvironment{fverbatim}[1]
+  {\verbatim\vfchar{#1}}
+  {\endverbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Spliting bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{category}[A]{First category}
