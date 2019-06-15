@@ -1,16 +1,15 @@
-\chapter{Math tools} \label{ch:math}
+\section{Cryptography background} \label{ch:math}
 %
-\section{Overview}
-Here we will include any notion or mathematical tool that the reader will need to study this thesis. Our goal is to make the citation and references in this document unnecessary for understanding the problem we analysed. We believe that we can make this project complete on its own and any available source will be needed only for the experienced reader who may want to get a deeper understanding of the mechanics discused.
+Here we will include the formal mathematical definition of any cryptographic primitive that the reader will need to study this thesis. Our goal is to make the citation and references in this document an optional read. We believe that we can make this project complete on its own and any available source will be needed only for the experienced reader who may want to get a deeper understanding of the mechanics discused.
 
 A great help, in order to keep this section as concrete as possible, was the work of my collegue and friend Kostis Karantias. He had already defined some notions, which are helpful in this thesis too. Some of his work is reproduced here. I thank him for his help and appreciate his work. I definitely refer the reader to his thesis~\cite{gtklocker}.
 %
-\section{Hash function}
+\subsection{Hash function}
 %
-In this section, we will define the syntax and the security model of the cryptographic hash function, as introduced in \cite{Katz:2007:IMC:1206501}. We will slightly change their definition, because we assume no key as input to the hash function. In our case, the only input is a message.
+We will define the syntax and the security model of the cryptographic hash function, as introduced in \cite{Katz:2007:IMC:1206501}. We will slightly change their definition, because we assume no key as input to the hash function. In our case, the only input is a message.
 %
 \begin{definition}[Hash function - syntax]
-A \textbf{hash function} is a probabilistic \\
+A \emph{hash function} is a probabilistic \\
 polynomial-time (p.p.t.) algorithm $H$ satisfying the following:
 \begin{itemize}
   \item[$\bullet$] There exists a, polynomial in $n$, function $l$ such that $H$ is a (deterministic) p.t. algorithm that takes as input any string $x \in { \{ 0,1 \}}^*$ and outputs a string:
@@ -19,11 +18,11 @@ polynomial-time (p.p.t.) algorithm $H$ satisfying the following:
   H(x) \in { \{ 0,1 \}}^{l(n)}
 \end{equation}
 If for every $n$, $H$ is defined only over inputs of length $l'(n)$ and $l'(n) > l(n)$, then
-we say that $H$ is a \textbf{fixed-length hash function} with length parameter $l'$. An output of a hash function is called a \emph{digest} of the function.
+we say that $H$ is a \emph{fixed-length hash function} with length parameter $l'$. An output of a hash function is called a \emph{digest} of the function.
 \end{definition}
 
 Notice that in the fixed-length case we require that $l'$ be greater than $l$. This ensures that the
-function is a hash function in the classic sense in that it \textit{compresses} the input. We remark
+function is a hash function in the classic sense in that it \emph{compresses} the input. We remark
 that in the general case we have no requirement on $l$ because the function takes for input all (finite) binary strings. Thus, by definition, it also compresses.
 
 We will now define security for this model. We begin by defining a game for a hash function $H$, an adversary $\mathcal{A}$ and a security parameter $n$:
@@ -46,50 +45,8 @@ The definition of collision resistance for hash functions states that no efficie
 \end{equation}
 \end{definition}
 
-\section{Merkle Trees} \label{sec:merkle-trees}
-In this section we will describe a data structure needed by the meticulous reader in order to understand the description of the \hyperref[sec:Bitcoin]{Bitcoin} protocol (see \hyperref[sec:Bitcoin]{chapter}~\ref{sec:Bitcoin}).
-A Merkle tree~\cite{merkle} is a data structure which allows a party to commit to a set of items using only a single hash and prove the inclusion of any item in the committed set, by providing a logarithmic proof in terms of the cardinality of the set.
-
-More specifically, the hashes of the items consist the leaves of the tree and the last level. The internal levels are defined recursively as follows: To create level $k-1$ each pair of level $k$, $(A, B)$, is transformed as a node of value $H(A || B)$ which points to both $A$ and $B$ for some hash function $H(\cdot)$. If the number of nodes at level $k$ is odd, the last node at that level is paired with itself\footnote{This specific construction is the one Bitcoin implements. There are various other constructions which are beyond the scope of our work.}.
-\vspace{0.3cm}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.9\columnwidth,keepaspectratio]{Images/merkle-tree-proof.png}
-  \caption{A Bitcoin Merkle tree. Source:~\cite{mastering}}
-  \label{fig:merkletree}
-\end{figure}
-\vspace{0.3cm}
-
-Merkle trees are useful in Bitcoin in order to commit to a set of transactions that will be included in a block while keeping the block header of a constant size.
-\pagebreak
-
-To provide proof of inclusion, all a prover has to do is provide a path of siblings up to the root $\sf{siblings}$ and a bit vector $\sf{left}$ indicating whether each sibling is on the left or the right. The verification process is shown in \hyperref[alg:merkle-verification]{Algorithm}~\ref{alg:merkle-verification}~\cite{gtklocker}.
-\vspace{0.3cm}
-\begin{algorithm}
-  \caption{\label{alg:merkle-verification}The \textsf{Verify} algorithm
-    for a Merkle proof}
-    \begin{algorithmic}[1]
-      \Function{\sf Verify$_{\sf root}$}{\sf leaf, siblings, left}
-            \State \sf{currentHash} $\gets$ \sf{leaf}
-            \While{$\sf{left} \neq []$}
-              \State \sf{siblingIsLeft} $\gets$ \sf{left.shift()}
-              \If{\sf{siblingIsLeft}}
-                \State \sf{currentHash} $\gets$ \sf{H(siblings.shift() || currentHash)}
-              \Else
-                \State \sf{currentHash} $\gets$ \sf{H(currentHash || siblings.shift())}
-              \EndIf
-            \EndWhile
-            \State\Return{currentHash = root}
-        \EndFunction
-    \end{algorithmic}
-\end{algorithm}
-\vspace{0.3cm}
-
-An example of a Bitcoin Merkle tree, along with a proof of inclusion for $K$ can be seen on \hyperref[fig:merkletree]{figure}~\ref{fig:merkletree}.
-
-%
-\section{Password Scramblers}
-Passwords\footnote{Passphrases and personal identification numbers (PINs) are considered "passwords", in this context.} are user-memorizable secrets. Typical (user-chosen) passwords often suffer from low entropy and can be attacked by trying out all possible password candidates. If we let asside the case of a dedicated cryptographic protocol on an interactive session, the next best protection are password scramblers performing "key-stretching". Christian Forler, Stefan Lucks and Jakob Wenzel~\cite{ForlerLW13}, give three basic conditions a good password scrambler should satisfy at least:
+\subsection{Password Scramblers}
+Passwords\footnote{Passphrases and personal identification numbers (PINs) are considered "passwords", in this context.} are user-memorizable secrets. Typical (user-chosen) passwords often suffer from low entropy and can be attacked by trying out all possible password candidates. If we let asside the case of a dedicated cryptographic protocol on an interactive session, the next best protection are password scramblers performing \emph{key-stretching}. Christian Forler, Stefan Lucks and Jakob Wenzel~\cite{ForlerLW13}, give three basic conditions a good password scrambler should satisfy at least:
 
 \begin{enumerate}
   \item \label{Condition 1} Given a password $pwd$, computing $PS(pwd)$ should be "fast enough" for the user.
@@ -99,11 +56,11 @@ Passwords\footnote{Passphrases and personal identification numbers (PINs) are co
 
 Tratidionally, most password scramblers satisfy \hyperref[Condition 2]{condition}~\ref{Condition 2} by iterating a cryptographic primitive (a block cipher or hash function) many times. However, an adversary with $b$ computing units (\emph{cores}) can try $b$ different passwords in parallel. With today's availability of graphical processing units (GPUs), slowing down these kind of attacks becomes a pressing question.
 
-\section{Memory-Hard Functions} \label{sec:memory-hard}
-In this section we will define the notion of the memory-hard function in the Parallel Random Oracle Model (pROM) of \cite{Alwen:2015:HPC:2746539.2746622}, as introduced in \cite{cryptoeprint:2016:875}. First, we will define the model along with the associated complexity notions.
+\subsection{Memory-Hard Functions} \label{sec:memory-hard}
+We will define the notion of the memory-hard function in the Parallel Random Oracle Model (pROM) of \cite{Alwen:2015:HPC:2746539.2746622}, as introduced in \cite{cryptoeprint:2016:875}. First, we will define the model along with the associated complexity notions.
 
 \paragraph{The parallel Random Oracle Model.} We consider an algorithm $\mathcal{A}$ executing in the pROM of \cite{Alwen:2015:HPC:2746539.2746622}. Let this algorithm be repeated an arbitrary amount of times. After each invocation we make states. At invocation $i \in \{ 1,2, \dots \}$ algorithm $\mathcal{A}$ keeps the state $\sigma_{i-1}$ it produced. Next $\mathcal{A}$ can make calls $\textbf{q}_i = (q_{1,i}, q_{2,i}, \dots)$
-to the \textit{fixed input length random oracle $H$} (ideal compression function). After it receives the digest of $H$, is allowed to perform arbitrary computation before producing its output (the next state $\sigma_i$). The state $\sigma_0$ contains the input to the computation and no other state is kept by $\mathcal{A}$. Now, we need some complexity notions to be defined.
+to the \emph{fixed input length random oracle $H$} (ideal compression function). After it receives the digest of $H$, is allowed to perform arbitrary computation before producing its output (the next state $\sigma_i$). The state $\sigma_0$ contains the input to the computation and no other state is kept by $\mathcal{A}$. Now, we need some complexity notions to be defined.
 
 The cumulative memory complexity (CMC) is defined to be
 \begin{equation} \nonumber
@@ -111,7 +68,7 @@ The cumulative memory complexity (CMC) is defined to be
 \end{equation}
 where $\lvert \sigma \rvert$ is the bit-length of state $\sigma$, the expectation is taken over the choice of $H$ and $max_{x,r}$ denotes the maximum over all inputs and coins of $\mathcal{A}$.
 
-Moreover, the \textit{time complexity} (TC), $time(\mathcal{A})$ is the maximum running time of $\mathcal{A}$ in any execution. Similarly, the \textit{space complexity} (SC) is the largest state it ever outputs in any execution.
+Moreover, the \emph{time complexity} (TC), $time(\mathcal{A})$ is the maximum running time of $\mathcal{A}$ in any execution. Similarly, the \emph{space complexity} (SC) is the largest state it ever outputs in any execution.
 
 \paragraph{Oracle function.} Let $f$ be a function over strings depending on the choice of $H$. We consider the scenario in which we want to compute $f$ on $m \in \mathbb{N}^{+}$ arbitrary distinct inputs.
 Let $\mathbb{A}_{f,m,q}$ be the set of pROM algorithms that accomplish this, making at most $q$ queries to
@@ -120,15 +77,15 @@ $H$. Then,
 \begin{enumerate}[label=(\alph*)]
   \item $f$ is an oracle function \\
 
-  \item The \textit{amortized cumulative memory complexity} (aCMC) of $f$ is defined to be
+  \item The \emph{amortized cumulative memory complexity} (aCMC) of $f$ is defined to be
   \begin{equation} \nonumber
       cmc_{m,q}(f) = \min \Bigg{\{} \frac{cmc(\mathcal{A})}{n} : \: n \in [m], \mathcal{A} \in \mathbb{A}_{f,n,q} \Bigg{\}}
   \end{equation}
 \end{enumerate}
-This definition provides a good lower-bound on the \textit{amortized time complexity} of a function \cite{Alwen:2015:HPC:2746539.2746622}.
+This definition provides a good lower-bound on the \emph{amortized time complexity} of a function \cite{Alwen:2015:HPC:2746539.2746622}.
 
 For more detailed information about the above, we refer the reader to the appendix of \cite{cryptoeprint:2016:875}. The reader can find some technical details there that are beyond of the scope of this thesis. Now we are ready to define properly the notion of the memory-hard function.
-\pagebreak
+
 
 \begin{definition}[Memory-Hard Function] \label{Memhard1}
   Let $\{ f_{\sigma, \tau} \}_{\sigma, \tau \in \mathbb{N}^{+}}$ be a family of (oracle) functions and $\mathcal{N}$ be a sequential pROM algorithm which, on input $(\sigma, \tau, x)$, outputs $f_{\sigma, \tau}(x)$ in time at most $\tau \sigma$ using space at most $\sigma$. Then $F=\big{(} \{ f_{\sigma,\tau} \}, \mathcal{N} \big{)}$
@@ -140,7 +97,7 @@ cmc_{m,q}(f_{\sigma, \tau})&\geq h(\sigma, \tau)           &  \frac{\mbox{space}
 %
 \end{definition}
 
-The above definition~\cite{cryptoeprint:2016:875}, although extremely rigid, is not that intuitive. In order to describe memory requirements, we will mention another definition given in \cite{ForlerLW13}, without causing any conflict with \hyperref[Memhard1]{definition}~\ref{Memhard1}. Before we give the second definition, one should notice that for any parallelized attack, using $b$ cores, the required memory per core is decreased by a factor of $\frac{1}{b}$, and vice versa.
+The above definition~\cite{cryptoeprint:2016:875}, although extremely rigid, is not that intuitive. In order to describe memory requirements, we will mention another definition given in \cite{ForlerLW13}, without causing any conflict with the above. Before we give the second definition, one should notice that for any parallelized attack, using $b$ cores, the required memory per core is decreased by a factor of $\frac{1}{b}$, and vice versa.
 
 \begin{definition}[Memory-Hard Function - intuitive]
   Let $g$ denote the memory cost factor. For all $\alpha > 0$, a memory-hard function $f$ can be computed on a Random Access Machine using \textbf{space}$(g)$ space and \textbf{time}$(g)$ operations, where \textbf{space}$(g) \in \Omega(\mbox{\textbf{time}}(g)^{1-\alpha})$.\\
@@ -152,13 +109,13 @@ The above definition~\cite{cryptoeprint:2016:875}, although extremely rigid, is 
 \end{definition}
 In their paper a formal generalization of this notion is given but it is beyond of the scope of this thesis. For more information about memory-hardness, the reader is refered to their work~\cite{ForlerLW13}.
 %
-\section{Pseudorandom Functions} \label{sec:PRF}
+\subsection{Pseudorandom Functions} \label{sec:PRF}
 In cryptography, a pseudorandom function family, abbreviated PRF, is a collection of efficiently-computable functions which emulate a random oracle in the following way: no efficient algorithm can distinguish (with significant advantage) between a function chosen randomly from the PRF family and a random oracle (a function whose outputs are fixed completely at random). With that in mind,
 we must first recall the definition of oracle indistinguishability and then proceed to define a pseudorandom function. Reproduced from~\cite{ACI}:
 
 \begin{definition}[Oracle Indistinguishability]
   Let $\{ O_n \}_{n \in \mathbb{N}}$ and $\{ O'_{n} \}_{n}$ be ensembles where $O_n, O'_n$ are probability
-  distributions over functions $f: \{ 0,1 \}^{l_1(n)} \rightarrow \{ 0,1 \}^{l_2(n)}$ for some polynomials $l_1(\cdot)$, $l_2(\cdot)$. We say that $\{ O_{n} \}_{n}$ and $\{ O'_{n} \}_{n}$ are \textbf{computationally indistinguishable} (denoted by $\{ O'_{n} \}_{n} \approx \{ O'_n \}_{n \in \mathbb{N}}$
+  distributions over functions $f: \{ 0,1 \}^{l_1(n)} \rightarrow \{ 0,1 \}^{l_2(n)}$ for some polynomials $l_1(\cdot)$, $l_2(\cdot)$. We say that $\{ O_{n} \}_{n}$ and $\{ O'_{n} \}_{n}$ are \emph{computationally indistinguishable} (denoted by $\{ O'_{n} \}_{n} \approx \{ O'_n \}_{n \in \mathbb{N}}$
   ) if for all non-uniform p.p.t. oracles machines $D$, there exists a negligible function $\epsilon(\cdot)$ such that $\forall n \in \mathbb{N}$
   \begin{equation} \label{oracle}
     \Bigg{\lvert} \: Pr \big{[} F \leftarrow O_n : D^{F(\cdot)}(1^n)=1 \big{]} - Pr \big{[} F \leftarrow O'_n : D^{F(\cdot)}(1^n)=1 \big{]} \: \Bigg{\rvert} < \epsilon(n).
@@ -166,7 +123,7 @@ we must first recall the definition of oracle indistinguishability and then proc
 \end{definition}
 
 \begin{definition}[Pseudorandom Function]
-  A family of functions $\big{\{} f_s: \{ 0,1 \}^{\lvert s \rvert} \rightarrow \{ 0,1 \}^{\lvert s \rvert} \big{\}}_{s \in \{ 0,1 \}^{*}}$ is \textbf{pseudorandom} if
+  A family of functions $\big{\{} f_s: \{ 0,1 \}^{\lvert s \rvert} \rightarrow \{ 0,1 \}^{\lvert s \rvert} \big{\}}_{s \in \{ 0,1 \}^{*}}$ is \emph{pseudorandom} if
   \begin{itemize}
     \item[$\bullet$] (Easy to compute): $f_s(x)$ can be computed by a p.p.t. algorithm that is given input $s$ and $x$
     \item[$\bullet$] (Pseudorandom): $\big{\{} s \leftarrow \{ 0,1 \}^n: f_s \big{\}}_n \approx \big{\{} F \leftarrow RF_n: F \big{\}}_n$.
@@ -208,18 +165,16 @@ The intuition in this section is that we can't construct a function that actuall
 \end{definition}
 
 Notice that if someone knows $s$ then it is easy to distinguish $f_s$ from a random function. In order to consider this function indistinguishable from a random function, one should keep seed $s$ secret.
-\clearpage
-\pagebreak
 
-\section{Pebbling game}
-Hellman presented in~\cite{Hellman:2006:CTT:2263346.2269686} a possibility to trade memory/space $S$ against time $T$ in attacking cryptographic algorithms, i.e. he has introduced the idea of a time-memory trade-off (TMT) in terms of generic attacks. Hence, we can assume that an adversary with access to this algorithm and restricted resources is always looking for a sweet spot to optimize $S \cdot T$. For, studying the TMT, one needs to choose a certain model. But first we must introduce the reader to the notion of the \textit{directed acyclic graph}. Reproduced from~\cite{ForlerLW13}:
+\subsection{Pebbling game}
+Hellman presented in~\cite{Hellman:2006:CTT:2263346.2269686} a possibility to trade memory/space $S$ against time $T$ in attacking cryptographic algorithms, i.e. he has introduced the idea of a time-memory trade-off (TMT) in terms of generic attacks. Hence, we can assume that an adversary with access to this algorithm and restricted resources is always looking for a sweet spot to optimize $S \cdot T$. For, studying the TMT, one needs to choose a certain model. But first we must introduce the reader to the notion of the \emph{directed acyclic graph}. Reproduced from~\cite{ForlerLW13}:
 
 \begin{definition}[Directed Acyclic Graph]
-  Let $\Pi(\mathcal{V},\mathcal{E})$ be a graph consisting of a set of vertices $\mathcal{V}=(v_0,v_1,\dots,v_{n-1})$ and a set of edges $\mathcal{E}=(e_0,e_1,\dots,e_{l-1})$, where $\mathcal{E}=\varnothing$ is a valid variant. $\Pi(\mathcal{V},\mathcal{E})$ is a \textbf{directed acyclic graph}, if every edge in $\mathcal{E}$
+  Let $\Pi(\mathcal{V},\mathcal{E})$ be a graph consisting of a set of vertices $\mathcal{V}=(v_0,v_1,\dots,v_{n-1})$ and a set of edges $\mathcal{E}=(e_0,e_1,\dots,e_{l-1})$, where $\mathcal{E}=\varnothing$ is a valid variant. $\Pi(\mathcal{V},\mathcal{E})$ is a \emph{directed acyclic graph}, if every edge in $\mathcal{E}$
   consists of a starting vertex $v_i$ and an ending vertex $v_j$, with $i \neq j$. A path through $\Pi(\mathcal{V},\mathcal{E})$ beginning at vertex $v_i$ must never reach $v_i$ again (else, there would be a cycle). If there exists a path from a vertex $v_i$ to a vertex $v_j$ in the graph with $i \neq j$, we will write $v_i \leq v_j$.
 \end{definition}
 
-In 1970, Hewitt and Paterson introduced a method for analyzing TMTs on directed acyclic graphs (DAG), called \textit{pebbling game}. It has been occasionally used in cryptographic context, see e.g.~\cite{Dziembowski:2011:KSR:2033036.2033061} for a recent example. The pebble game model is restricted to DAGs with bounded in-degree and can be seen as a single-player game. The two following definitions are produced from~\cite{cryptoeprint:2016:875}:
+In 1970, Hewitt and Paterson introduced a method for analyzing TMTs on directed acyclic graphs (DAG), called \emph{pebbling game}. It has been occasionally used in cryptographic context, see e.g.~\cite{Dziembowski:2011:KSR:2033036.2033061} for a recent example. The pebble game model is restricted to DAGs with bounded in-degree and can be seen as a single-player game. The two following definitions are produced from~\cite{cryptoeprint:2016:875}:
 
 \begin{definition}[Parallel/Sequential Graph Pebbling]
   Let $G=(\mathcal{V},\mathcal{E})$ be a DAG and let $T \subseteq \mathcal{V}$ be a target set of nodes to be pebbled. A pebbling configuration (of $G$) is a subset $P_i \subseteq \mathcal{V}$. A legal parallel pebbling of $T$ is a sequence $P=(P_0,\dots,P_t)$ of pebbling configurations of $G$ where $P_0 = \varnothing$ and which satisfies \hyperref[pebble:condition_1]{conditions}~\ref{pebble:condition_1}
@@ -251,7 +206,6 @@ In 1970, Hewitt and Paterson introduced a method for analyzing TMTs on directed 
   $\mathcal{P}_{G}^{||}$.
 %
 \end{definition}
-\pagebreak
 %
 \begin{definition}[Time/Space/Cumulative Pebbling Complexity]
   The \emph{time}, \emph{space}, \emph{space-time} and \emph{cumulative} complexity of a pebbling $P=\{ P_0,\dots,P_t \} \in \mathcal{P}_{G}^{||}$ are defined to be:

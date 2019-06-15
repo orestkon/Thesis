@@ -25,18 +25,25 @@
 %\pagenumbering{arabic}
 \mainmatter
 
+\input{Chapters/Preface.tex}
 \input{Chapters/Introduction.tex}
-\input{Chapters/Bitcoin.tex}
-\input{Chapters/Mining.tex}
-\input{Chapters/Monero.tex}
-\input{Chapters/CryptonightDescription.tex}
-\input{Chapters/ProblemStatement.tex}
-\input{Chapters/Summary.tex}
+\part{From decentralization to re-centralization}
 
-\begin{appendices}
-  \input{Appendices/MathTools.tex}
-  \input{Appendices/MoneroAppendix.tex}
-\end{appendices}
+\chapter{Preliminaries}
+%
+\epigraph{Security is a binary state. A system cannot be secure against malicious attackers and insecure against other "noble" parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.}{\emph{Edward Snowden}}
+%
+\input{Chapters/Preliminaries/CryptoBackground.tex}
+\input{Chapters/Preliminaries/Bitcoin.tex}
+\input{Chapters/Preliminaries/EgalitarianMining.tex}
+
+\input{Chapters/Monero.tex}
+
+\part{Back to decentralization}
+\input{Chapters/OurModel.tex}
+\input{Chapters/CryptoNightAnalysis.tex}
+\input{Chapters/Conclusion.tex}
+
 %
 %% End of the document, clear page and prepare for bibliography
 %

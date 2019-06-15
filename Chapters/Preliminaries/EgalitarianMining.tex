@@ -1,16 +1,5 @@
-\chapter{Mining} \label{sec:mining}
-%
-\epigraph{Security is a binary state. A system cannot be secure against malicious attackers and insecure against other "noble" parties. It is either secure or insecure. And if the prospect of an attack exists, then security collapses.}{\textit{Edward Snowden}}
-\section{Introduction}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Think about it, seems ugly
-\setlength{\intextsep}{0pt}
-\begin{wrapfigure}[10]{L}{0.3\textwidth}
-\centering
-\includegraphics[width=0.30\textwidth]{Images/Bitcoin/mining_start.jpg}
-\end{wrapfigure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Mining\footnote{It is misleading to think that there is an analogy between gold mining and cryptocurrency mining. The fact is that gold miners are rewarded for producing gold, while some cryptocurrency's miners are not rewarded for producing cryptocoins; they are rewarded for their record-keeping services.} is the processing of transactions in the digital currency system, in which the records of some cryptocurrency's current  transactions, \hyperref[sec:blocks]{\emph{blocks}} (see \hyperref[sec:blocks]{section}~\ref{sec:blocks}), are added to the record of past transactions, the \hyperref[sec:blockchain]{\emph{blockchain}} (see \hyperref[sec:blockchain]{section}~\ref{sec:blockchain}). Miners keep the blockchain consistent, complete, and unalterable by repeatedly grouping newly broadcast transactions into a block, which is then broadcast to the network and verified by recipient nodes~\cite{economist}. Each block contains a SHA-256 cryptographic hash of the previous block~\cite{economist}, thus linking it to the previous block and giving the blockchain its name.
+\section{Egalitarian Mining} \label{sec:mining}
+
 
 To be accepted by the rest of the network, a new block must contain a \hyperref[sec:proofofwork]{Proof of Work (PoW)} (see \hyperref[sec:proofofwork]{section}~\ref{sec:proofofwork}). The PoW requires miners to find a number called a nonce, such that when the block content is hashed along with the nonce, the result is numerically smaller than the network's difficulty target~\cite{Nakamoto_bitcoin:a} and thus the \hyperref[eq:PoW]{PoW equation} (see \hyperref[eq:PoW]{equation}~\ref{eq:PoW}) is satisfied. This proof is easy for any node in the network to verify, but extremely time-consuming to generate, as for a secure cryptographic hash, miners must try many different nonce values before meeting the difficulty target.
 
@@ -36,7 +25,7 @@ Bitcoin generally started with individuals and small organizations handling the 
 
 That creates a problem. In a system, which since its creation is supposed to distribute power among users, there has been a great power concentration in the hands of big companies, like Bitfury or 21, that develop ASICs to mine Bitcoin. Because of the extreme cost of ASICs and extreme hashrate, someone who uses a multi-graphics card system or a CPU is out of competition. As a result, independent miners have largely dried up.
 
-\section{Egalitarian Mining} \label{sec:egalitarian}
+\subsection{Egalitarianism} \label{sec:egalitarian}
 \setlength{\intextsep}{0pt}
 \begin{wrapfigure}[7]{L}{0.32\textwidth}
 \centering
@@ -55,9 +44,8 @@ Many questions like the above have been asked and usually the answer is not desc
 This is hurtful for a system, which by design is supposed to bring decentralization in the financial market. Because, without hobbyists, we are actually left with big companies handling almost all of the mining. Companies will comply with regulations that the government of each country enforces and cannot be expected to react and inspire political movements. Since countries can and they have, historically, collaborated against threats, a union of countries who can enforce regulations to companies that control more than 51\% of the hashing power, can bring a cryptocurrency to its knees, if seen as a threat. That scenario does not fit in most definitions of security.
 
 One of the reasons that cryptocurrencies have a bootstrapping period is because they need a big support community to distribute mining in order to guarantee security. When the total hashing power is a few high-end gaming systems, acquiring 51\% of the hashing power is feasible. As the support expands, the security is satisfied for all practical purposes. But when mining is dominated by companies, then a totally trustless system gives birth to a trusted party. That's against the motivation for the inception of a cryptocurrency and it raises questions like "\emph{Why should I trust the mining companies and support this cryptocoin? Do I trust my bank more? After all, my bank is just another company...}"
-\pagebreak
 
-\subsection{Formal definition}
+\subsubsection{Formal definition}
 Now the reader should have a good understanding about the notion of \emph{egalitarianism}. However, the claims for egalitarianism in several cryptocurrencies have been hand wavy and no such claim is accompanied by exact data. Egalitarianism was a vague and undefined term until quite recently. In 2019, Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros published a paper~\cite{egalitarianism} aiming to end this era of ambiguity. They presented a quantitative definition for this term and set the basis for future work in this direction.
 
 As a means towards establishing their definition, they define the \emph{egalitarian curve} $f$ of a cryptocurrency. Reproduced from~\cite{egalitarianism}:
@@ -101,7 +89,6 @@ returns which the \emph{optimal} strategy ensures for a given initial capital $v
 \end{definition}
 
 As they remark in their paper, the intuition behind this definition is that, to have egalitarianism, the ROI must remain the same across different capital investments. As such, any deviation from the mean is non-egalitarian. For further reading the reader is refered to their work~\cite{egalitarianism}.
-\pagebreak
 
 We are focusing on mining, but one should think about the possibilities of a \hyperref[sec:proofofwork]{Proof of Work (PoW)} (see \hyperref[sec:proofofwork]{section}~\ref{sec:proofofwork}) mechanism in order to understand the contribution of a memory-hard hash function. The PoW mechanism is actually a voting system. Users vote for the right order of the transactions, for enabling new features in the protocol and for the honest money supply distribution. Therefore, it is important that during the voting process all participants have equal voting rights.
 
