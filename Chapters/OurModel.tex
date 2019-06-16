@@ -10,7 +10,7 @@
 %
 \epigraph{Democracy must be something more than two wolves and a sheep voting on what to have for dinner.}{\textit{James Bovard}}
 %
-\section{Description}
+\section{CryptoNight Description}
 In this section we will describe in detail the proposed implementation of the CryptoNight hash function. This function is used in the Monero project in order to achieve \hyperref[sec:egalitarian]{\emph{egalitarian mining}}. It is easy to understand why we characterize this implementation as \emph{proposed}, since each miner is free to use any implementation he/she can think of, as long as it produces the right result.
 
 The first step we took, to understand how CryptoNight actually works, was reading Monero project's reviews. However, as Monero core developer \verb|smooth_xmr| has posted on reddit~\cite{reddit} when asked specifically about Cryptonight function reviews:
@@ -304,7 +304,7 @@ The last case, is more complex. At first we notice the following: if one of the 
 
 Because of the special way CryptoNight function performs the multiplication, the inputs' sizes are 64 bits = 8 bytes = $\frac{n}{2}$. In addition, considering that AES is a PRF (assumption) and $SP$ is unifomly random (at least at the first round by assumption), then the two inputs are independent. The probability of one or both inputs to be null is:
 \begin{equation} \label{prob_zero}
-  \frac{1}{2^{n/2}} + \frac{1}{2^{n/2}} - \frac{1}{2^{n/2} \cdot 2^{n/2}} = \frac{2\cdot2^{n/2}-1}{2^n} < \frac{1}{2^{(n/2)-1}} = \mbox{\textbf{negl(n)}}
+  \frac{1}{2^{n/2}} + \frac{1}{2^{n/2}} - \frac{1}{2^{n/2} \cdot 2^{n/2}} = \frac{2\cdot2^{n/2}-1}{2^n} < \frac{1}{2^{(n/2)-1}} = \mbox{\textbf{negl}(n)}
 \end{equation}
 \vspace{0.3cm}
 

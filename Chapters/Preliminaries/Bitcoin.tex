@@ -28,6 +28,7 @@ Bitcoin is pseudonymous~\cite{gtklocker}: the identity of each user is only thei
 As in fiat money, transfer of value in Bitcoin happens with transactions. A \hyperref[sec:transactions]{transaction} has \hyperref[sec:inputs]{inputs} and \hyperref[sec:outputs]{outputs} (see \hyperref[sec:outputs]{sections}~\ref{sec:transactions},~\ref{sec:inputs},~\ref{sec:outputs}). An output is where the value creation happens for the receiver. An output can be later redeemed by using its designated receiver's private key and turned into an input to be used for another transaction.
 
 Bitcoins have all the desirable properties of a money-like good. They are portable, durable, divisible, recognizable, fungible, scarce and difficult to counterfeit.
+\pagebreak
 
 \subsection{Transactions} \label{sec:transactions}
 A \emph{transaction} is a collection of inputs and outputs. It uses the sum of the inputs' values as credit to debit each output accordingly. As it makes sense, a transaction is only valid as long as all its outputs and inputs are valid. It should also be clear that the value of the outputs should not exceed the value of the inputs, otherwise we would be creating value out of thin air with new transactions. Specifically this is expressed as
@@ -35,6 +36,7 @@ A \emph{transaction} is a collection of inputs and outputs. It uses the sum of t
 \begin{equation} \nonumber
   \sum_{\sf i \in inputs} {\sf i.value} \ge \sum_{\sf o \in outputs} {\sf o.value}
 \end{equation}
+
 This is sometimes called the \emph{Law of Conservation}. In cases where
 
 \begin{equation} \nonumber
@@ -55,6 +57,7 @@ The transaction id is the digest of the two times hashing operation (SHA256\text
   \caption{Transactions with their inputs and outputs~\cite{mastering}}
   \label{fig:transaction-internally}
 \end{figure}
+\pagebreak
 
 \subsection{Inputs} \label{sec:inputs}
 An input is the way an output is redeemed. Specifically, it contains three things:
@@ -101,12 +104,11 @@ More specifically, the hashes of the items consist the leaves of the tree and th
   \caption{A Bitcoin Merkle tree. Source:~\cite{mastering}}
   \label{fig:merkletree}
 \end{figure}
-\vspace{0.3cm}
 
 Merkle trees are useful in Bitcoin in order to commit to a set of transactions that will be included in a block while keeping the block header of a constant size.
 
 To provide proof of inclusion, all a prover has to do is provide a path of siblings up to the root $\sf{siblings}$ and a bit vector $\sf{left}$ indicating whether each sibling is on the left or the right. The verification process is shown in \hyperref[alg:merkle-verification]{Algorithm}~\ref{alg:merkle-verification}~\cite{gtklocker}.
-\vspace{0.3cm}
+
 \begin{algorithm}
   \caption{\label{alg:merkle-verification}The \textsf{Verify} algorithm
     for a Merkle proof}
@@ -125,9 +127,8 @@ To provide proof of inclusion, all a prover has to do is provide a path of sibli
         \EndFunction
     \end{algorithmic}
 \end{algorithm}
-\vspace{0.3cm}
 
-An example of a Bitcoin Merkle tree, along with a proof of inclusion for $K$ can be seen on \hyperref[fig:merkletree]{figure}~\ref{fig:merkletree}.
+%An example of a Bitcoin Merkle tree, along with a proof of inclusion for $K$ can be seen on \hyperref[fig:merkletree]{figure}~\ref{fig:merkletree}.
 
 \subsection{Blockchain} \label{sec:blockchain}
 Each block contains a SHA-256 cryptographic hash of the previous block~\cite{economist}, thus linking it to the previous block and giving the blockchain its name. Now, the reader can visualize the famous term \emph{blockchain}. The blockchain is a chain of blocks. The blockchain is public and it holds the history of all valid transactions in a cryptocurrency's network. It holds the timeline of a cryptocurrency's life. It is easy to see that, by the definition of the blockchain, there can be no parallel chains. There is not such thing in economics as two valid transaction histories.
@@ -200,6 +201,8 @@ Bitcoin offers much more than just moving currency around. It allows us to actua
 This script introduces two kinds of formats. The first kind is commands prefixed with \code{OP\_}. These operations are called \emph{opcodes} and they perform calculations on values on the stack. The result is pushed again to the stack. The types of the calculations are intuitive, e.g. \code{OP\_HASH256} calculates the SHA256 hash of the value on the top of the stack, \code{OP\_EQUALS} compares the top 2 values on the stack and pushes 1 if they are indeed equal or 0 otherwise. The second kind is hex values. These values are simply pushed to the stack. Usually they will be used as input for some operation.
 
 It is easy for the reader to see that the script of \hyperref[fig:bitcoin-script]{figure}~\ref{fig:bitcoin-script} checks if the value on the stack is the preimage of the given hash value and returns 1 (true) or 0 (false). More information about Bitcoin scripts and details about the stack operations can be found in~\cite{wiki}. In practice, this output confirms the success of the evaluation. Such a script is called a \textsf{pubKeyScript}. However, in our example we assume the preimage was on the stack. The way this is implemented in Bitcoin is running another script called \textsf{scriptSig} that passes the parameters to \textsf{pubKeyScript}. The combination of these two scripts is enough powerful and the calculations they perform can be used to make a transaction in the Bitcoin network.
+\clearpage
+\pagebreak
 
 \subsection{P2PKH}
 Now, let's see the standard script for conventional fund transfer in Bitcoin, called \emph{pay to public key hash} (P2PKH). Two types of payment are referred as P2PK (pay to public key) and P2PKH (pay to public key hash). Satoshi later decided to use P2PKH instead of P2PK for two reasons:

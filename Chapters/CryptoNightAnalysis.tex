@@ -39,7 +39,7 @@ Our starting plan was quite simple. The moment we understood the operations that
 
 First case (\emph{honest} miner):
 \begin{itemize}
-  \item If the input is uniformly at random chosen, then the output is of the same nature \textbf{AND} independent from the input. (one round)
+  \item If the input is uniformly at random chosen, then the output is of the same nature \emph{and} independent from the input. (one round)
   \item The above expands to the whole function, not just one round.
 \end{itemize}
 
@@ -51,7 +51,7 @@ It is easy to expand the above hypothetical result to the function as a whole. E
 
 Second case (\emph{malicious} miner):
 \begin{itemize}
-  \item If the input is \textbf{NOT} chosen at random, then the output is \textbf{STILL} uniformly at random chosen \textbf{AND} independent from the input. (one round)
+  \item If the input is \emph{not} chosen at random, then the output is \emph{still} uniformly at random chosen \emph{and} independent from the input. (one round)
   \item The above expands to the whole function, not just one round.
 \end{itemize}
 
@@ -60,7 +60,7 @@ If we had the results for the honest case, then the next step would be to show t
 If we managed to prove the above, that would be a proof of the CryptoNight's memory-hardness property. If we cannot find a shortcut for the process, then we cannot find a way to calculate the result with less memory or less time. Let us elaborate on the details of our research.
 
 \subsection{The model}
-Based on the aforementioned plan and with help from the observations and assumptions we made in \hyperref[sec:analysis]{section}~\ref{sec:analysis}, we now present the model of computation we assume for CryptoNight's second stage (see \hyperref[fig:model]{figure}~\ref{fig:model}).
+Based on the aforementioned plan and with help from the observations and assumptions we made in \hyperref[sec:analysis]{section}~\ref{sec:analysis}, we now use the model of computation we assume for CryptoNight's second stage (see \hyperref[fig:model]{figure}~\ref{fig:model}) to begin our analysis.
 
 The reader can see that there is a natural division of the process in three parts. The first part is the set of all operations performed on the first address' value. Explicitly, that involves:
 \begin{description}
@@ -89,7 +89,7 @@ The third part is not of much interest for our purposes. It extracts the two out
   \label{fig:model}
 \end{figure}
 
-Here we note again (see \hyperref[sec:operations]{section}~\ref{sec:operations}) the special nature of the multiplication. Just for our purposes, we assume that it sustains the properties of its input. If the input (the two integers, each of size $n$) is uniformly at random chosen then the output of the multiplication is of the same nature. We strongly declare that this is \textbf{NOT} the case for the specific implementation of this operation. However, we will see that even with this assumption, we will not achieve our goal.
+Here we note again (see \hyperref[sec:operations]{section}~\ref{sec:operations}) the special nature of the multiplication. Just for our purposes, we assume that it sustains the properties of its input. If the input (the two integers, each of size $n$) is uniformly at random chosen then the output of the multiplication is of the same nature. We strongly declare that this is not the case for the specific implementation of this operation. However, we will see that even with this assumption, we will not achieve our goal.
 
 \subsection{The road to proof construction}
 Based on the above we begin our analysis. Under the following assumptions,
@@ -113,8 +113,8 @@ Let's see the values of $a'$ and $b'$:
 
 Here we have a major problem. The problem is not the distribution of the output. Under our assumptions that is appropriate. But,
 \begin{itemize}
-  \item $a'$ is \textbf{NOT} independent from $a$
-  \item $b'$ is \textbf{NOT} independent from $b$
+  \item $a'$ is \emph{not} independent from $a$
+  \item $b'$ is \emph{not} independent from $b$
   \item $SP'$ (scratchpad after the round) is not uniformly at random chosen
 \end{itemize}
 The third statement comes out of the observation that the value of $SP_a$, after the write operation, is dependent on the value of $b$. These are observations that spoil our plan.
@@ -128,7 +128,7 @@ The above intuition, apart from the assumptions involved, implies a level of con
 
 But we will make a stronger assumption. We will assume that some adversarial miner has a total control over the value of $a$ and $b$. We will show that even in that case, an attack seems impossible. Due to the nature of our results, it doesn't make sense to analyze the way an attacker can gain control over the value of $a$ or $b$.
 
-\subsection{What can we do?}
+\subsection{Details}
 What is the level of impact that we can cause, if we could control the values of $a$ and $b$? What is the best we can do in order to achieve our goal?
 
 If someone takes his/her time observing the process, he/she can see the only thing that we can hope for. That is to find an address $a$, with a content $SP_a$ such that:
@@ -151,7 +151,7 @@ This means that, for a uniformly at random chosen 16-byte number, the probabilit
   \frac{1 \cdot n}{\beta_n} = \frac{n}{2 \cdot n^5} = \frac{1}{2 \cdot n^4} = \frac{1}{\mbox{\textbf{poly}}(n)}
 \end{equation}
 
-That is, for all intents and purposes, \textbf{NOT} a negligible probability with respect to the size of $n$. Hence, that is something that we can do efficiently enough. Let's see what this scenario gives us, as a round outcome. If the reader cares to do some math, he/she will see that \hyperref[eq:normal_1]{equations}~\ref{eq:normal_1},~\ref{eq:normal_2} become:
+That is, for all intents and purposes, \emph{not} a negligible probability with respect to the size of $n$. Hence, that is something that we can do efficiently enough. Let's see what this scenario gives us, as a round outcome. If the reader cares to do some math, he/she will see that \hyperref[eq:normal_1]{equations}~\ref{eq:normal_1},~\ref{eq:normal_2} become:
 \begin{align} \nonumber
   a' &= \Big( a + \big( a \cdot (a \oplus b) \big) \Big) \oplus (a \oplus b) &
   &\mbox{and} & b' &= a

@@ -4,20 +4,85 @@
 %
 
 \section{Decentralization}
+Decentralized networks aim to eliminate the need for a central authority. Rather than to hand over control to a central party, decentralized networks are run by the participants themselves. This means that the entire system becomes more distributed.
 
-\section{Our contribution}
+As a result, any processes underpinned by decentralized technology become significantly harder to shut down. This is primarily due to the elimination of a single point of failure in the system. It is worth noting that decentralization brings with it a lot of positive effects. For one, it means that users will no longer need to put their trust in a single central authority to perform a process.
+
+A decentralized network consists of a so-called peer-to-peer network. This means that data is distributed across numerous devices.
+
+\subsubsection{Ownership of users' data}
+This is a simplistic view of decentralization but it highlights one of its most fundamental strengths. The advent of cryptocurrencies and blockchains – which build on decentralization – can be said to give back ownership of data to users. This is because it does not rely on a single entity to handle users’ information. In an age where \emph{big data} is increasingly becoming a popular topic, decentralization can be seen as a solution to this problem.
+
+Companies like Google or Facebook are often accused of infringing on users' privacy by collecting information regarding them. However, this is not something that is exclusive to corporations. Governments could also abuse their power over such information.
+
+This highlights the main problem with centralized entities, as the risk of abusive behavior becomes more prevalent. Moreover, it is hard to stop this from taking place, as such centralized entities are often crucial to the system as a whole. Nonetheless, some might object to the notion of preserving privacy through sharing information more freely, across multiple devices. Although this approach might seem counterintuitive, it is actually quite sound. As blockchains employ cryptography, the information can be kept safe and private.
+
+\subsubsection{Egalitarian tool}
+It should be noted that the benefits of decentralization extend far beyond practical reasons. In fact, decentralization is increasingly being heralded as a powerful egalitarian tool.
+
+As people around the world face certain oppressive regimes that attempt to seize control over the free press or shut down users' access to social media, decentralization might prove even more useful in countering censorship. A government could shut down a service like Twitter or Facebook comparatively easy. This could simply be achieved by denying traffic going to any of Twitter’s or Facebook’s central servers.
+
+Decentralized networks – on the other hand – make use of peer-to-peer networks, which would be virtually impossible to censor. This is because a government would then have to block all of the undesired points of the peer-to-peer network, rather than just a central server.
+
+Moreover, one of the most important draws of decentralized networks is that they are open. As a result, anyone with the expertise to do so could potentially develop their own services, processes, products or tools. In fact, decentralized networks can be seen as nothing more than an underlying platform. What this platform allows for are the benefits of decentralization.
+
+This can be compared to the internet itself. The world wide web is nothing more than an underlying platform that allows for applications to be built on top. The modern notion of decentralized blockchain technology is less than a decade old. Decentralized technology presents a plethora of new opportunities.
+
+\subsubsection{Overview}
+To sum up, the benefits that decentralized systems offer are:
+
+\begin{itemize}
+  \item Users don't have to put trust in a central authority
+  \item It it less likely for a single point of failure to exist
+  \item There is less censorship
+  \item Decentralized networks are more likely to be open development platforms
+  \item There is potential for network ownership alignment
+\end{itemize}
+
+The last point is the idea that the people who contribute value to a decentralized network receive ownership or economic stake in the network, that becomes more valuable as the network grows. This is one of the most exciting things that blockchain technology brings to decentralized networks, as it allows economics to be designed into the networks themselves, to create the right incentives for early participants to become value-contributing users.
+
+\section{Summary of Contribution}
+We study the claim that Monero's mining function, CryptoNight, is memory-hard. Our contributions in this thesis are as follows:
+
+\begin{enumerate}
+  \item We represent graphically the functionality of CryptoNight
+  \item We introduce a mathematical model for CryptoNight function
+  \item We attempt to construct a formal mathematical proof of CryptoNight's memory-hardness property
+  \item We attempt to attack CryptoNight's memory-hardness property
+\end{enumerate}
+
+\subsubsection{Graphical representation}
+To our knowledge, we are the first to present graphically the whole process of the CryptoNight function. We believe that this will help any researcher who wants to analyze or understand the way this function handles its components and the relation between them.
+
+\subsubsection{Mathematical model}
+Then, we construct a mathematical model. We make intuitive but solid assumptions about:
+
+\begin{itemize}
+  \item The nature of the AES encryption operation and its output
+  \item The distribution of the input
+\end{itemize}
+
+During this process we note implementation details that may be theoretically problematic about the addition and multiplication operations used. However, we proceed in our analysis, assuming that these minor problems don't exist. The reason is twofold – one, these problems admit a relatively easy fix and, two, because of the nature of our results we care to highlight other characteristics that didn't allow us to succeed in our attempts.
+
+\subsubsection{Proof}
+We fail to construct a formal mathematical proof of CryptoNight's memory-hardness property. We discuss the reasons for this result and present our thoughts and effort. This analysis can be helpful for the person or team that wants to research this problem or a similar one.
+
+\subsubsection{Attack}
+An attack on CryptoNight's property seems improbable and we discuss the reasons behind this claim. We hope that this analysis is helpful too, for future research on CryptoNight.
 
 \section{Thesis structure}
 We tried to make this document readable. From this point of view, we tried to achieve completeness, in the sense that the reader should not refer to external resources to understand the basic arguments involved. Of course, a more keen reader can find references for a detailed study of the notions involved in our work, but that is something that we wanted to be as optional as possible.
 
-In the first chapter, the reader will find an overview of the first complete implementation of a cryptocurrency. That was a paper published under the pseudonym Satoshi Nakamoto~\cite{Nakamoto_bitcoin:a}, introducing the \hyperref[sec:Bitcoin]{Bitcoin} project to the world. This overview is certainly not a detailed description of all aspects of Bitcoin, as this would be unproductive for the discussion in this work. However, we believe that we give a satisfactory description of the project and we hope that the reader will acquire an adequate understanding of the structure of this novelty.
+In the first part, the reader will find an overview of the first complete implementation of a cryptocurrency. That was a paper published under the pseudonym Satoshi Nakamoto~\cite{Nakamoto_bitcoin:a}, introducing the \hyperref[sec:Bitcoin]{Bitcoin} project to the world. This overview is certainly not a detailed description of all aspects of Bitcoin, as this would be unproductive for the discussion in this work. However, we believe that we give a satisfactory description of the project and we hope that the reader will acquire an adequate understanding of the structure of this novelty.
 
-In the second chapter, we introduce the reader to the concept of \hyperref[sec:mining]{mining}, based on the knowledge gained through the study of the first chapter. The purpose of this description is to introduce the notion of \emph{egalitarianism} and more precisely, the notion of \hyperref[sec:egalitarian]{egalitarian mining}. This notion was for a long time a folklore subject of dispute in the community, being a starter for many passionate conversations. It was formally defined recently, in the work of Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros ~\cite{egalitarianism}.
+We introduce the reader to the concept of \hyperref[sec:mining]{mining}, based on the knowledge gained through the study of the Bitcoin project. The purpose of this description is to introduce the notion of \emph{egalitarianism} and more precisely, the notion of \hyperref[sec:egalitarian]{egalitarian mining}. This notion was for a long time a folklore subject of dispute in the community, being a starter for many passionate conversations. It was formally defined recently, in the work of Dimitris Karakostas, Aggelos Kiayias, Christos Nasikas and Dionysis Zindros ~\cite{egalitarianism}.
 
-In the third chapter we introduce another cryptocurrency, named \hyperref[sec:Monero]{Monero}, and the purposes of its community along with a technical description of its features. The basic structure for Monero project is the \hyperref[sec:CryptoNote]{CryptoNote} protocol, described in a paper published under the pseudonym Nicolas van Saberhagen~\cite{citeulike:14139412}. We describe its features as well.
+In the second chapter of the first part, we introduce another cryptocurrency, named \hyperref[sec:Monero]{Monero}, and the purposes of its community along with a technical description of its features. The basic structure for Monero project is the \hyperref[sec:CryptoNote]{CryptoNote} protocol, described in a paper published under the pseudonym Nicolas van Saberhagen~\cite{citeulike:14139412}. We describe its features as well.
 
-Then, we get to the point where we can discuss the problem of interest of this thesis. This is Monero's mining function, \hyperref[ch:cryptonight]{CryptoNight}. This function is part of the CryptoNote protocol and it is the reason that Monero claims to offer egalitarianism in its mining process. This feature's existence is due to a known property, called \hyperref[sec:memory-hard]{memory-hardness}. This function is alleged to be memory-hard, although we found no formal research on this matter. CryptoNight's functionality and features are described in chapter four.
+Then, we get to the point where we can discuss the problem of interest of this thesis. This is Monero's mining function, \hyperref[ch:cryptonight]{CryptoNight}. This function is part of the CryptoNote protocol and it is the reason that Monero claims to offer egalitarianism in its mining process. This feature's existence is due to a known property, called \hyperref[sec:memory-hard]{memory-hardness}. This function is alleged to be memory-hard, although we found no formal research on this matter. CryptoNight's functionality and features are described in the first chapter of the second part.
 
-In the next chapter, we try to construct a formal mathematical proof of the CryptoNight's memory-hardness property and we discuss the reasons we failed to do so. Using these reasons, we attempt to construct an attack on this property.
+In the next chapter, we try to construct a formal mathematical proof of CryptoNight's memory-hardness property and we discuss the reasons we failed to do so. Using these reasons, we attempt to construct an attack on this property.
 
-Finally, we sum up our observations and try to highlight important knowledge gained through this journey. In the first appendix, the reader can find formal mathematical definitions of the notions used or referred, in an effort for this thesis to be both readable and complete. Constructions and details about the Monero project, can be found in the second Appendix. However, this information is not needed for the reader to keep up with the flow of our work or to understand our remarks. Nevertheless, they were included for the sake of completeness and for the reader, as he/she might find this information beneficial.
+Finally, we sum up our observations and try to highlight important knowledge gained through this journey.
+
+In the first part, the reader can find formal mathematical definitions of the notions used or referred, in an effort for this thesis to be both readable and complete. That is presented in the Cryptographic Background section of the first chapter. Constructions and details about the Monero project, are included in the Monero chapter. However, this information is not needed for the reader to keep up with the flow of our work or to understand our remarks. Nevertheless, they were included for the sake of completeness and for the reader, as he/she might find this information beneficial.

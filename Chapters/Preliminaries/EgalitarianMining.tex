@@ -26,11 +26,6 @@ Bitcoin generally started with individuals and small organizations handling the 
 That creates a problem. In a system, which since its creation is supposed to distribute power among users, there has been a great power concentration in the hands of big companies, like Bitfury or 21, that develop ASICs to mine Bitcoin. Because of the extreme cost of ASICs and extreme hashrate, someone who uses a multi-graphics card system or a CPU is out of competition. As a result, independent miners have largely dried up.
 
 \subsection{Egalitarianism} \label{sec:egalitarian}
-\setlength{\intextsep}{0pt}
-\begin{wrapfigure}[7]{L}{0.32\textwidth}
-\centering
-\includegraphics[width=0.32\textwidth]{Images/Mining/justice.jpg}
-\end{wrapfigure}
 Let's consider several contexts where an adversary has an upper hand over the defender, by using special hardware in an attack. These include password processing, hard-drive protection, cryptocurrency mining, resourse sharing, code obfuscation, etc. \hyperref[sec:memory-hard]{Memory-hard} computing is a generic paradigm, which can protect the defender against attacks in the aforementioned contexts. Every task is amalgamated with a certain procedure requiring intensive access to RAM, both in terms of size and bandwidth, so that transferring the computation to GPU, FPGA, and even ASIC brings little to no cost reduction.
 
 Cryptographic schemes that run in this framework become \emph{egalitarian} in the sense that both users and attackers are equal in the price-performance ratio conditions. When the cryptographic scheme is a hash function used for cryptocurrency mining, we refer to this notion as \emph{egalitarian mining}.
@@ -42,6 +37,7 @@ Many questions like the above have been asked and usually the answer is not desc
 \emph{Egalitarian mining does not destroy competition.} The miner who invests more in hardware is rewarded more. Each individual miner is rewarded according to the computation power he offers to the community. The real difference is that it is really easy for people to start mining with a single high-end gaming system. Hobbyists, who want to support the community are welcome to mine. In Bitcoin system, this option is not available. In order to support the community by mining, you have to invest a lot of money on ASICs to be competitive. This means that, in general, the mining to support the Bitcoin project or for fun is dead.
 
 This is hurtful for a system, which by design is supposed to bring decentralization in the financial market. Because, without hobbyists, we are actually left with big companies handling almost all of the mining. Companies will comply with regulations that the government of each country enforces and cannot be expected to react and inspire political movements. Since countries can and they have, historically, collaborated against threats, a union of countries who can enforce regulations to companies that control more than 51\% of the hashing power, can bring a cryptocurrency to its knees, if seen as a threat. That scenario does not fit in most definitions of security.
+\pagebreak
 
 One of the reasons that cryptocurrencies have a bootstrapping period is because they need a big support community to distribute mining in order to guarantee security. When the total hashing power is a few high-end gaming systems, acquiring 51\% of the hashing power is feasible. As the support expands, the security is satisfied for all practical purposes. But when mining is dominated by companies, then a totally trustless system gives birth to a trusted party. That's against the motivation for the inception of a cryptocurrency and it raises questions like "\emph{Why should I trust the mining companies and support this cryptocoin? Do I trust my bank more? After all, my bank is just another company...}"
 
@@ -74,7 +70,10 @@ They continue with the necessary definition of the \emph{egalitarian curve} in o
 
 The value $\underset{B \in \mathcal{B}}{\max}{\mathbb{E}[B(v)]}$ identifies the maximum expectation of
 returns across all investment strategies $\mathcal{B}$, i.e., the amount of
-returns which the \emph{optimal} strategy ensures for a given initial capital $v$. Now, we are ready to reproduce their definition of the notion of interest:
+returns which the \emph{optimal} strategy ensures for a given initial capital $v$.
+\pagebreak
+
+\noindent Now, we are ready to reproduce their definition of the notion of interest:
 
 \begin{definition}[Egalitarianism]
   Given a cryptocurrency $c$, an investment period duration $d$ and an initial

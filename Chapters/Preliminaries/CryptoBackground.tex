@@ -7,7 +7,9 @@ A great help, in order to keep this section as concrete as possible, was the wor
 \subsection{Hash function}
 %
 We will define the syntax and the security model of the cryptographic hash function, as introduced in \cite{Katz:2007:IMC:1206501}. We will slightly change their definition, because we assume no key as input to the hash function. In our case, the only input is a message.
-%
+\clearpage
+\pagebreak
+
 \begin{definition}[Hash function - syntax]
 A \emph{hash function} is a probabilistic \\
 polynomial-time (p.p.t.) algorithm $H$ satisfying the following:
@@ -121,6 +123,7 @@ we must first recall the definition of oracle indistinguishability and then proc
     \Bigg{\lvert} \: Pr \big{[} F \leftarrow O_n : D^{F(\cdot)}(1^n)=1 \big{]} - Pr \big{[} F \leftarrow O'_n : D^{F(\cdot)}(1^n)=1 \big{]} \: \Bigg{\rvert} < \epsilon(n).
   \end{equation}
 \end{definition}
+\pagebreak
 
 \begin{definition}[Pseudorandom Function]
   A family of functions $\big{\{} f_s: \{ 0,1 \}^{\lvert s \rvert} \rightarrow \{ 0,1 \}^{\lvert s \rvert} \big{\}}_{s \in \{ 0,1 \}^{*}}$ is \emph{pseudorandom} if
@@ -165,6 +168,8 @@ The intuition in this section is that we can't construct a function that actuall
 \end{definition}
 
 Notice that if someone knows $s$ then it is easy to distinguish $f_s$ from a random function. In order to consider this function indistinguishable from a random function, one should keep seed $s$ secret.
+\clearpage
+\pagebreak
 
 \subsection{Pebbling game}
 Hellman presented in~\cite{Hellman:2006:CTT:2263346.2269686} a possibility to trade memory/space $S$ against time $T$ in attacking cryptographic algorithms, i.e. he has introduced the idea of a time-memory trade-off (TMT) in terms of generic attacks. Hence, we can assume that an adversary with access to this algorithm and restricted resources is always looking for a sweet spot to optimize $S \cdot T$. For, studying the TMT, one needs to choose a certain model. But first we must introduce the reader to the notion of the \emph{directed acyclic graph}. Reproduced from~\cite{ForlerLW13}:
@@ -223,3 +228,5 @@ In 1970, Hewitt and Paterson introduced a method for analyzing TMTs on directed 
 \end{definition}
 We notice that the definition comes along with the intuition about these complexities. For $\alpha \in \{ s,t,st,cc \}$ and any $G$, the parallel pebbling complexity is at most as high as the sequential,
 i.e., $\Pi_\alpha(G) \geq \Pi_{\alpha}^{||}(G)$, and cumulative complexity is at most as high as space-time complexity, i.e. $\Pi_{st}(G) \geq \Pi_{cc}(G)$ and $\Pi_{st}^{||}(G) \geq \Pi_{cc}^{||}(G)$.
+\clearpage
+\pagebreak

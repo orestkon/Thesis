@@ -3,11 +3,6 @@
 \epigraph{Arguing that you don't care about the right to privacy because you have nothing to hide is no different than saying you don't care about free speech because you have nothing to say.}{\textit{Edward Snowden}}
 %
 \section{Summary}
-%\setlength{\intextsep}{0pt}
-\begin{wrapfigure}{L}{0.26\textwidth}
-\centering
-\includegraphics[width=0.26\textwidth]{Images/Summary/knowledge.jpg}
-\end{wrapfigure}
 The intuition behind the nature of the problem lies in the relation between the first and the second address written in each loop, in the second stage of the function. As we saw, the first address is a random pointer produced from the input. This is something that can be leveraged to some adversary's advantage, at least in the first round. But the way the second pointer is produced makes it hard to keep track of the computation.
 
 Now, let's take a step back. If we want to attack the memory-hardness property, what exactly is our goal? Well, the train of thought is the following: If we managed to compute the first 128 sequential bytes of the state of the scratchpad (after the second stage), without using the rest of it, then it would be a win. We can compute in steps the digest of the CryptoNight function, using just 128 bytes of the scratchpad in each step.
@@ -32,11 +27,6 @@ It is obvious that a successful attack on the AES function could lead to a succe
 We don't know yet, whether the reverse is true. Namely, whether a successful attack on CryptoNight's memory-hardness property is a step towards a successful attack on AES. This is a step that can follow our work, but it seems a really tricky and difficult problem.
 
 \subsubsection{Fresh point of view}
-%\setlength{\intextsep}{0pt}
-\begin{wrapfigure}{L}{0.28\textwidth}
-\centering
-\includegraphics[width=0.28\textwidth]{Images/Summary/nothing.jpg}
-\end{wrapfigure}
 If someone wants to continue our research, we recommend a huge step back. Maybe another model for the problem or something that is not produced from a similar point of view. As we presented in this thesis, we have found problems very early in our analysis and we couldn't pass beyond the second round of the second stage.
 
 If someone wants to perform a cryptographic analysis on CryptoNight's memory-hardness property, then he/she is supposed to analyze this second stage. This second stage is the place where the origins and the basis of the memory-hardness property lie.
