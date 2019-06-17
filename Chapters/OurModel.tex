@@ -14,15 +14,15 @@
 In this section we will describe in detail the proposed implementation of the CryptoNight hash function. This function is used in the Monero project in order to achieve \hyperref[sec:egalitarian]{\emph{egalitarian mining}}. It is easy to understand why we characterize this implementation as \emph{proposed}, since each miner is free to use any implementation he/she can think of, as long as it produces the right result.
 
 The first step we took, to understand how CryptoNight actually works, was reading Monero project's reviews. However, as Monero core developer \verb|smooth_xmr| has posted on reddit~\cite{reddit} when asked specifically about Cryptonight function reviews:
-\begin{verbatim}
+\begin{quoting}
   CryptoNight was extensively reviewed, though not as part of
   a "formal" review process, by Professor David Andersen who
   also wrote the current implementation of the hashing code.
 
-  [...] stating that it would likely achieve its goals of resisting
+  \noindent [...] stating that it would likely achieve its goals of resisting
   extreme optimizations and narrowing the performance gap between
   CPUs, GPUs, and ASICs.
-\end{verbatim}
+\end{quoting}
 
 We tried to find and read this review, as it would be a great start for our work. Unfortunately, as we discovered, the review was really informal and the best we could find was a post in professor David Andersen's personal blog~\cite{andersen}. There, one can find the \emph{first}, to our knowledge, graphical representation of the \hyperref[sec:second]{second stage} of the CryptoNight function (see \hyperref[sec:second]{section}~\ref{sec:second}).
 
@@ -103,11 +103,18 @@ Each time 128 bytes are written, they represent the result of the encryption of 
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.65,keepaspectratio]{Images/Bill/initialization.png}
+  \includegraphics[width=\columnwidth,keepaspectratio]{Images/Bill/initialization_cropped.pdf}
   \caption{Scratchpad initialization.~\cite{bill}}
   \label{fig:initialization}
 \end{figure}
 \clearpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth,keepaspectratio]{Images/Bill/input_stage_2_modified_cropped.pdf}
+  \caption{Extracting $a$ and $b$ values.~\cite{bill}}
+  \label{fig:stage2input}
+\end{figure}
 
 \subsection{The second stage (memory-hardness)} \label{sec:second}
 The second stage of the algorithm uses the initialized scratchpad and two values that are computed from the hashed input of the function. Its goal is to perform computations on the scratchpad values (on all of them with high probability) and produce a final scratchpad structure that can't be computed otherwise or in stages (without huge time complexity). The memory-hardness property is satisfied if and only if there is no other way to compute the final state of the scratchpad using less memory than the size of the scratchpad. That is the overview. Let's see the details.
@@ -118,13 +125,6 @@ The second stage of the algorithm uses the initialized scratchpad and two values
   \item \label{memh: step 1} Compute the values of $a$ and $b$.
 \end{enumerate}
 Elements $a$ and $b$ are the two values which, along with the scratchpad, are given as input to the loop. More specifically, the first 64 bytes of the hashed input (the Keccak state) are split in two parts (32 bytes each part) and XOR-ed ($\oplus$), and the resulting 32 bytes are used to initialize variables $a$ and $b$, 16 bytes each.
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.62,keepaspectratio]{Images/Bill/input_stage_2_modified.png}
-  \caption{Extracting $a$ and $b$ values.~\cite{bill}}
-  \label{fig:stage2input}
-\end{figure}
 
 In \hyperref[fig:stage2input]{figure}~\ref{fig:stage2input} the reader can see the visualization of this preparation part.
 \clearpage
@@ -173,7 +173,7 @@ This concludes the second part. The scratchpad is written twice per iteration. T
 
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.65,keepaspectratio]{Images/Bill/stage_2.png}
+  \includegraphics[width=\columnwidth,keepaspectratio]{Images/Bill/stage_2_cropped.pdf}
   \caption{The memory-hard part.~\cite{bill}}
   \label{fig:stage2}
 \end{figure}
@@ -228,20 +228,20 @@ We call the state of the hashed input after the above step as the \emph{modified
 \end{enumerate}
 The result of \hyperref[output]{step}~\ref{output} is the output of the CryptoNight function. For more information about these functions, the reader is refered to the respective articles~\cite{10030667226,sha3groestl,sha3W09,sha3F+08}.
 
+\begin{subfigures}
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.62, natwidth=210mm, natheight=297mm]{Images/Bill/stage_3.1.png}
-  \caption{The third stage (1).~\cite{bill}}
+  \includegraphics[width=\columnwidth, keepaspectratio,natwidth=16.69cm,natheight=24.49cm]{Images/Bill/stage_3.1_cropped.pdf}
+  \caption{The third stage.~\cite{bill}}
   \label{fig:stage3.1}
 \end{figure}
-\clearpage
-
 \begin{figure}[H]
   \centering
-  \includegraphics[scale=0.62, natwidth=210mm, natheight=148mm]{Images/Bill/stage_3.2_modified.png}
-  \caption{The third stage (2).~\cite{bill}}
+  \includegraphics[width=\columnwidth, keepaspectratio, natwidth=16.38cm, natheight=14.31cm]{Images/Bill/stage_3.2_cropped.pdf}
+  \caption{The third stage.~\cite{bill}}
   \label{fig:stage3.2}
 \end{figure}
+\end{subfigures}
 
 \section{Analysis} \label{sec:analysis}
 Now that we have described the way this function computes its output, we will try to build a model for our theoretical analysis. There are several assumptions that we have to make to abstract the function's operation. For this purpose, we build our model and define its security. At first, we have to focus on the part that is linked to the \hyperref[sec:memory-hard]{\emph{memory-hardness}} property (see \hyperref[sec:memory-hard]{section}~\ref{sec:memory-hard}). The reader now should have an understanding about the general purpose of each stage.
@@ -284,21 +284,21 @@ In \hyperref[sec:PRF]{section}~\ref{sec:PRF} the reader can find the mathematica
 Apart from the AES use, the memory-hard stage of CryptoNight function performs one addition, two XOR-operations and one multiplication. In order to be able to produce conclusions, we try to analyze what the side effects of these operations are. All of these operations get two inputs of 16 bytes size and produce a 16 byte result.
 
 Let's examine them one by one. In the case of the XOR operation, it is easy to see that if the two inputs are chosen uniformly at random, then the result is also uniformly chosen at random. In the case of addition, reproduced from CryptoNote~\cite{cryptonight}:
-\begin{verbatim}
-   The 8byte_add function represents each of the arguments as a
+\begin{quoting}
+   The \verb|8byte_add| function represents each of the arguments as a
    pair of 64-bit little-endian values and adds them together,
-   component-wise, modulo 2^64. The result is converted back into
+   component-wise, modulo $2^{64}$. The result is converted back into
    16 bytes.
-\end{verbatim}
+\end{quoting}
 
 It is trickier to see the same here, but with a little effort one can see that if the input is chosen uniformly at random, then the result is uniformly chosen at random too. In the case of multiplication, reproduced from CryptoNote~\cite{cryptonight} again:
-\begin{verbatim}
-   The 8byte_mul function, however, uses only the first 8 bytes
+\begin{quoting}
+   The \verb|8byte_mul| function, however, uses only the first 8 bytes
    of each argument, which are interpreted as unsigned 64-bit
    little-endian integers and multiplied together. The result is
    converted into 16 bytes, and finally the two 8-byte halves of
    the result are swapped.
-\end{verbatim}
+\end{quoting}
 
 The last case, is more complex. At first we notice the following: if one of the inputs is null, then the result is also null. That could be a problem. We try to calculate the probability that the result is null, due to the null value of one or both inputs. We don't care about the null value of the result due to modulo operation. That probability is obviously equal to the probability that the result is equal with some other value. We would like the "extra" probability, that the value of the result is null due to input's null value, to be negligible.
 

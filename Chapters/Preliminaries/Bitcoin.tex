@@ -4,8 +4,7 @@ Bitcoin~\cite{Nakamoto_bitcoin:a} is a decentralized digital currency that enabl
 The original Bitcoin software by Satoshi Nakamoto was released under the MIT license. Most client software, derived or "from scratch", also use open source licensing.
 
 Bitcoin is the first successful implementation of a distributed cryptocurrency, described in part in 1998 by Wei Dai on the cypherpunks mailing list. For the reader to understand what this list was, we reproduce from \emph{cryptoanarchy.wiki}~\cite{cryptoanarchy}:
-
-\begin{verbatim}
+\begin{quoting}
   The Cypherpunks mailing list was started in 1992, and by 1994
   had 700 subscribers. At its peak, it was a very active forum
   with technical discussion ranging over mathematics, cryptography,
@@ -15,7 +14,7 @@ Bitcoin is the first successful implementation of a distributed cryptocurrency, 
   a day from December 1, 1996 to March 1, 1999, and suggests that
   the number was probably higher earlier. The number of subscribers
   is estimated to have reached 2000 in the year 1997.
-\end{verbatim}
+\end{quoting}
 
 It is during this period that the community was energised by a battle with the U.S. intelligence establishment relating to the export of cryptography (which the U.S. Government had at the time classified as a munition).
 
@@ -241,6 +240,8 @@ This is the standard script for conventional fund transfer in Bitcoin. Let's say
 
 Bob's signature will be available. We will see that it can be found on the hash of the transaction containing the output. The script will then duplicate his public key, check that it matches the one on the \text{pubKeyScript} and if it does, it will check that he has provided a valid signature with that public key. If all these checks pass, the stack will end up with 1 on top and the execution will be valid.
 
+\subsection{Theoretical model}
+A deeper analysis and security results on the mathematical model of the blockchain technology can be found in two very important papers called "The Bitcoin backbone protocol: Analysis and Application"~\cite{backbone1} and "The Bitcoin backbone protocol with chains of variable difficulty"~\cite{backbone2}. We definitely refer the reader to the above work, if he/she wants to aquire a deep understanding of the blockchain structure.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
