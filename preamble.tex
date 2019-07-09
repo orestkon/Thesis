@@ -21,7 +21,7 @@
 \usepackage[font=itshape]{quoting}
 \usepackage{subfloat}
 
-\usepackage[backend=biber,style=numeric]{biblatex}
+\usepackage[backend=bibtex,style=numeric,sorting=sortkey]{biblatex}
 \addbibresource{myBibliography.bib}
 \defbibfilter{papers}{
   type=article or
@@ -43,14 +43,6 @@
 %% myPackages (Extra)
 \usepackage{enumitem}
 
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,       % false: boxed links; true: colored links
-    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
-    citecolor=red,        % color of links to bibliography
-    filecolor=magenta,      % color of file links
-    urlcolor=cyan           % color of external links
-}
 \usepackage{bookmark}
 
 \renewcommand{\maketitle}{
@@ -184,3 +176,12 @@
 %\begin{category}[B]{Second category}
 %  \SBentries{edward,curve25519}
 %\end{category}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    citecolor=red,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
